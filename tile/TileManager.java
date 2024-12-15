@@ -129,7 +129,15 @@ public class TileManager {
 		return mapTileNum;
 	}
 
+	public int getMapTileNum(int col, int row) {
+		return mapTileNum[col][row];
+	}
+
 	public Tile[] getTile() {
 		return tile;
+	}
+
+	public Tile getTile(int index) {
+		return tile[index];
 	}
 }

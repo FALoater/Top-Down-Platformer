@@ -66,8 +66,8 @@ public class AssetSetter {
 
 	public void spawnProjectile(int xPos, int yPos, int speed, String direction) {
 		for(int i=0;i<gp.getProjectiles().length;i++) {
-			if(gp.getProjectiles()[i] == null) {
-				gp.getProjectiles()[i] = new Projectile(xPos, yPos, speed, direction, gp);
+			if(gp.getProjectiles(i) == null) {
+				gp.setProjectile(i, new Projectile(xPos, yPos, speed, direction, gp));
 				return;
 			}
 		}

@@ -268,6 +268,14 @@ public class GamePanel extends JPanel implements Runnable {
 		return proj;
 	}
 
+	public Projectile getProjectiles(int index) {
+		return proj[index];
+	}
+
+	public void setProjectile(int index, Projectile projectile) {
+		proj[index] = projectile;
+	}
+
 	public int getDialogueState() {
 		return dialogueState;
 	}
@@ -302,6 +310,10 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public SuperObject[] getObjects() {
 		return obj;
+	}
+
+	public SuperObject getObjects(int index) {
+		return obj[index];
 	}
 
 	public void toggleDebug() {
