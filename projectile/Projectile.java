@@ -24,12 +24,18 @@ public class Projectile extends Entity {
         this.direction = direction;
         this.gp = gp;
 
-        img = setup("/assets/projectiles/enemy_projectiles/red_projectile");
-
         // give projectile smaller hitbox to match the sprite
         solidArea = new Rectangle(12, 18,23,23);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+    }
+
+    protected BufferedImage getImg() {
+        return null;
+    }
+
+    protected boolean checkCollisions() {
+        return false;
     }
 
     @Override
@@ -38,7 +44,7 @@ public class Projectile extends Entity {
         // if not, then check whether the projectile hits the player
         // in both cases, delete the projectile if true
         init = false;
-        markedForDeletion = gp.getCollisionChecker().checkTile(this) || gp.getCollisionChecker().checkProjectileCollision(gp.getPlayer(), this);
+        markedForDeletion = checkCollisions();
 
         // calculate where projectile will display on the screen
         screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX(); 
@@ -67,6 +73,8 @@ public class Projectile extends Entity {
             worldX -tileSize < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenY() && 
             worldY + tileSize> gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() && 
             worldY - tileSize < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) { 
+            
+            img = getImg();
                 
             // Draw the projectile if inside the four corners
             if(!init) g2.drawImage(img, screenX, screenY, tileSize, tileSize, null);

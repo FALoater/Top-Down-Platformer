@@ -1,7 +1,7 @@
 package main;
 
 import entity.NPC_OldMan;
-import projectile.Projectile;
+import projectile.RedProjectile;
 import entity.FireThrower;
 
 import static main.GamePanel.tileSize;
@@ -67,7 +67,7 @@ public class AssetSetter {
 	public void spawnProjectile(int xPos, int yPos, int speed, String direction) {
 		for(int i=0;i<gp.getProjectiles().length;i++) {
 			if(gp.getProjectiles(i) == null) {
-				gp.setProjectile(i, new Projectile(xPos, yPos, speed, direction, gp));
+				gp.setProjectile(i, new RedProjectile(xPos, yPos, speed, direction, gp));
 				return;
 			}
 		}
