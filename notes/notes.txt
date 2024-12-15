@@ -1,0 +1,48 @@
+Entities
+    **Enemies**
+        L1: Shooter
+        L2: Water Thrower
+        L3: Flame Thrower
+        L4: "Boss" Fight
+        # A* pathfinding?
+
+    Player
+        Shooting
+        Lives/Hearts
+
+    NPC
+        Motivation
+
+UI
+    Title, Rules, Menu, End Screen
+    Health Bar
+    # Time taken
+
+Game Functionality
+    Animation
+    Pause/Resume Game  
+    Settings Menu
+    Game over - play again/exit
+
+Sounds
+    Theme tune
+    Sound effects
+
+Powerups
+    Healing Potion
+    Speed Boosters    
+    
+    # Keys for Doors/Shortcuts
+    # Teleportation
+    
+-----------------------------------
+Login System
+    Stage unique ID
+    Create username/password and store as hash like linux passwd
+
+Story
+    Pls set me a story
+
+Traps
+    1v1
+    Slow down time
