@@ -128,7 +128,7 @@ public class Entity {
 				spriteNum = 1;
 			}
 			spriteCounter = 0; // reset spriteCounter
-    }
+    	}
     }	
 	
 	public void draw(Graphics2D g2) {
