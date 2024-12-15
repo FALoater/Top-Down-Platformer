@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 
 import entity.Entity;
 import entity.Player;
-import entity.Projectile;
 import object.SuperObject;
+import projectile.Projectile;
 import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -129,9 +129,9 @@ public class GamePanel extends JPanel implements Runnable {
 			for(int i = 0;i<proj.length;i++) {
 				Projectile projectile = proj[i];
 
-				if(proj[i] != null) {
+				if(projectile != null) {
 					// check first if the projectile is meant to be deleted first
-					if(proj[i].isMarkedForDeletion() || Math.abs(proj[i].getWorldX()) > worldWidth || Math.abs(proj[i].getWorldY()) > worldHeight) {
+					if(projectile.isMarkedForDeletion() || Math.abs(projectile.getWorldX()) > worldWidth || Math.abs(projectile.getWorldY()) > worldHeight) {
 						proj[i] = null;
 					} else {
 						projectile.update();
@@ -209,7 +209,6 @@ public class GamePanel extends JPanel implements Runnable {
 			for(Projectile projectile : proj) {
 				if(projectile != null) {
 					projectile.draw(g2);
-					
 					if(debug) projectile.drawHitbox(g2);
 				}
 			}

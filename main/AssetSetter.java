@@ -1,7 +1,7 @@
 package main;
 
 import entity.NPC_OldMan;
-import entity.Projectile;
+import projectile.Projectile;
 import entity.FireThrower;
 
 import static main.GamePanel.tileSize;

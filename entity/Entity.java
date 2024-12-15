@@ -12,6 +12,7 @@ import static main.GamePanel.tileSize;
 
 import main.GamePanel;
 import main.UtilityTool;
+import projectile.Projectile;
 
 // this will be the super/parent class for all our entities
 // stores variables that will be used in all of player, monster, NPC classes
@@ -128,7 +129,7 @@ public class Entity {
 				spriteNum = 1;
 			}
 			spriteCounter = 0; // reset spriteCounter
-    }
+    	}
     }	
 	
 	public void draw(Graphics2D g2) {

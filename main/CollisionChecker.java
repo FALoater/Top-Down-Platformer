@@ -1,7 +1,7 @@
 package main;
 
 import entity.Entity;
-import entity.Projectile;
+import projectile.Projectile;
 
 import static main.GamePanel.tileSize;
 

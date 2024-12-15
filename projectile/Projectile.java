@@ -1,18 +1,20 @@
-package entity;
+package projectile;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import entity.Entity;
 import main.GamePanel;
 
 import static main.GamePanel.tileSize;
 
 public class Projectile extends Entity {
     //Every projectile needs the position, direction, image and access to the main game class
-    private BufferedImage img;
-    private boolean markedForDeletion;
+    protected BufferedImage img;
+    protected boolean markedForDeletion;
+    private boolean init = true;
 
     public Projectile(int worldX, int worldY, int speed, String direction, GamePanel gp) {
         super(gp);
@@ -22,10 +24,10 @@ public class Projectile extends Entity {
         this.direction = direction;
         this.gp = gp;
 
-        img = setup("/assets/projectiles/red_projectile");
+        img = setup("/assets/projectiles/enemy_projectiles/red_projectile");
 
         // give projectile smaller hitbox to match the sprite
-        solidArea = new Rectangle( 12,  18,23,23);
+        solidArea = new Rectangle(12, 18,23,23);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
     }
@@ -35,6 +37,7 @@ public class Projectile extends Entity {
         // first, check whether the projectile hits the wall
         // if not, then check whether the projectile hits the player
         // in both cases, delete the projectile if true
+        init = false;
         markedForDeletion = gp.getCollisionChecker().checkTile(this) || gp.getCollisionChecker().checkProjectileCollision(gp.getPlayer(), this);
 
         // calculate where projectile will display on the screen
@@ -60,15 +63,13 @@ public class Projectile extends Entity {
     @Override
     public void draw(Graphics2D g2) {
         // Calculate the area where the player is currently in
-		if (worldX + tileSize> gp.getPlayer().getWorldX() - gp.getPlayer().screenX &&
-            worldX -tileSize < gp.getPlayer().getWorldX() + gp.getPlayer().screenX && 
+		if (worldX + tileSize> gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() &&
+            worldX -tileSize < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenY() && 
             worldY + tileSize> gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() && 
             worldY - tileSize < gp.getPlayer().getWorldY() + gp.getPlayer().getScreenY()) { 
                 
             // Draw the projectile if inside the four corners
-            g2.drawImage(img, screenX, screenY, tileSize, tileSize, null);
-
-            
+            if(!init) g2.drawImage(img, screenX, screenY, tileSize, tileSize, null);
         }
     }
 
