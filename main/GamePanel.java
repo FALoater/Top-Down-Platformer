@@ -4,8 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Arrays;
+
 import javax.swing.JPanel;
 
+import entity.Enemy;
 import entity.Entity;
 import entity.Player;
 import object.SuperObject;
@@ -48,7 +51,8 @@ public class GamePanel extends JPanel implements Runnable {
 	//INSTANTIATE ENTITY AND OBJECT 
 	private Player player = new Player(this, keyH);
 	private SuperObject obj[] = new SuperObject[10]; // we have 10 slots to add objects (at the same time) (can update later on during the game development) 
-	public Entity npc[] = new Entity[10], enemies[] = new Entity[10];
+	private Entity npc[] = new Entity[10];
+	private Enemy enemies[] = new Enemy[10];
 	private Projectile proj[] = new Projectile[10];
 	
 	// GAME STATE
@@ -121,6 +125,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// the two methods (update and paintComponent) will be called in the gameLoop 
 	public void update() {
+
 		if (gameState == playState) { 
 			// PLAYER
 			player.update();
@@ -145,9 +150,14 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 			//Enemies
-			for(Entity enemy : enemies) {
+			for (int i = 0; i < enemies.length; i++) {
+				Enemy enemy = enemies[i];
 				if(enemy != null) {
-					enemy.update();
+					if(enemy.isMarkedForDeletion()) {
+						enemies[i] = null;
+					} else {
+						enemy.update();
+					}
 				}
 			}
 		}
@@ -286,6 +296,30 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public Entity[] getNPCs() {
+		return npc;
+	}
+
+	public Entity getNPCs(int index) {
+		return npc[index];
+	}
+
+	public void createNPC(int index, Entity npc) {
+		this.npc[index] = npc;	
+	}
+
+	public Enemy[] getEnemies() {
+		return enemies;
+	}
+
+	public Enemy getEnemies(int index) {
+		return enemies[index];
+	}
+
+	public void createEnemy(int index, Enemy enemy) {
+		this.enemies[index] = enemy;
 	}
 
 	public CollisionChecker getCollisionChecker() {

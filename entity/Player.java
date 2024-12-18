@@ -15,6 +15,8 @@ import static main.GamePanel.tileSize;
 //child class of entity super class
 public class Player extends Entity {
     private KeyHandler keyH;
+    private boolean attacking = false;
+    private int attackTimer = 60;
 
     public Player(GamePanel gp, KeyHandler keyH) {
     	super(gp);
@@ -56,6 +58,9 @@ public class Player extends Entity {
     }
     
     public void update() { 
+        attackTimer++;
+        if(attackTimer > 60 && attacking) attacking = false; 
+
         //checks if key pressed (if not, no animation) 
         if (keyH.isUpPressed() || keyH.isDownPressed() || keyH.isLeftPressed() || keyH.isRightPressed()) { 
             if (keyH.isUpPressed()) {
@@ -79,11 +84,11 @@ public class Player extends Entity {
             pickUpObject(objIndex);
             
             //CHECK NPC COLLISION
-            int npcIndex = gp.getCollisionChecker().checkEntity(this, gp.npc); //pass npc array as 'target' parameter
+            int npcIndex = gp.getCollisionChecker().checkEntity(this, gp.getNPCs()); //pass npc array as 'target' parameter
             interactNPC(npcIndex);
 
             //CHECK ENEMY COLLISION
-            gp.getCollisionChecker().checkEntity(this, gp.enemies); // probably decrease health after this coliision
+            gp.getCollisionChecker().checkEntity(this, gp.getEnemies()); // probably decrease health after this coliision
             
             // CHECK EVENT 
             gp.getEventHandler().checkEvent();
@@ -126,7 +131,7 @@ public class Player extends Entity {
 		if (i!= 999) {
 		    if(gp.getKeyHandler().isEnterPressed()) {
 		    	gp.setGameState(gp.getDialogueState());
-				gp.npc[i].speak();
+				gp.getNPCs()[i].speak();
 		    }
 		}
 	}
@@ -174,6 +179,16 @@ public class Player extends Entity {
 //        	// add penalty item as well 
 //        }
 //        }
+    }
+
+    public void attack() {
+        // return early if the player is already attacking
+        if(attacking || attackTimer < 60) return;
+
+        // else spawn projectile and update player sprite
+        attacking = true;
+        attackTimer = 0;
+        gp.getAssetSetter().spawnFireProjectile(worldX, worldY, 7, direction);
     }
 
     public void draw(Graphics2D g2) {

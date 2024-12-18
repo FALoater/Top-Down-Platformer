@@ -1,5 +1,6 @@
 package main;
 
+import entity.Enemy;
 import entity.Entity;
 import projectile.Projectile;
 
@@ -14,15 +15,7 @@ public class CollisionChecker {
         this.gp = gp;
     }
 
-    public boolean checkTile(Projectile projectile) {
-        // a method for checkTile(entity) already exists
-        // therefore convert projectile into entity
-        Entity p = new Entity(projectile);
-        checkTile(p);
-        return p.getCollisionOn();
-    }
-    
-    public void checkTile(Entity entity) {
+    public boolean checkTile(Entity entity) {
         Rectangle entitySolidArea = entity.getSolidArea();
         
         int entityLeftWorldX = entity.getWorldX() + entitySolidArea.x;
@@ -37,6 +30,8 @@ public class CollisionChecker {
         
         int tileNum1, tileNum2;
 
+        boolean collision = false;
+
         switch(entity.getDirection()) {
             case "up": 
                 entityTopRow = (entityTopWorldY - entity.getSpeed()) / tileSize;
@@ -45,6 +40,7 @@ public class CollisionChecker {
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
+                    collision = true;
                 }
                 break; 
 
@@ -55,6 +51,7 @@ public class CollisionChecker {
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
+                    collision = true;
                 }
                 break; 
 
@@ -65,6 +62,7 @@ public class CollisionChecker {
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
+                    collision = true;
                 }
                 break;
 
@@ -75,9 +73,12 @@ public class CollisionChecker {
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
+                    collision = true;
                 }
                 break;
         }
+
+        return collision;
     }
 
     public int checkObject(Entity entity, boolean player) { // check if the entity is a player or not 
@@ -275,7 +276,7 @@ public class CollisionChecker {
             projectile.incrementSolidAreaY(projectile.getWorldY());
 
             if (entity.getSolidArea().intersects(projectile.getSolidArea())) { 
-                entity.takeDamage(1);
+                entity.takeDamage(projectile.getDamage());
                 return true;
             } else {
                 // reset hitboxes and valuesx

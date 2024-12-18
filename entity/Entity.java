@@ -267,7 +267,7 @@ public class Entity {
         return speed;
     }
 
-	public boolean getCollisionOn() {
+	public boolean isCollisionOn() {
 		return collisionOn;
 	}
 

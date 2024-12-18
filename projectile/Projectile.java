@@ -2,7 +2,6 @@ package projectile;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import entity.Entity;
@@ -14,27 +13,27 @@ public class Projectile extends Entity {
     //Every projectile needs the position, direction, image and access to the main game class
     protected BufferedImage img;
     protected boolean markedForDeletion;
+    protected int damage;
+
     private boolean init = true;
 
-    public Projectile(int worldX, int worldY, int speed, String direction, GamePanel gp) {
+    public Projectile(int worldX, int worldY, int speed, String direction, GamePanel gp, int damage) {
         super(gp);
         this.worldX = worldX;
         this.worldY = worldY;
         this.speed = speed;
         this.direction = direction;
         this.gp = gp;
-
-        // give projectile smaller hitbox to match the sprite
-        solidArea = new Rectangle(12, 18,23,23);
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
+        this.damage = damage;
     }
 
     protected BufferedImage getImg() {
         return null;
     }
 
-    protected boolean checkCollisions() {
+    protected void checkEntityCollisions() {}
+
+    protected boolean checkWallCollisions() {
         return false;
     }
 
@@ -44,7 +43,8 @@ public class Projectile extends Entity {
         // if not, then check whether the projectile hits the player
         // in both cases, delete the projectile if true
         init = false;
-        markedForDeletion = checkCollisions();
+        markedForDeletion = checkWallCollisions();
+        checkEntityCollisions();
 
         // calculate where projectile will display on the screen
         screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX(); 
@@ -104,5 +104,9 @@ public class Projectile extends Entity {
 
     public int getScreenY() {
         return screenY;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 }
