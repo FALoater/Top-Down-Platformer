@@ -15,8 +15,10 @@ import static main.GamePanel.tileSize;
 //child class of entity super class
 public class Player extends Entity {
     private KeyHandler keyH;
-    private boolean attacking = false;
-    private int attackTimer = 60;
+    private boolean attacking = false, canMove = true;
+    private int attackTimer = 30;
+
+    private BufferedImage shoot_left1, shoot_left2, shoot_right1, shoot_right2, shoot_up1, shoot_up2, shoot_down1, shoot_down2;
 
     public Player(GamePanel gp, KeyHandler keyH) {
     	super(gp);
@@ -47,19 +49,35 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() { 
-        up1 = setup("/assets/entities/player/moving/boy_up_1"); 
-        up2 = setup("/assets/entities/player/moving/boy_up_2"); 
-        down1 = setup("/assets/entities/player/moving/boy_down_1"); 
-        down2 = setup("/assets/entities/player/moving/boy_down_2"); 
-        left1 = setup("/assets/entities/player/moving/boy_left_1"); 
-        left2 = setup("/assets/entities/player/moving/boy_left_2"); 
-        right1 = setup("/assets/entities/player/moving/boy_right_1"); 
-        right2 = setup("/assets/entities/player/moving/boy_right_2"); 
+        up1 = setup("/assets/entities/player/moving/boy_up_1", tileSize, tileSize); 
+        up2 = setup("/assets/entities/player/moving/boy_up_2", tileSize, tileSize);
+        down1 = setup("/assets/entities/player/moving/boy_down_1", tileSize, tileSize); 
+        down2 = setup("/assets/entities/player/moving/boy_down_2", tileSize, tileSize); 
+        left1 = setup("/assets/entities/player/moving/boy_left_1", tileSize, tileSize); 
+        left2 = setup("/assets/entities/player/moving/boy_left_2", tileSize, tileSize); 
+        right1 = setup("/assets/entities/player/moving/boy_right_1", tileSize, tileSize); 
+        right2 = setup("/assets/entities/player/moving/boy_right_2", tileSize, tileSize); 
+
+        shoot_down1 = setup("/assets/entities/player/attacking/boy_attack_down_1", tileSize, tileSize * 2);
+        shoot_down2 = setup("/assets/entities/player/attacking/boy_attack_down_2", tileSize, tileSize * 2);
+        shoot_up1 = setup("/assets/entities/player/attacking/boy_attack_up_1", tileSize, tileSize * 2);
+        shoot_up2 = setup("/assets/entities/player/attacking/boy_attack_up_2", tileSize, tileSize * 2);
+        shoot_left1 = setup("/assets/entities/player/attacking/boy_attack_left_1", tileSize * 2, tileSize);
+        shoot_left2 = setup("/assets/entities/player/attacking/boy_attack_left_2", tileSize * 2, tileSize);
+        shoot_right1 = setup("/assets/entities/player/attacking/boy_attack_right_1", tileSize * 2, tileSize);
+        shoot_right2 = setup("/assets/entities/player/attacking/boy_attack_right_2", tileSize * 2, tileSize);
+
+        hurt = setup("/assets/entities/player/moving/boy_hurt", tileSize, tileSize);
     }
     
     public void update() { 
         attackTimer++;
-        if(attackTimer > 60 && attacking) attacking = false; 
+        if(attacking) canMove = false;
+        else canMove = true;
+
+        if(attackTimer > 30 && attacking) {
+            attacking = false;
+        } 
 
         //checks if key pressed (if not, no animation) 
         if (keyH.isUpPressed() || keyH.isDownPressed() || keyH.isLeftPressed() || keyH.isRightPressed()) { 
@@ -96,7 +114,7 @@ public class Player extends Entity {
             gp.getKeyHandler().setEnterPressed(false);
 
             //IF COLLISION IS FALSE, PLAYER CAN MOVE
-            if (collisionOn == false) { 
+            if (collisionOn == false && canMove) { 
                 switch(direction) { 
                     case "up": 
                         worldY -= speed; 
@@ -113,7 +131,7 @@ public class Player extends Entity {
                 }
             }
 
-            spriteCounter++; // everytime update is called, spriteCounter is incremented
+            if(canMove) spriteCounter++; // everytime update is called, spriteCounter is incremented
 			if (spriteCounter > 12) {
 				if (spriteNum == 1) { // switch between two images for each direction to give a walking feel
 					spriteNum = 2;
@@ -183,16 +201,32 @@ public class Player extends Entity {
 
     public void attack() {
         // return early if the player is already attacking
-        if(attacking || attackTimer < 60) return;
+        if(attacking || attackTimer < 30) return;
 
         // else spawn projectile and update player sprite
         attacking = true;
         attackTimer = 0;
-        gp.getAssetSetter().spawnFireProjectile(worldX, worldY, 7, direction);
+
+        switch(direction) {
+            case "up":
+                gp.getAssetSetter().spawnFireProjectile(worldX, worldY - tileSize, 7, "up");
+                break;
+            case "down":
+                gp.getAssetSetter().spawnFireProjectile(worldX, worldY + tileSize, 7, "down");
+                break;
+            case "left":
+                gp.getAssetSetter().spawnFireProjectile(worldX - tileSize, worldY, 7, "left");
+                break;
+            case "right":
+                gp.getAssetSetter().spawnFireProjectile(worldX + tileSize, worldY, 7, "right");
+                break;
+        }
     }
 
     public void draw(Graphics2D g2) {
+
         BufferedImage image = null;
+
         switch(direction) { 
             case "up": 
                 image = (spriteNum == 1) ? up1 : up2;
@@ -207,6 +241,29 @@ public class Player extends Entity {
                 image = (spriteNum == 1) ? right1 : right2;
                 break;
         }
+
+        if(attacking) {
+            switch(direction) {
+                case "up":
+                    image = (spriteNum == 1) ? shoot_up1 : shoot_up2;
+                    break;
+                case "down":
+                    image = (spriteNum == 1) ? shoot_down1 : shoot_down2;
+                    break;
+                case "left":
+                    image = (spriteNum == 1) ? shoot_left1 : shoot_left2;
+                    break;
+                case "right":
+                    image = (spriteNum == 1) ? shoot_right1 : shoot_right2;
+                    break;
+            }
+        }
+
+        if(isHurt) {
+            image = hurt;
+            isHurt = false;
+        }
+
         g2.drawImage(image, screenX, screenY, null);
     }
 

@@ -34,8 +34,10 @@ public class Entity {
 	protected int maxLife; 
 	protected int life;
 
+	protected boolean isHurt = false;
+
 	// BufferedImage = an image with an accessible buffer of image data (we use this to store our image files) 
-	protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+	protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, hurt;
 
 	protected GamePanel gp;
 
@@ -157,25 +159,34 @@ public class Entity {
 				image = (spriteNum == 1) ? right1 : right2;
 				break;
 			}
+
+			if(isHurt) {
+				image = hurt;
+				isHurt = false;
+			}
+
 			g2.drawImage(image, screenX, screenY, tileSize, tileSize, null);
+			drawHealthBar(g2);
 		}
 	}
 
-	public void drawHitbox(Graphics2D g2) {}
-		
-	protected BufferedImage setup(String imagePath) { 
+	protected void drawHitbox(Graphics2D g2) {}
+
+	protected void drawHealthBar(Graphics2D g2) {}
+
+	protected BufferedImage setup(String imagePath, int width, int height) {
 		UtilityTool uTool = new UtilityTool();
-		BufferedImage image = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB);
-		
-		try { 
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+		try {
 			image = ImageIO.read(getClass().getResourceAsStream(imagePath +".png"));
-			image = uTool.scaleImage(image, tileSize, tileSize);
-			
-		}catch(IOException e) { 
+			image = uTool.scaleImage(image, width, height);
+
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		return image;
-    }
+	}
 
 	public void restoreFullHealth() {
 		life = maxLife;
@@ -197,6 +208,7 @@ public class Entity {
 
     public void takeDamage(int damage) {
         life -= damage;
+		isHurt = true;
     }
     
     public String getDirection() {

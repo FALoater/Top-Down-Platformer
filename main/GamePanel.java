@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Arrays;
 
 import javax.swing.JPanel;
 
@@ -31,8 +30,8 @@ public class GamePanel extends JPanel implements Runnable {
 	//WORLD SETTINGS 
 	public static final int maxWorldCol = 50; 
 	public static final int maxWorldRow = 50; 
-	public static  final int worldWidth = tileSize * maxWorldCol; 
-	public static  final int worldHeight = tileSize * maxWorldRow; 
+	public static final int worldWidth = tileSize * maxWorldCol; 
+	public static final int worldHeight = tileSize * maxWorldRow; 
 	
 	//FPS
 	private int FPS = 60;
@@ -200,6 +199,8 @@ public class GamePanel extends JPanel implements Runnable {
 			for (int i = 0; i < enemies.length; i++) {
 				if (enemies[i] != null) {
 					enemies[i].draw(g2);
+
+					if(debug) enemies[i].drawHitbox(g2);
 				}
 			}
 			

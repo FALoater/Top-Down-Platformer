@@ -67,7 +67,6 @@ public class Enemy extends Entity {
 		markedForDeletion = life <= 0;
 	}
 
-
 	@Override
     // draw the hitbox for debug
     public void drawHitbox(Graphics2D g2) {
@@ -78,4 +77,13 @@ public class Enemy extends Entity {
 	public boolean isMarkedForDeletion() {
 		return markedForDeletion;
 	}
+
+	@Override
+	protected void drawHealthBar(Graphics2D g2) {
+		g2.setColor(Color.black);
+		g2.drawRect(screenX, screenY - 10, 48, 10);
+		g2.setColor(Color.red);
+		g2.fillRect(screenX + 1, screenY - 9, (int)(47 * ((float)life / (float)maxLife)), 9);
+	}
+
 }

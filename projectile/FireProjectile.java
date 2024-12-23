@@ -1,5 +1,7 @@
 package projectile;
 
+import static main.GamePanel.tileSize;
+
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -18,10 +20,10 @@ public class FireProjectile extends Projectile{
     }
 
     private void loadImgs() {
-        up1 = setup("/assets/projectiles/player_projectiles/fireball_up_1"); 
-        down1 = setup("/assets/projectiles/player_projectiles/fireball_down_1"); 
-        left1 = setup("/assets/projectiles/player_projectiles/fireball_left_1"); 
-        right1 = setup("/assets/projectiles/player_projectiles/fireball_right_1"); 
+        up1 = setup("/assets/projectiles/player_projectiles/fireball_up_1", tileSize, tileSize); 
+        down1 = setup("/assets/projectiles/player_projectiles/fireball_down_1", tileSize, tileSize); 
+        left1 = setup("/assets/projectiles/player_projectiles/fireball_left_1", tileSize, tileSize); 
+        right1 = setup("/assets/projectiles/player_projectiles/fireball_right_1", tileSize, tileSize); 
     }
 
     @Override

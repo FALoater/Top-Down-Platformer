@@ -5,6 +5,8 @@ import entity.Entity;
 import projectile.Projectile;
 
 import static main.GamePanel.tileSize;
+import static main.GamePanel.worldHeight;
+import static main.GamePanel.worldWidth;
 
 import java.awt.Rectangle;
 
@@ -22,6 +24,10 @@ public class CollisionChecker {
         int entityRightWorldX = entity.getWorldX() + entitySolidArea.x + entitySolidArea.width;
         int entityTopWorldY = entity.getWorldY() + entitySolidArea.y;
         int entityBottomWorldY = entity.getWorldY() + entitySolidArea.y + entitySolidArea.height;
+
+        if(entityTopWorldY < 0 || entityBottomWorldY > worldHeight || entityLeftWorldX < 0 || entityRightWorldX > worldWidth) {
+            return true;
+        }
         
         int entityLeftCol = entityLeftWorldX / tileSize; 
         int entityRightCol = entityRightWorldX / tileSize;
@@ -35,6 +41,8 @@ public class CollisionChecker {
         switch(entity.getDirection()) {
             case "up": 
                 entityTopRow = (entityTopWorldY - entity.getSpeed()) / tileSize;
+                if(entityTopRow < 0 || entityTopRow >= 50) return true;
+
                 tileNum1 = gp.getTileManager().getMapTileNum(entityLeftCol, entityTopRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityRightCol, entityTopRow);
                 
@@ -46,6 +54,7 @@ public class CollisionChecker {
 
             case "down": 
                 entityBottomRow = (entityBottomWorldY + entity.getSpeed()) / tileSize;
+                if(entityBottomRow < 0 || entityBottomRow >= 50) return true;
                 tileNum1 = gp.getTileManager().getMapTileNum(entityLeftCol, entityBottomRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityRightCol, entityBottomRow);
                 
@@ -57,6 +66,7 @@ public class CollisionChecker {
 
             case "left": 
                 entityLeftCol = (entityLeftWorldX - entity.getSpeed()) / tileSize;
+                if(entityLeftCol < 0 || entityLeftCol >= 50) return true;
                 tileNum1 = gp.getTileManager().getMapTileNum(entityLeftCol, entityTopRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityLeftCol, entityBottomRow);
                 
@@ -68,6 +78,7 @@ public class CollisionChecker {
 
             case "right":
                 entityRightCol = (entityRightWorldX + entity.getSpeed()) / tileSize;
+                if(entityRightCol < 0 || entityRightCol >= 50) return true;
                 tileNum1 = gp.getTileManager().getMapTileNum(entityRightCol, entityTopRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityRightCol, entityBottomRow);
                 
