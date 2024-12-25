@@ -15,10 +15,9 @@ import static main.GamePanel.tileSize;
 //child class of entity super class
 public class Player extends Entity {
     private KeyHandler keyH;
-    private boolean attacking = false, canMove = true;
-    private int attackTimer = 30;
+    private boolean canMove;
 
-    private BufferedImage shoot_left1, shoot_left2, shoot_right1, shoot_right2, shoot_up1, shoot_up2, shoot_down1, shoot_down2;
+    private BufferedImage attackDown1, attackDown2, attackUp1, attackUp2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 
     public Player(GamePanel gp, KeyHandler keyH) {
     	super(gp);
@@ -31,6 +30,8 @@ public class Player extends Entity {
         solidArea = new Rectangle(10, 12, 26, 26); 
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
+
+        attackTimer = 45;
         
         setDefaultValues();
         getPlayerImage();
@@ -49,35 +50,40 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() { 
-        up1 = setup("/assets/entities/player/moving/boy_up_1", tileSize, tileSize); 
-        up2 = setup("/assets/entities/player/moving/boy_up_2", tileSize, tileSize);
-        down1 = setup("/assets/entities/player/moving/boy_down_1", tileSize, tileSize); 
-        down2 = setup("/assets/entities/player/moving/boy_down_2", tileSize, tileSize); 
-        left1 = setup("/assets/entities/player/moving/boy_left_1", tileSize, tileSize); 
-        left2 = setup("/assets/entities/player/moving/boy_left_2", tileSize, tileSize); 
-        right1 = setup("/assets/entities/player/moving/boy_right_1", tileSize, tileSize); 
-        right2 = setup("/assets/entities/player/moving/boy_right_2", tileSize, tileSize); 
+        up1 = setup("/assets/entities/player/moving/boy_up_1"); 
+        up2 = setup("/assets/entities/player/moving/boy_up_2"); 
+        down1 = setup("/assets/entities/player/moving/boy_down_1"); 
+        down2 = setup("/assets/entities/player/moving/boy_down_2"); 
+        left1 = setup("/assets/entities/player/moving/boy_left_1"); 
+        left2 = setup("/assets/entities/player/moving/boy_left_2"); 
+        right1 = setup("/assets/entities/player/moving/boy_right_1"); 
+        right2 = setup("/assets/entities/player/moving/boy_right_2"); 
 
-        shoot_down1 = setup("/assets/entities/player/attacking/boy_attack_down_1", tileSize, tileSize * 2);
-        shoot_down2 = setup("/assets/entities/player/attacking/boy_attack_down_2", tileSize, tileSize * 2);
-        shoot_up1 = setup("/assets/entities/player/attacking/boy_attack_up_1", tileSize, tileSize * 2);
-        shoot_up2 = setup("/assets/entities/player/attacking/boy_attack_up_2", tileSize, tileSize * 2);
-        shoot_left1 = setup("/assets/entities/player/attacking/boy_attack_left_1", tileSize * 2, tileSize);
-        shoot_left2 = setup("/assets/entities/player/attacking/boy_attack_left_2", tileSize * 2, tileSize);
-        shoot_right1 = setup("/assets/entities/player/attacking/boy_attack_right_1", tileSize * 2, tileSize);
-        shoot_right2 = setup("/assets/entities/player/attacking/boy_attack_right_2", tileSize * 2, tileSize);
+        // load shooting sprites
+        attackDown1 = setup("/assets/entities/player/attacking/boy_attack_down_1", tileSize, tileSize * 2);
+        attackDown2 = setup("/assets/entities/player/attacking/boy_attack_down_2", tileSize, tileSize * 2);
+        attackUp1 = setup("/assets/entities/player/attacking/boy_attack_up_1", tileSize, tileSize * 2);
+        attackUp2 = setup("/assets/entities/player/attacking/boy_attack_up_2", tileSize, tileSize * 2);
+        attackLeft1 = setup("/assets/entities/player/attacking/boy_attack_left_1", tileSize * 2, tileSize);
+        attackLeft2 = setup("/assets/entities/player/attacking/boy_attack_left_2", tileSize * 2, tileSize);
+        attackRight1 = setup("/assets/entities/player/attacking/boy_attack_right_1", tileSize * 2, tileSize);
+        attackRight2 = setup("/assets/entities/player/attacking/boy_attack_right_2", tileSize * 2, tileSize);
 
-        hurt = setup("/assets/entities/player/moving/boy_hurt", tileSize, tileSize);
+        hurt = setup("/assets/entities/player/moving/boy_hurt");
     }
     
     public void update() { 
         attackTimer++;
-        if(attacking) canMove = false;
-        else canMove = true;
 
-        if(attackTimer > 30 && attacking) {
+        if(attacking) {
+            canMove = false;
+        } else {
+            canMove = true;
+        }
+
+        if(attackTimer > 45 && attacking) {
             attacking = false;
-        } 
+        }
 
         //checks if key pressed (if not, no animation) 
         if (keyH.isUpPressed() || keyH.isDownPressed() || keyH.isLeftPressed() || keyH.isRightPressed()) { 
@@ -102,11 +108,11 @@ public class Player extends Entity {
             pickUpObject(objIndex);
             
             //CHECK NPC COLLISION
-            int npcIndex = gp.getCollisionChecker().checkEntity(this, gp.getNPCs()); //pass npc array as 'target' parameter
+            int npcIndex = gp.getCollisionChecker().checkEntity(this, gp.getNPC()); //pass npc array as 'target' parameter
             interactNPC(npcIndex);
 
             //CHECK ENEMY COLLISION
-            gp.getCollisionChecker().checkEntity(this, gp.getEnemies()); // probably decrease health after this coliision
+            gp.getCollisionChecker().checkEntity(this, gp.getEnemy()); // probably decrease health after this coliision
             
             // CHECK EVENT 
             gp.getEventHandler().checkEvent();
@@ -149,7 +155,7 @@ public class Player extends Entity {
 		if (i!= 999) {
 		    if(gp.getKeyHandler().isEnterPressed()) {
 		    	gp.setGameState(gp.getDialogueState());
-				gp.getNPCs()[i].speak();
+				gp.getNPC(i).speak();
 		    }
 		}
 	}
@@ -199,34 +205,8 @@ public class Player extends Entity {
 //        }
     }
 
-    public void attack() {
-        // return early if the player is already attacking
-        if(attacking || attackTimer < 30) return;
-
-        // else spawn projectile and update player sprite
-        attacking = true;
-        attackTimer = 0;
-
-        switch(direction) {
-            case "up":
-                gp.getAssetSetter().spawnFireProjectile(worldX, worldY - tileSize, 7, "up");
-                break;
-            case "down":
-                gp.getAssetSetter().spawnFireProjectile(worldX, worldY + tileSize, 7, "down");
-                break;
-            case "left":
-                gp.getAssetSetter().spawnFireProjectile(worldX - tileSize, worldY, 7, "left");
-                break;
-            case "right":
-                gp.getAssetSetter().spawnFireProjectile(worldX + tileSize, worldY, 7, "right");
-                break;
-        }
-    }
-
     public void draw(Graphics2D g2) {
-
         BufferedImage image = null;
-
         switch(direction) { 
             case "up": 
                 image = (spriteNum == 1) ? up1 : up2;
@@ -245,20 +225,20 @@ public class Player extends Entity {
         if(attacking) {
             switch(direction) {
                 case "up":
-                    image = (spriteNum == 1) ? shoot_up1 : shoot_up2;
+                    image = (spriteNum == 1) ? attackUp1 : attackUp2;
                     break;
                 case "down":
-                    image = (spriteNum == 1) ? shoot_down1 : shoot_down2;
+                    image = (spriteNum == 1) ? attackDown1 : attackDown2;
                     break;
                 case "left":
-                    image = (spriteNum == 1) ? shoot_left1 : shoot_left2;
+                    image = (spriteNum == 1) ? attackLeft1 : attackLeft2;
                     break;
                 case "right":
-                    image = (spriteNum == 1) ? shoot_right1 : shoot_right2;
+                    image = (spriteNum == 1) ? attackRight1 : attackRight2;
                     break;
-            }
+                }
         }
-
+        
         if(isHurt) {
             image = hurt;
             isHurt = false;
@@ -273,4 +253,26 @@ public class Player extends Entity {
         g2.setColor(Color.red);
         g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     } 
+    
+    public void attack() {
+        if(attacking || attackTimer < 45 || !keyH.isAttackPressed()) return;
+
+        attacking = true;
+        attackTimer = 0;
+
+        switch(direction) {
+            case "up":
+                gp.getAssetSetter().spawnFireProjectile(worldX, worldY - tileSize, 7, direction);
+                break;
+            case "down":
+                gp.getAssetSetter().spawnFireProjectile(worldX, worldY + tileSize, 7, direction);
+                break;
+            case "left":
+                gp.getAssetSetter().spawnFireProjectile(worldX - tileSize, worldY, 7, direction);
+                break;
+            case "right":
+                gp.getAssetSetter().spawnFireProjectile(worldX + tileSize, worldY, 7, direction);
+                break;
+        }
+    }
 }

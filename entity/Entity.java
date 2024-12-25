@@ -27,14 +27,14 @@ public class Entity {
 	protected int solidAreaDefaultX, solidAreaDefaultY;
 
 	protected int spriteCounter = 0, spriteNum = 1;
-	protected int actionLockCounter = 0;
 	protected int dialogueIndex = 0;
+	protected int attackTimer;
 	
 	// CHARACTER STATUS 
 	protected int maxLife; 
 	protected int life;
 
-	protected boolean isHurt = false;
+	protected boolean attacking = false, isHurt = false, markedForDeletion = false;
 
 	// BufferedImage = an image with an accessible buffer of image data (we use this to store our image files) 
 	protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, hurt;
@@ -73,6 +73,8 @@ public class Entity {
     }
 	
 	public void setAction() {}; // overriden in subclasses
+	protected void drawHealthBar(Graphics2D g2) {}; // overriden in subclasses
+
 	public void speak() {
 		if (dialogues[dialogueIndex] == null) { 
 			dialogueIndex = 0;
@@ -170,23 +172,25 @@ public class Entity {
 		}
 	}
 
-	protected void drawHitbox(Graphics2D g2) {}
+	public void drawHitbox(Graphics2D g2) {}
 
-	protected void drawHealthBar(Graphics2D g2) {}
-
-	protected BufferedImage setup(String imagePath, int width, int height) {
+	protected BufferedImage setup(String imagePath) {
+		return setup(imagePath, tileSize, tileSize);
+	}
+		
+	protected BufferedImage setup(String imagePath, int width, int height) { 
 		UtilityTool uTool = new UtilityTool();
-		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-		try {
+		BufferedImage image = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB);
+		
+		try { 
 			image = ImageIO.read(getClass().getResourceAsStream(imagePath +".png"));
 			image = uTool.scaleImage(image, width, height);
-
-		}catch(IOException e) {
+			
+		}catch(IOException e) { 
 			e.printStackTrace();
 		}
 		return image;
-	}
+    }
 
 	public void restoreFullHealth() {
 		life = maxLife;
@@ -279,11 +283,15 @@ public class Entity {
         return speed;
     }
 
-	public boolean isCollisionOn() {
+	public boolean getCollisionOn() {
 		return collisionOn;
 	}
 
 	public void setCollisionOn(boolean collisionOn) {
 		this.collisionOn = collisionOn;
+	}
+
+	public boolean isMarkedForDeletion() {
+		return markedForDeletion;
 	}
 }

@@ -54,21 +54,21 @@ public class AssetSetter {
 	}
 	
 	public void setNPC() {
-		gp.createNPC(0, new NPC_OldMan(gp));
-		gp.getNPCs(0).setWorldX(tileSize*21);
-		gp.getNPCs(0).setWorldY(tileSize*21);
+		gp.setNPC(0, new NPC_OldMan(gp));
+		gp.getNPC(0).setWorldX(tileSize*21);
+		gp.getNPC(0).setWorldY(tileSize*21);
 	}
 
 	public void spawnFlameThrower() {
-		gp.createEnemy(0, new FireThrower(gp));
-		gp.getEnemies(0).setWorldX(tileSize*19);
-		gp.getEnemies(0).setWorldY(tileSize*19);
+		gp.setEnemy(0, new FireThrower(gp));
+		gp.getEnemy(0).setWorldX(tileSize*19);
+		gp.getEnemy(0).setWorldY(tileSize*19);
 	}
 
 	public void spawnRedProjectile(int xPos, int yPos, int speed, String direction) {
 		for(int i=0;i<gp.getProjectiles().length;i++) {
 			if(gp.getProjectiles(i) == null) {
-				gp.setProjectile(i, new RedProjectile(xPos, yPos, speed, direction, gp, 1));
+				gp.setProjectile(i, new RedProjectile(xPos, yPos, speed, direction, gp));
 				return;
 			}
 		}
@@ -77,7 +77,7 @@ public class AssetSetter {
 	public void spawnFireProjectile(int xPos, int yPos, int speed, String direction) {
 		for(int i=0;i<gp.getProjectiles().length;i++) {
 			if(gp.getProjectiles(i) == null) {
-				gp.setProjectile(i, new FireProjectile(xPos, yPos, speed, direction, gp, 2));
+				gp.setProjectile(i, new FireProjectile(xPos, yPos, speed, direction, gp));
 				return;
 			}
 		}

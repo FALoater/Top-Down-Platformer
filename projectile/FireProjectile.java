@@ -1,8 +1,5 @@
 package projectile;
 
-import static main.GamePanel.tileSize;
-
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import entity.Enemy;
@@ -10,32 +7,18 @@ import main.GamePanel;
 
 public class FireProjectile extends Projectile{
     
-    public FireProjectile(int worldX, int worldY, int speed, String direction, GamePanel gp, int damage) {
-        super(worldX, worldY, speed, direction, gp, damage);
+    public FireProjectile(int worldX, int worldY, int speed, String direction, GamePanel gp) {
+        super(worldX, worldY, speed, direction, gp);
         loadImgs();
 
-        solidArea = new Rectangle(12, 9,27,30);
-        solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
+        damage = 2;
     }
 
     private void loadImgs() {
-        up1 = setup("/assets/projectiles/player_projectiles/fireball_up_1", tileSize, tileSize); 
-        down1 = setup("/assets/projectiles/player_projectiles/fireball_down_1", tileSize, tileSize); 
-        left1 = setup("/assets/projectiles/player_projectiles/fireball_left_1", tileSize, tileSize); 
-        right1 = setup("/assets/projectiles/player_projectiles/fireball_right_1", tileSize, tileSize); 
-    }
-
-    @Override
-    protected void checkEntityCollisions() {
-        for(Enemy enemy : gp.getEnemies()) {
-            if(enemy != null) markedForDeletion = gp.getCollisionChecker().checkProjectileCollision(enemy, this);
-        }
-    }
-
-    @Override
-    protected boolean checkWallCollisions() {
-        return gp.getCollisionChecker().checkTile(this);
+        up1 = setup("/assets/projectiles/player_projectiles/fireball_up_1"); 
+        down1 = setup("/assets/projectiles/player_projectiles/fireball_down_1"); 
+        left1 = setup("/assets/projectiles/player_projectiles/fireball_left_1"); 
+        right1 = setup("/assets/projectiles/player_projectiles/fireball_right_1"); 
     }
 
     @Override
@@ -56,5 +39,23 @@ public class FireProjectile extends Projectile{
             default:
                 return null;
         }
+    }
+
+    // needs to be for every enemy
+
+    @Override
+    protected boolean checkCollisions() {
+        if(gp.getCollisionChecker().checkTile(this)) return true;
+
+        Enemy[] enemies = gp.getEnemy();
+
+        for(Enemy enemy : enemies) {
+            if(enemy != null) {
+                if(gp.getCollisionChecker().checkProjectileCollision(enemy, this)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

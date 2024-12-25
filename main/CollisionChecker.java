@@ -1,12 +1,9 @@
 package main;
 
-import entity.Enemy;
 import entity.Entity;
 import projectile.Projectile;
 
 import static main.GamePanel.tileSize;
-import static main.GamePanel.worldHeight;
-import static main.GamePanel.worldWidth;
 
 import java.awt.Rectangle;
 
@@ -17,17 +14,21 @@ public class CollisionChecker {
         this.gp = gp;
     }
 
-    public boolean checkTile(Entity entity) {
+    public boolean checkTile(Projectile projectile) {
+        // a method for checkTile(entity) already exists
+        // therefore convert projectile into entity
+        Entity p = new Entity(projectile);
+        checkTile(p);
+        return p.getCollisionOn();
+    }
+    
+    public void checkTile(Entity entity) {
         Rectangle entitySolidArea = entity.getSolidArea();
         
         int entityLeftWorldX = entity.getWorldX() + entitySolidArea.x;
         int entityRightWorldX = entity.getWorldX() + entitySolidArea.x + entitySolidArea.width;
         int entityTopWorldY = entity.getWorldY() + entitySolidArea.y;
         int entityBottomWorldY = entity.getWorldY() + entitySolidArea.y + entitySolidArea.height;
-
-        if(entityTopWorldY < 0 || entityBottomWorldY > worldHeight || entityLeftWorldX < 0 || entityRightWorldX > worldWidth) {
-            return true;
-        }
         
         int entityLeftCol = entityLeftWorldX / tileSize; 
         int entityRightCol = entityRightWorldX / tileSize;
@@ -36,60 +37,47 @@ public class CollisionChecker {
         
         int tileNum1, tileNum2;
 
-        boolean collision = false;
-
         switch(entity.getDirection()) {
             case "up": 
                 entityTopRow = (entityTopWorldY - entity.getSpeed()) / tileSize;
-                if(entityTopRow < 0 || entityTopRow >= 50) return true;
-
                 tileNum1 = gp.getTileManager().getMapTileNum(entityLeftCol, entityTopRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityRightCol, entityTopRow);
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
-                    collision = true;
                 }
                 break; 
 
             case "down": 
                 entityBottomRow = (entityBottomWorldY + entity.getSpeed()) / tileSize;
-                if(entityBottomRow < 0 || entityBottomRow >= 50) return true;
                 tileNum1 = gp.getTileManager().getMapTileNum(entityLeftCol, entityBottomRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityRightCol, entityBottomRow);
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
-                    collision = true;
                 }
                 break; 
 
             case "left": 
                 entityLeftCol = (entityLeftWorldX - entity.getSpeed()) / tileSize;
-                if(entityLeftCol < 0 || entityLeftCol >= 50) return true;
                 tileNum1 = gp.getTileManager().getMapTileNum(entityLeftCol, entityTopRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityLeftCol, entityBottomRow);
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
-                    collision = true;
                 }
                 break;
 
             case "right":
                 entityRightCol = (entityRightWorldX + entity.getSpeed()) / tileSize;
-                if(entityRightCol < 0 || entityRightCol >= 50) return true;
                 tileNum1 = gp.getTileManager().getMapTileNum(entityRightCol, entityTopRow);
                 tileNum2 = gp.getTileManager().getMapTileNum(entityRightCol, entityBottomRow);
                 
                 if (gp.getTileManager().getTile(tileNum1).isCollision() || gp.getTileManager().getTile(tileNum2).isCollision()) {
                     entity.setCollisionOn(true);
-                    collision = true;
                 }
                 break;
         }
-
-        return collision;
     }
 
     public int checkObject(Entity entity, boolean player) { // check if the entity is a player or not 

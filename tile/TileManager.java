@@ -37,7 +37,6 @@ public class TileManager {
 			initaliseTile(3, "earth", false);
 			initaliseTile(4, "tree", true);
 			initaliseTile(5, "sand", false);
-
 			
 	}
 	

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JPanel;
 
 import entity.Enemy;
@@ -30,8 +29,8 @@ public class GamePanel extends JPanel implements Runnable {
 	//WORLD SETTINGS 
 	public static final int maxWorldCol = 50; 
 	public static final int maxWorldRow = 50; 
-	public static final int worldWidth = tileSize * maxWorldCol; 
-	public static final int worldHeight = tileSize * maxWorldRow; 
+	public static  final int worldWidth = tileSize * maxWorldCol; 
+	public static  final int worldHeight = tileSize * maxWorldRow; 
 	
 	//FPS
 	private int FPS = 60;
@@ -124,7 +123,6 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// the two methods (update and paintComponent) will be called in the gameLoop 
 	public void update() {
-
 		if (gameState == playState) { 
 			// PLAYER
 			player.update();
@@ -149,17 +147,17 @@ public class GamePanel extends JPanel implements Runnable {
 				}
 			}
 			//Enemies
-			for (int i = 0; i < enemies.length; i++) {
-				Enemy enemy = enemies[i];
-				if(enemy != null) {
-					if(enemy.isMarkedForDeletion()) {
+			for(int i = 0; i <enemies.length;i++) {
+				if(enemies[i] != null) {
+					if(enemies[i].isMarkedForDeletion()) {
 						enemies[i] = null;
 					} else {
-						enemy.update();
+						enemies[i].update();
 					}
 				}
 			}
 		}
+		
 		if (gameState == pauseState) {
 			// pause menu
 		}
@@ -199,8 +197,6 @@ public class GamePanel extends JPanel implements Runnable {
 			for (int i = 0; i < enemies.length; i++) {
 				if (enemies[i] != null) {
 					enemies[i].draw(g2);
-
-					if(debug) enemies[i].drawHitbox(g2);
 				}
 			}
 			
@@ -283,6 +279,30 @@ public class GamePanel extends JPanel implements Runnable {
 		return proj[index];
 	}
 
+	public Entity[] getNPC() {
+		return npc;
+	}
+
+	public Entity getNPC(int index) {
+		return npc[index];
+	}
+
+	public void setNPC(int index, Entity entity) {
+		npc[index] = entity;
+	}
+
+	public Enemy[] getEnemy() {
+		return enemies;
+	}
+
+	public Enemy getEnemy(int index) {
+		return enemies[index];
+	}
+
+	public void setEnemy(int index, Enemy enemy) {
+		enemies[index] = enemy;
+	}
+
 	public void setProjectile(int index, Projectile projectile) {
 		proj[index] = projectile;
 	}
@@ -297,30 +317,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public Player getPlayer() {
 		return player;
-	}
-
-	public Entity[] getNPCs() {
-		return npc;
-	}
-
-	public Entity getNPCs(int index) {
-		return npc[index];
-	}
-
-	public void createNPC(int index, Entity npc) {
-		this.npc[index] = npc;	
-	}
-
-	public Enemy[] getEnemies() {
-		return enemies;
-	}
-
-	public Enemy getEnemies(int index) {
-		return enemies[index];
-	}
-
-	public void createEnemy(int index, Enemy enemy) {
-		this.enemies[index] = enemy;
 	}
 
 	public CollisionChecker getCollisionChecker() {

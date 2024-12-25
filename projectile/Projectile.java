@@ -2,6 +2,7 @@ package projectile;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import entity.Entity;
@@ -12,29 +13,29 @@ import static main.GamePanel.tileSize;
 public class Projectile extends Entity {
     //Every projectile needs the position, direction, image and access to the main game class
     protected BufferedImage img;
-    protected boolean markedForDeletion;
+    protected boolean init = true;
     protected int damage;
 
-    private boolean init = true;
-
-    public Projectile(int worldX, int worldY, int speed, String direction, GamePanel gp, int damage) {
+    public Projectile(int worldX, int worldY, int speed, String direction, GamePanel gp) {
         super(gp);
         this.worldX = worldX;
         this.worldY = worldY;
         this.speed = speed;
         this.direction = direction;
         this.gp = gp;
-        this.damage = damage;
+
+        // give projectile smaller hitbox to match the sprite
+        solidArea = new Rectangle(12, 18,23,23);
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
     }
 
     protected BufferedImage getImg() {
         return null;
     }
 
-    protected void checkEntityCollisions() {}
-
-    protected boolean checkWallCollisions() {
-        return false;
+    protected boolean checkCollisions() {
+        return gp.getCollisionChecker().checkTile(this);
     }
 
     @Override
@@ -43,8 +44,7 @@ public class Projectile extends Entity {
         // if not, then check whether the projectile hits the player
         // in both cases, delete the projectile if true
         init = false;
-        markedForDeletion = checkWallCollisions();
-        checkEntityCollisions();
+        markedForDeletion = checkCollisions();
 
         // calculate where projectile will display on the screen
         screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX(); 
@@ -89,7 +89,6 @@ public class Projectile extends Entity {
     }
 
     // Getters and setters
-
     public boolean isMarkedForDeletion() {
         return markedForDeletion;
     }
