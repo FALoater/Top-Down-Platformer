@@ -6,12 +6,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
-import entity.Enemy;
 import entity.Entity;
 import entity.Player;
+import entity.enemy.Enemy;
 import object.SuperObject;
 import projectile.Projectile;
-import tile.TileManager;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -38,21 +37,22 @@ public class GamePanel extends JPanel implements Runnable {
 	//INSTANTIATE SYSTEM CLASSES
 	private Sound music = new Sound(), se = new Sound();
 	private Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
-
-	private AssetSetter aSetter = new AssetSetter(this);
-	private CollisionChecker cChecker = new CollisionChecker(this);
-	private EventHandler eHandler = new EventHandler(this); //instantiate in gamePanel class
 	private KeyHandler keyH = new KeyHandler(this);
-	private TileManager tileM = new TileManager(this);
-	private UI ui = new UI(this);
 
 	//INSTANTIATE ENTITY AND OBJECT 
-	private Player player = new Player(this, keyH);
 	private SuperObject obj[] = new SuperObject[10]; // we have 10 slots to add objects (at the same time) (can update later on during the game development) 
 	private Entity npc[] = new Entity[10];
 	private Enemy enemies[] = new Enemy[10];
 	private Projectile proj[] = new Projectile[10];
-	
+	private Player player = new Player(this, keyH); //instantiate in gamePanel class
+
+	private AssetSetter aSetter = new AssetSetter(this);
+	private CollisionChecker cChecker = new CollisionChecker(this);
+	private EventHandler eHandler = new EventHandler(this); //instantiate in gamePanel class
+	private LevelManager levelManager = new LevelManager(this);
+	private UI ui = new UI(this);
+
+
 	// GAME STATE
 	//game state - various game situations (title screen, main game play screen, menu screen, pause screen etc.) 
 	//depending on the situation, the program draws something different on the screen 
@@ -78,7 +78,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void setupGame() { 
 		aSetter.setObject();
 		aSetter.setNPC();
-		aSetter.spawnFlameThrower();
+		levelManager.init();
 		//playMusic(0); // this is the first song that will run continuously in the background
 		// we do not want music running on the title screen so we turn it off in this function 
 		gameState = titleState;
@@ -184,7 +184,7 @@ public class GamePanel extends JPanel implements Runnable {
 		//OTHERS (add a condition for the title xfeen) 
 		else {
 			//TILE
-			tileM.draw(g2); // this has to come before the player line (draw tiles first, then player) 
+			levelManager.draw(g2); // this has to come before the player line (draw tiles first, then player) 
 			
 			//OBJECT
 			for (int i = 0; i < obj.length; i++) { // have to go through the entire objects array and check to see if any object is null 
@@ -335,8 +335,8 @@ public class GamePanel extends JPanel implements Runnable {
 		return keyH;
 	}
 
-	public TileManager getTileManager() {
-		return tileM;
+	public LevelManager getLevelManager() {
+		return levelManager;
 	}
 
 	public SuperObject[] getObjects() {

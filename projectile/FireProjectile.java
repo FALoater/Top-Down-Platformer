@@ -2,7 +2,7 @@ package projectile;
 
 import java.awt.image.BufferedImage;
 
-import entity.Enemy;
+import entity.enemy.Enemy;
 import main.GamePanel;
 
 public class FireProjectile extends Projectile{

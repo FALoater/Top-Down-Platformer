@@ -1,16 +1,20 @@
-package entity;
+package entity.enemy;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Random;
 
+import entity.Entity;
 import main.GamePanel;
 
-public class Enemy extends Entity {
+public abstract class Enemy extends Entity {
+	private int directionLock = 60;
+
     public Enemy(GamePanel gp) {
         super(gp);
-        speed = 1;
-        direction = "down";
+        speed = 4;
+        direction = "right";
 
         maxLife = 4;
         life = maxLife;
@@ -43,6 +47,7 @@ public class Enemy extends Entity {
 	public void setAction() { 
         checkHealth();
 		attackTimer++;
+		directionLock++;
 
 		if(attackTimer > 90 && attacking) {
 			attacking = false;
@@ -52,21 +57,44 @@ public class Enemy extends Entity {
 		int playerX = gp.getPlayer().getWorldX();
 		int playerY = gp.getPlayer().getWorldY();
 
-		// compare player coordinates with enemy coordinates
+		// only pathfind if player is within 10 tiles (480 pixels)
+		// else randomly move
 		// move left and right before up and down
-		if(playerX == worldX) {
-			if(playerY > worldY) {
-				direction = "down";
+		if( Math.sqrt(Math.pow(playerX - worldX, 2) + Math.pow(playerY - worldY, 2)) < 480) {
+			if(playerX == worldX) {
+				if(playerY > worldY) {
+					direction = "down";
+				} else {
+					direction = "up";
+				}
+	
 			} else {
-				direction = "up";
+				if(playerX > worldX) {
+					direction = "right";
+				} else {
+					direction = "left";
+				}
+			}
+		} else {
+			if(directionLock >= 60) {
+				Random random = new Random();
+				int i = random.nextInt(100) + 1;
+				if (i <= 25) {
+					direction = "up";
+				}
+				if (i > 25 && i < 50) { 
+					direction = "down";
+				}
+				if (i > 50 && i<75) {
+					direction = "left";
+					}
+				if (i > 75 && i <= 100) { 
+					direction = "right";
+				}
+
+				directionLock = 0;
 			}
 
-		} else {
-			if(playerX > worldX) {
-				direction = "right";
-			} else {
-				direction = "left";
-			}
 		}
 		attack();
 	}	

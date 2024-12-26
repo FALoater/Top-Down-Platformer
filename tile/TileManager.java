@@ -3,9 +3,9 @@ package tile;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
 
 import main.GamePanel;
@@ -19,14 +19,16 @@ public class TileManager {
 	
 	private GamePanel gp; 
 	private Tile[] tile;
-	private int mapTileNum[][];
+	private int mapTileNum[][] = new int[maxWorldCol][maxWorldRow];
 	
 	public TileManager(GamePanel gp) { 
 		this.gp = gp;
 		this.tile = new Tile[10]; //create 10 kinds of tiles (if we need more we can simply change this number) 
-		this.mapTileNum = new int[maxWorldCol][maxWorldRow]; // this array will store all these numbers on the mapTile
 		getTileImage();
-		loadMap();
+	}
+
+	public void getLevel(int level) {
+		mapTileNum = loadLevel(level);
 	}
 	
 	public void getTileImage() { 
@@ -37,7 +39,6 @@ public class TileManager {
 			initaliseTile(3, "earth", false);
 			initaliseTile(4, "tree", true);
 			initaliseTile(5, "sand", false);
-			
 	}
 	
 	public static BufferedImage readImage(String imageName){
@@ -52,20 +53,13 @@ public class TileManager {
 		}
 
 		return img;
-
 	}
 
-	private void initaliseTile(int index, String imgName, boolean collision) {
-		UtilityTool uTool = new UtilityTool();
-		this.tile[index] = new Tile();
-		this.tile[index].setImage(readImage(imgName));
-		this.tile[index].setImage(uTool.scaleImage(tile[index].getImage(), tileSize, tileSize));
-		this.tile[index].setCollision(collision);
-	}
-	
-	public void loadMap() { 
+    public int[][] loadLevel(int level) { 
+        int mapTileNum[][] = new int[maxWorldCol][maxWorldRow];
+
 	    try { 
-	        InputStream is = getClass().getResourceAsStream("/assets/maps/world01.txt"); //importStream used to import text file 
+	        InputStream is = getClass().getResourceAsStream("/assets/maps/world0" + String.valueOf(level) + ".txt"); //importStream used to import text file 
 	        BufferedReader br = new BufferedReader(new InputStreamReader(is));  // bufferedReader reads the contents of the text file (just a format) 
 	        
 	        int col = 0;
@@ -91,6 +85,15 @@ public class TileManager {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
+        return mapTileNum;
+    }
+
+	private void initaliseTile(int index, String imgName, boolean collision) {
+		UtilityTool uTool = new UtilityTool();
+		this.tile[index] = new Tile();
+		this.tile[index].setImage(readImage(imgName));
+		this.tile[index].setImage(uTool.scaleImage(tile[index].getImage(), tileSize, tileSize));
+		this.tile[index].setCollision(collision);
 	}
 	
 	public void draw(Graphics2D g2) {

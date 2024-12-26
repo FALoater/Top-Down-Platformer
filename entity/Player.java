@@ -39,8 +39,6 @@ public class Player extends Entity {
 
     public void setDefaultValues() { 
     	//Default characteristics for the player entity 
-        worldX = tileSize * 23; 
-        worldY = tileSize * 21; 
         speed = 4;
         direction = "down";
         
@@ -262,16 +260,16 @@ public class Player extends Entity {
 
         switch(direction) {
             case "up":
-                gp.getAssetSetter().spawnFireProjectile(worldX, worldY - tileSize, 7, direction);
+                gp.getAssetSetter().spawnProjectile(worldX, worldY - tileSize, 7, direction, "fire");
                 break;
             case "down":
-                gp.getAssetSetter().spawnFireProjectile(worldX, worldY + tileSize, 7, direction);
+                gp.getAssetSetter().spawnProjectile(worldX, worldY + tileSize, 7, direction, "fire");
                 break;
             case "left":
-                gp.getAssetSetter().spawnFireProjectile(worldX - tileSize, worldY, 7, direction);
+                gp.getAssetSetter().spawnProjectile(worldX - tileSize, worldY, 7, direction, "fire");
                 break;
             case "right":
-                gp.getAssetSetter().spawnFireProjectile(worldX + tileSize, worldY, 7, direction);
+                gp.getAssetSetter().spawnProjectile(worldX + tileSize, worldY, 7, direction, "fire");
                 break;
         }
     }

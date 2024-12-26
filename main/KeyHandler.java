@@ -78,7 +78,9 @@ public class KeyHandler implements KeyListener {
 				attackPressed = true;
 				gp.getPlayer().attack();
 			}
-			
+			if (code == KeyEvent.VK_Z) {
+				gp.getLevelManager().loadNextLevel();
+			}
 			// DEBUG
 			if (code == KeyEvent.VK_Q) { 
 				gp.toggleDebug();
