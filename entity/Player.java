@@ -16,6 +16,7 @@ import static main.GamePanel.tileSize;
 public class Player extends Entity {
     private KeyHandler keyH;
     private boolean canMove;
+    private int ammo = 3;
 
     private BufferedImage attackDown1, attackDown2, attackUp1, attackUp2, attackLeft1, attackLeft2, attackRight1, attackRight2;
 
@@ -31,7 +32,7 @@ public class Player extends Entity {
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
-        attackTimer = 45;
+        attackTimer = 90;
         
         setDefaultValues();
         getPlayerImage();
@@ -79,7 +80,14 @@ public class Player extends Entity {
             canMove = true;
         }
 
-        if(attackTimer > 45 && attacking) {
+        if(ammo > 0 && !keyH.isAttackPressed()) {
+            attacking = false;
+        }
+
+        if(ammo <= 0) {
+            if(attackTimer > 90) {
+                ammo = 3;
+            }
             attacking = false;
         }
 
@@ -253,10 +261,11 @@ public class Player extends Entity {
     } 
     
     public void attack() {
-        if(attacking || attackTimer < 45 || !keyH.isAttackPressed()) return;
+        if(ammo <= 0 || !keyH.isAttackPressed()) return;
 
         attacking = true;
         attackTimer = 0;
+        ammo--;
 
         switch(direction) {
             case "up":

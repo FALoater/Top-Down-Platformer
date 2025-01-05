@@ -126,6 +126,9 @@ public class GamePanel extends JPanel implements Runnable {
 		if (gameState == playState) { 
 			// PLAYER
 			player.update();
+			if(levelManager.getNumberOfEnemies() == 0) {
+				levelManager.loadNextLevel();
+			}
 
 			// Projectiles
 			for(int i = 0;i<proj.length;i++) {
@@ -146,11 +149,12 @@ public class GamePanel extends JPanel implements Runnable {
 					npc[i].update();
 				}
 			}
-			//Enemies
+
 			for(int i = 0; i <enemies.length;i++) {
 				if(enemies[i] != null) {
 					if(enemies[i].isMarkedForDeletion()) {
 						enemies[i] = null;
+						levelManager.decreaseNumberOfEnemies();
 					} else {
 						enemies[i].update();
 					}
@@ -305,6 +309,18 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setProjectile(int index, Projectile projectile) {
 		proj[index] = projectile;
+	}
+
+	public void resetProjectiles() {
+		for(int i = 0; i < proj.length; i++) {
+			proj[i] = null;
+		}
+	}
+
+	public void resetEnemies() {
+		for(int i = 0; i < enemies.length; i++) {
+			enemies[i] = null;
+		}
 	}
 
 	public int getDialogueState() {

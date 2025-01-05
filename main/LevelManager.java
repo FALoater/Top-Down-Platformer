@@ -10,6 +10,7 @@ public class LevelManager {
     private GamePanel gp;
     private TileManager tileManager;
     private int currentLevel = 1;
+    private int numberOfEnemies;
 
     public LevelManager(GamePanel gp) {
         this.gp = gp;
@@ -25,8 +26,22 @@ public class LevelManager {
     public void loadNextLevel() {
         currentLevel++;
         loadTiles(currentLevel);
-        resetPlayer();
+        resetAll();
         loadEnemies();
+    }
+
+    private void resetAll() {
+        resetPlayer();
+        resetProjectiles();
+        resetEnemies();
+    }
+
+    private void resetProjectiles() {
+        gp.resetProjectiles();
+    }
+
+    private void resetEnemies() {
+        gp.resetEnemies();
     }
 
     public void draw(Graphics2D g2) {
@@ -64,7 +79,9 @@ public class LevelManager {
                 // copy and paste the above line to add more enemies
                 // enemyTypes: fireThrower, waterThrower, slimeThrower
                 // worldX and worldY are tile coordinates
+                numberOfEnemies = 3;
             case 2:
+                numberOfEnemies = 3;
                 return;
             case 3:
                 return;
@@ -74,4 +91,12 @@ public class LevelManager {
     public TileManager getTileManager() {
         return tileManager;
     }
+
+    public int getNumberOfEnemies() {
+        return numberOfEnemies;
+    }  
+
+    public void decreaseNumberOfEnemies() {
+        numberOfEnemies--;
+    }   
 }

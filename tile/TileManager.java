@@ -28,7 +28,7 @@ public class TileManager {
 	}
 
 	public void getLevel(int level) {
-		mapTileNum = loadLevel(level);
+		loadLevel(level);
 	}
 	
 	public void getTileImage() { 
@@ -55,9 +55,7 @@ public class TileManager {
 		return img;
 	}
 
-    public int[][] loadLevel(int level) { 
-        int mapTileNum[][] = new int[maxWorldCol][maxWorldRow];
-
+    public void loadLevel(int level) { 
 	    try { 
 	        InputStream is = getClass().getResourceAsStream("/assets/maps/world0" + String.valueOf(level) + ".txt"); //importStream used to import text file 
 	        BufferedReader br = new BufferedReader(new InputStreamReader(is));  // bufferedReader reads the contents of the text file (just a format) 
@@ -85,7 +83,6 @@ public class TileManager {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-        return mapTileNum;
     }
 
 	private void initaliseTile(int index, String imgName, boolean collision) {
