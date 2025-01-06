@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
-import entity.Entity;
 import entity.Player;
 import entity.enemy.Enemy;
 import object.SuperObject;
@@ -28,8 +27,8 @@ public class GamePanel extends JPanel implements Runnable {
 	//WORLD SETTINGS 
 	public static final int maxWorldCol = 50; 
 	public static final int maxWorldRow = 50; 
-	public static  final int worldWidth = tileSize * maxWorldCol; 
-	public static  final int worldHeight = tileSize * maxWorldRow; 
+	public static final int worldWidth = tileSize * maxWorldCol; 
+	public static final int worldHeight = tileSize * maxWorldRow; 
 	
 	//FPS
 	private int FPS = 60;
@@ -40,8 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private KeyHandler keyH = new KeyHandler(this);
 
 	//INSTANTIATE ENTITY AND OBJECT 
-	private SuperObject obj[] = new SuperObject[10]; // we have 10 slots to add objects (at the same time) (can update later on during the game development) 
-	private Entity npc[] = new Entity[10];
+	private SuperObject obj[] = new SuperObject[10]; // we have 10 slots to add objects (at the same time) (can update later on during the game development)
 	private Enemy enemies[] = new Enemy[10];
 	private Projectile proj[] = new Projectile[10];
 	private Player player = new Player(this, keyH); //instantiate in gamePanel class
@@ -77,7 +75,6 @@ public class GamePanel extends JPanel implements Runnable {
 	//setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
 		aSetter.setObject();
-		aSetter.setNPC();
 		levelManager.init();
 		//playMusic(0); // this is the first song that will run continuously in the background
 		// we do not want music running on the title screen so we turn it off in this function 
@@ -143,12 +140,6 @@ public class GamePanel extends JPanel implements Runnable {
 					}
 				}
 			}
-			//NPC
-			for (int i = 0; i < npc.length; i++) {
-				if(npc[i] != null) {
-					npc[i].update();
-				}
-			}
 
 			for(int i = 0; i <enemies.length;i++) {
 				if(enemies[i] != null) {
@@ -201,13 +192,6 @@ public class GamePanel extends JPanel implements Runnable {
 			for (int i = 0; i < enemies.length; i++) {
 				if (enemies[i] != null) {
 					enemies[i].draw(g2);
-				}
-			}
-			
-			//NPC
-			for (int i = 0; i < npc.length; i++) {
-				if (npc[i] != null) {
-					npc[i].draw(g2);
 				}
 			}
 
@@ -281,18 +265,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public Projectile getProjectiles(int index) {
 		return proj[index];
-	}
-
-	public Entity[] getNPC() {
-		return npc;
-	}
-
-	public Entity getNPC(int index) {
-		return npc[index];
-	}
-
-	public void setNPC(int index, Entity entity) {
-		npc[index] = entity;
 	}
 
 	public Enemy[] getEnemy() {

@@ -53,7 +53,6 @@ public abstract class Enemy extends Entity {
 			attacking = false;
 		}
 		
-		gp.getCollisionChecker().checkEntity(this, gp.getNPC()); 
 		int playerX = gp.getPlayer().getWorldX();
 		int playerY = gp.getPlayer().getWorldY();
 

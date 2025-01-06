@@ -157,7 +157,7 @@ public class CollisionChecker {
         return index;
     }
     
-    //NPC or Monster Collision 
+    //Monster Collision 
     public int checkEntity(Entity entity, Entity[] target) {
     	int index = 999; 
         

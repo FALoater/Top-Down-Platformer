@@ -15,7 +15,7 @@ import main.UtilityTool;
 import projectile.Projectile;
 
 // this will be the super/parent class for all our entities
-// stores variables that will be used in all of player, monster, NPC classes
+// stores variables that will be used in all of player, monster classes
 
 public class Entity {
 	
@@ -27,7 +27,6 @@ public class Entity {
 	protected int solidAreaDefaultX, solidAreaDefaultY;
 
 	protected int spriteCounter = 0, spriteNum = 1;
-	protected int dialogueIndex = 0;
 	protected int attackTimer;
 	
 	// CHARACTER STATUS 
@@ -45,7 +44,6 @@ public class Entity {
 	protected Rectangle solidArea = new Rectangle(0,0,48,48); 
 	
 	protected String direction;
-	protected String dialogues[] = new String[20]; // space for 20 dialogues
 	
 	public Entity(GamePanel gp) {
 		this.gp = gp;
@@ -74,30 +72,6 @@ public class Entity {
 	
 	public void setAction() {}; // overriden in subclasses
 	protected void drawHealthBar(Graphics2D g2) {}; // overriden in subclasses
-
-	public void speak() {
-		if (dialogues[dialogueIndex] == null) { 
-			dialogueIndex = 0;
-		}
-		
-		gp.getUi().setCurrentDialogue(dialogues[dialogueIndex]);
-		dialogueIndex++;
-		
-		switch(gp.getPlayer().getDirection()) {
-		case "up": 
-			direction = "down"; 
-			break;
-		case "down": 
-			direction = "up";
-			break; 
-		case "left": 
-			direction = "right"; 
-			break; 
-		case "right": 
-			direction = "left";
-			break;
-		}
-	};
 	
 	public void update() { 
 		setAction(); // subclass method takes priority 

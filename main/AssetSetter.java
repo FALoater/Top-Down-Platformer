@@ -1,6 +1,5 @@
 package main;
 
-import entity.NPC_OldMan;
 import entity.enemy.Enemy;
 import entity.enemy.FireThrower;
 import projectile.*;
@@ -52,12 +51,6 @@ public class AssetSetter {
 //		gp.obj[7] = new OBJ_Boots(gp); 
 //		gp.obj[7].worldX = 37 * tileSize; 
 //		gp.obj[7].worldY =  42 * tileSize
-	}
-	
-	public void setNPC() {
-		gp.setNPC(0, new NPC_OldMan(gp));
-		gp.getNPC(0).setWorldX(tileSize*21);
-		gp.getNPC(0).setWorldY(tileSize*21);
 	}
 
 	public Enemy spawnEnemy(int worldX, int worldY, String type) {

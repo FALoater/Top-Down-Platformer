@@ -113,10 +113,6 @@ public class Player extends Entity {
             int objIndex = gp.getCollisionChecker().checkObject(this, true);
             pickUpObject(objIndex);
             
-            //CHECK NPC COLLISION
-            int npcIndex = gp.getCollisionChecker().checkEntity(this, gp.getNPC()); //pass npc array as 'target' parameter
-            interactNPC(npcIndex);
-
             //CHECK ENEMY COLLISION
             gp.getCollisionChecker().checkEntity(this, gp.getEnemy()); // probably decrease health after this coliision
             
@@ -155,16 +151,6 @@ public class Player extends Entity {
             }
         }	
     }
-
-    //Player would like to interact with NPC
-    private void interactNPC(int i) {
-		if (i!= 999) {
-		    if(gp.getKeyHandler().isEnterPressed()) {
-		    	gp.setGameState(gp.getDialogueState());
-				gp.getNPC(i).speak();
-		    }
-		}
-	}
 
 	public void pickUpObject(int i) { 
     	if (i!= 999) {
