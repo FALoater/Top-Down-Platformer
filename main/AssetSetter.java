@@ -15,7 +15,7 @@ public class AssetSetter {
 		this.gp = gp;
 	}
 	
-	public void setObject() {
+	// public void setObject() {
 		//determine which objects you want and where you want to position them on the world map
 		// can create a maximum of 10 objects (7 so far) 
 		
@@ -51,7 +51,7 @@ public class AssetSetter {
 //		gp.obj[7] = new OBJ_Boots(gp); 
 //		gp.obj[7].worldX = 37 * tileSize; 
 //		gp.obj[7].worldY =  42 * tileSize
-	}
+	// }
 
 	public Enemy spawnEnemy(int worldX, int worldY, String type) {
 		switch(type) {

@@ -110,8 +110,8 @@ public class Player extends Entity {
             gp.getCollisionChecker().checkTile(this);
             
             //CHECK OBJECT COLLISION
-            int objIndex = gp.getCollisionChecker().checkObject(this, true);
-            pickUpObject(objIndex);
+            // int objIndex = gp.getCollisionChecker().checkObject(this, true);
+            // pickUpObject(objIndex);
             
             //CHECK ENEMY COLLISION
             gp.getCollisionChecker().checkEntity(this, gp.getEnemy()); // probably decrease health after this coliision
@@ -152,9 +152,9 @@ public class Player extends Entity {
         }	
     }
 
-	public void pickUpObject(int i) { 
-    	if (i!= 999) {
-    	}
+	// public void pickUpObject(int i) { 
+    // 	if (i!= 999) {
+    // 	}
 //         
 //        	String objectName = gp.obj[i].name;
 //        	
@@ -195,7 +195,7 @@ public class Player extends Entity {
 //        	// add penalty item as well 
 //        }
 //        }
-    }
+//  }
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
