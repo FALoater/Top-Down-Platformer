@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import entity.Player;
 import entity.enemy.Enemy;
 import object.SuperObject;
+import projectile.Projectile;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -42,6 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
 	// GAME OBJECTS
 	private SuperObject obj[] = new SuperObject[10];
 	private Enemy enemies[] = new Enemy[10];
+	private Projectile proj[] = new Projectile[10];
 	private Player player = new Player(this, keyH);
 
 	// GAME MANAGERS
@@ -116,6 +118,19 @@ public class GamePanel extends JPanel implements Runnable {
 		if (gameState == playState) { 
 			player.update();
 
+			for(int i = 0;i<proj.length;i++) {
+				Projectile projectile = proj[i];
+
+				if(projectile != null) {
+					// check first if the projectile is meant to be deleted first
+					if(projectile.isMarkedForDeletion() || Math.abs(projectile.getWorldX()) > worldWidth || Math.abs(projectile.getWorldY()) > worldHeight) {
+						proj[i] = null;
+					} else {
+						projectile.update();
+					}
+				}
+			}
+
 			for(int i = 0; i <enemies.length;i++) {
 				if(enemies[i] != null) {
 					if(enemies[i].isMarkedForDeletion()) {
@@ -160,6 +175,13 @@ public class GamePanel extends JPanel implements Runnable {
 
 			player.draw(g2);
 			if(debug) player.drawHitbox(g2);
+
+			for(Projectile projectile : proj) {
+				if(projectile != null) {
+					projectile.draw(g2);
+					if(debug) projectile.drawHitbox(g2);
+				}
+			}
 
 			ui.draw(g2);
 
@@ -245,7 +267,6 @@ public class GamePanel extends JPanel implements Runnable {
 	public void setEnemy(int index, Enemy enemy) {
 		enemies[index] = enemy;
 	}
-
 	
 	public LevelManager getLevelManager() {
 		return levelManager;
@@ -257,6 +278,18 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public SuperObject getObjects(int index) {
 		return obj[index];
+	}
+
+	public Projectile[] getProjectiles() {
+		return proj;
+	}
+
+	public Projectile getProjectiles(int index) {
+		return proj[index];
+	}
+
+	public void setProjectile(int index, Projectile projectile) {
+		proj[index] = projectile;
 	}
 
 	public void toggleDebug() {

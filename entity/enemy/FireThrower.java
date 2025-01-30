@@ -28,8 +28,8 @@ public class FireThrower extends Enemy{
         down2 = setup("/assets/entities/enemy/fire_thrower/fire_thrower_down_2"); 
     }
 
-	// @Override
-	// protected void spawnProjectile() {
-	// 	gp.getAssetSetter().spawnProjectile(worldX, worldY, 7, direction, "red");
-	// }
+	@Override
+	protected void spawnProjectile() {
+		gp.getAssetSetter().spawnProjectile(worldX, worldY, 7, direction, "red");
+	}
 }

@@ -2,6 +2,7 @@ package main;
 
 import entity.Entity;
 // import projectile.Projectile;
+import projectile.Projectile;
 
 import static main.GamePanel.tileSize;
 
@@ -14,13 +15,13 @@ public class CollisionChecker {
         this.gp = gp;
     }
 
-    // public boolean checkTile(Projectile projectile) {
-    //     // a method for checkTile(entity) already exists
-    //     // therefore convert projectile into entity
-    //     Entity p = new Entity(projectile);
-    //     checkTile(p);
-    //     return p.getCollisionOn();
-    // }
+    public boolean checkTile(Projectile projectile) {
+        // a method for checkTile(entity) already exists
+        // therefore convert projectile into entity
+        Entity p = new Entity(projectile);
+        checkTile(p);
+        return p.getCollisionOn();
+    }
     
     public void checkTile(Entity entity) {
         Rectangle entitySolidArea = entity.getSolidArea();
@@ -266,25 +267,25 @@ public class CollisionChecker {
        gp.getPlayer().setSolidAreaY(gp.getPlayer().getSolidAreaDefaultY());
     }
 
-    // public boolean checkProjectileCollision(Entity entity, Projectile projectile) {
-    //     entity.incrementSolidAreaX(entity.getWorldX());
-    //     entity.incrementSolidAreaY(entity.getWorldY());
-    //     // --------------------------------------------------
-    //     if(projectile != null) {
-    //         projectile.incrementSolidAreaX(projectile.getWorldX());
-    //         projectile.incrementSolidAreaY(projectile.getWorldY());
+    public boolean checkProjectileCollision(Entity entity, Projectile projectile) {
+        entity.incrementSolidAreaX(entity.getWorldX());
+        entity.incrementSolidAreaY(entity.getWorldY());
+        // --------------------------------------------------
+        if(projectile != null) {
+            projectile.incrementSolidAreaX(projectile.getWorldX());
+            projectile.incrementSolidAreaY(projectile.getWorldY());
 
-    //         if (entity.getSolidArea().intersects(projectile.getSolidArea())) { 
-    //             entity.takeDamage(projectile.getDamage());
-    //             return true;
-    //         } else {
-    //             // reset hitboxes and valuesx
-    //             projectile.setSolidAreaX(projectile.getSolidAreaDefaultX());
-    //             projectile.setSolidAreaY(projectile.getSolidAreaDefaultY());
-    //             entity.setSolidAreaX(entity.getSolidAreaDefaultX()); 
-    //             entity.setSolidAreaY(entity.getSolidAreaDefaultY());
-    //         }
-    //     }
-    //     return false;
-    // }
+            if (entity.getSolidArea().intersects(projectile.getSolidArea())) { 
+                entity.takeDamage(projectile.getDamage());
+                return true;
+            } else {
+                // reset hitboxes and valuesx
+                projectile.setSolidAreaX(projectile.getSolidAreaDefaultX());
+                projectile.setSolidAreaY(projectile.getSolidAreaDefaultY());
+                entity.setSolidAreaX(entity.getSolidAreaDefaultX()); 
+                entity.setSolidAreaY(entity.getSolidAreaDefaultY());
+            }
+        }
+        return false;
+    }
 }

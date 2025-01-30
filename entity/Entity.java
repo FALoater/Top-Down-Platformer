@@ -13,6 +13,7 @@ import static main.GamePanel.tileSize;
 import main.GamePanel;
 import main.UtilityTool;
 // import projectile.Projectile;
+import projectile.Projectile;
 
 // this will be the super/parent class for all our entities
 // stores variables that will be used in all of player, monster classes
@@ -49,15 +50,15 @@ public class Entity {
 		this.gp = gp;
 	}
 
-	// public Entity(Projectile projectile) {
-	// 	// temporarily converts a projectile into an entity
-	// 	// this is for projectile collisions
-	// 	this.worldX = projectile.getWorldX();
-	// 	this.worldY = projectile.getWorldY();
-	// 	this.speed = projectile.getSpeed();
-	// 	this.direction = projectile.getDirection();
-	// 	this.solidArea = projectile.getSolidArea();
-	// }
+	public Entity(Projectile projectile) {
+		// temporarily converts a projectile into an entity
+		// this is for projectile collisions
+		this.worldX = projectile.getWorldX();
+		this.worldY = projectile.getWorldY();
+		this.speed = projectile.getSpeed();
+		this.direction = projectile.getDirection();
+		this.solidArea = projectile.getSolidArea();
+	}
 
 	public void setHitbox(int x, int y, int width, int height) {
 		solidArea.x = x;

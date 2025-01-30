@@ -28,8 +28,8 @@ public class SlimeThrower extends Enemy{
 		down2 = setup("/assets/entities/enemy/slime_thrower/slime_thrower_down_2");
     }
 
-	// @Override
-	// protected void spawnProjectile() {
-	// 	gp.getAssetSetter().spawnProjectile(worldX, worldY, 7, direction, "slime");
-	// }
+	@Override
+	protected void spawnProjectile() {
+		gp.getAssetSetter().spawnProjectile(worldX, worldY, 7, direction, "slime");
+	}
 }

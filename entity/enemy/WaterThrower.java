@@ -28,8 +28,8 @@ public class WaterThrower extends Enemy{
         down2 = setup("/assets/entities/enemy/water_thrower/water_thrower_down_2");
     }
 
-	// @Override
-	// protected void spawnProjectile() {
-	// 	gp.getAssetSetter().spawnProjectile(worldX, worldY, 7, direction, "water");
-	// }
+	@Override
+	protected void spawnProjectile() {
+		gp.getAssetSetter().spawnProjectile(worldX, worldY, 7, direction, "water");
+	}
 }
