@@ -24,35 +24,35 @@ public class KeyHandler implements KeyListener {
 		int code = e.getKeyCode(); // basically returns the number of the key that was pressed 
 		
 		// //TITLE STATE
-		// if (gp.getGameState() == gp.getTitleState()) {
-		// 	if (gp.getUi().getTitleScreenState() == 0) {
-		// 		if (code == KeyEvent.VK_W) {
-		// 			gp.getUi().decrementCommandNum();
-		// 			if(gp.getUi().getCommandNum() < 0) {
-		// 				gp.getUi().setCommandNum(2); //prevents the arrow from moving into oblivion 
-		// 			}
-		// 		}
-		// 		if (code == KeyEvent.VK_S) {
-		// 			gp.getUi().incrementCommandNum();
-		// 			if(gp.getUi().getCommandNum() > 2) {
-		// 				gp.getUi().setCommandNum(0);
-		// 			}
-		// 		}
+		if (gp.getGameState() == gp.getTitleState()) {
+			if (gp.getUi().getTitleScreenState() == 0) {
+				if (code == KeyEvent.VK_W) {
+					gp.getUi().decrementCommandNum();
+					if(gp.getUi().getCommandNum() < 0) {
+						gp.getUi().setCommandNum(2); //prevents the arrow from moving into oblivion 
+					}
+				}
+				if (code == KeyEvent.VK_S) {
+					gp.getUi().incrementCommandNum();
+					if(gp.getUi().getCommandNum() > 2) {
+						gp.getUi().setCommandNum(0);
+					}
+				}
 				
-		// 		if (code == KeyEvent.VK_ENTER) {
-		// 			if (gp.getUi().getCommandNum() == 0) {
-		// 				gp.setGameState(gp.getPlayState());
-		// 				gp.playMusic(0);
-		// 			}
-		// 			if (gp.getUi().getCommandNum() == 1) {
-		// 				//add later
-		// 			}
-		// 			if(gp.getUi().getCommandNum() == 2) { 
-		// 				System.exit(0);
-		// 			}
-		// 		}
-		// 	}
-		// }
+				if (code == KeyEvent.VK_ENTER) {
+					if (gp.getUi().getCommandNum() == 0) {
+						gp.setGameState(gp.getPlayState());
+						//gp.playMusic(0);
+					}
+					if (gp.getUi().getCommandNum() == 1) {
+						//add later
+					}
+					if(gp.getUi().getCommandNum() == 2) { 
+						System.exit(0);
+					}
+				}
+			}
+		}
 		
 		//PLAY STATE 
 		if(gp.getGameState() == gp.getPlayState()) {

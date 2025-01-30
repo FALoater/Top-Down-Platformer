@@ -39,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	// GAME MANAGERS
 	private LevelManager levelManager = new LevelManager(this); // this will be used to manage the levels in the game
+	private UI ui = new UI(this); // this will be used to manage the UI in the game
 
 	// GAME STATE
 	//game state - various game situations (title screen, main game play screen, menu screen, pause screen etc.) 
@@ -47,7 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private final int titleState = 0; //for title screen 
 	private final int playState = 1; 
 	private final int pauseState = 2;
-	//private final int dialogueState = 3; not sure if will be used
+	private final int dialogueState = 3;
 
 	// Create gamePanel constructor 
 	public GamePanel() { 
@@ -60,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	//setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
-		gameState = playState;
+		gameState = titleState;
 		levelManager.init();
 	}
 	
@@ -128,12 +129,14 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		//TITLE SCREEN
 		if (gameState == titleState) {
-			
+			ui.draw(g2);
 		} else {
 			levelManager.draw(g2);
 
 			player.draw(g2);
 			if(debug) player.drawHitbox(g2);
+
+			ui.draw(g2);
 
 			// DEBUG
 			if (debug) {
@@ -166,12 +169,20 @@ public class GamePanel extends JPanel implements Runnable {
 		return pauseState;
 	}
 
+	public int getDialogueState() {
+		return dialogueState;
+	}
+
 	public KeyHandler getKeyHandler() {
 		return keyH;
 	}
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public UI getUi() {
+		return ui;
 	}
 
 	public void toggleDebug() {
