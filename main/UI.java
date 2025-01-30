@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
 
 import object.OBJ_Heart;
 import object.SuperObject;
@@ -16,19 +15,15 @@ import static main.GamePanel.screenWidth;
 
 public class UI {
 	// store for game over
-	private boolean messageOn = false, gameFinished = false; //default 
-	private double playTime; //how long has the user spent finding the treasure
-	private int messageCounter = 0, commandNum = 0;
+	private int commandNum = 0;
 	private int titleScreenState = 0; // 0: the first screen, 1: the second screen...
 
-	private String message = "";
 	private String currentDialogue = "";
 
 	//handles all the on-screen UI 
 	//BufferedImage keyImage;
 	private BufferedImage heart_full, heart_half, heart_blank;
-	private DecimalFormat dFormat = new DecimalFormat("#0.00"); //display up to 2dp only
-	private Font arial_40, arial_80B;
+	private Font arial_40;
 	private GamePanel gp; 
 	private Graphics2D g2;
 	
@@ -36,7 +31,6 @@ public class UI {
 		this.gp = gp;
 		
 		arial_40 = new Font("Arial", Font.PLAIN, 40); //instantiate in the constructor once 
-		arial_80B = new Font("Arial", Font.BOLD, 80);
 		
 		// CREATE HUD OBJECT 
 		SuperObject heart = new OBJ_Heart();
@@ -44,11 +38,6 @@ public class UI {
 		heart_full = images[0];
 		heart_half = images[1];
 		heart_blank = images[2];
-	}
-	
-	public void showMessage(String text) {
-		message = text; 
-		messageOn = true; 
 	}
 	
 	public void draw(Graphics2D g2) { 
@@ -110,98 +99,55 @@ public class UI {
 	}
 
 	private void drawTitleScreen() {
-		if(titleScreenState == 0) {
-			g2.setColor(new Color(0,0,0));
-			g2.fillRect(0, 0, screenWidth, screenHeight);
-			
-			// TITLE NAME
-			g2.setFont(g2.getFont().deriveFont(Font.BOLD,75F));
-			String text = "Blue Boy Adventure";
-			int x = getXforCentredText(text); 
-			int y = tileSize * 3; 
-			
-			//SHADOW
-			g2.setColor(Color.gray);
-			g2.drawString(text, x+5, y+5);
-			
-			//MAIN COLOUR
-			g2.setColor(Color.white);
-			g2.drawString(text, x, y);
-			
-			// BLUE BOY IMAGE
-			x = screenWidth/2 - (tileSize*2)/2; 
-			y += tileSize*2;
-			g2.drawImage(gp.getPlayer().getPlayerMenuImg(), x, y, tileSize*2, tileSize*2, null);
-			
-			//MENU 
-			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-			
-			text = "NEW GAME";
-			x = getXforCentredText(text); 
-			y += tileSize*3.5; //add a further four tiles down from the image 
-			g2.drawString(text, x, y);
-			if (commandNum == 0) { 
-				g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
-			}
-			
-			text = "LOAD GAME";
-			x = getXforCentredText(text); 
-			y += tileSize; //add a further four tiles down from the image 
-			g2.drawString(text, x, y);
-			if (commandNum == 1) { 
-				g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
-			}
-			
-			text = "QUIT";
-			x = getXforCentredText(text); 
-			y += tileSize; //add a further four tiles down from the image 
-			g2.drawString(text, x, y);
-			if (commandNum == 2) { 
-				g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
-			}
+		g2.setColor(new Color(0,0,0));
+		g2.fillRect(0, 0, screenWidth, screenHeight);
+		
+		// TITLE NAME
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,75F));
+		String text = "Blue Boy Adventure";
+		int x = getXforCentredText(text); 
+		int y = tileSize * 3; 
+		
+		//SHADOW
+		g2.setColor(Color.gray);
+		g2.drawString(text, x+5, y+5);
+		
+		//MAIN COLOUR
+		g2.setColor(Color.white);
+		g2.drawString(text, x, y);
+		
+		// BLUE BOY IMAGE
+		x = screenWidth/2 - (tileSize*2)/2; 
+		y += tileSize*2;
+		g2.drawImage(gp.getPlayer().getPlayerMenuImg(), x, y, tileSize*2, tileSize*2, null);
+		
+		//MENU 
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+		
+		text = "NEW GAME";
+		x = getXforCentredText(text); 
+		y += tileSize*3.5; //add a further four tiles down from the image 
+		g2.drawString(text, x, y);
+		if (commandNum == 0) { 
+			g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
 		}
-//		else if (titleScreenState == 1) {
-//			//CLASS SELECCTION SCREEN 
-//			g2.setColor(Color.white); 
-//			g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 42F));
-//			
-//			String text = "Select your class!";
-//			int x = getXforCentredText(text);
-//			int y = tileSize*3;
-//			g2.drawString(text, x, y);
-//			
-//			text = "Fighter";
-//			x = getXforCentredText(text);
-//			y += tileSize*3;
-//			g2.drawString(text, x, y);
-//			if (commandNum == 0) { 
-//				g2.drawString(">", x-tileSize, y);
-//			}
-//			
-//			text = "Thief";
-//			x = getXforCentredText(text);
-//			y += tileSize;
-//			g2.drawString(text, x, y);
-//			if (commandNum == 1) { 
-//				g2.drawString(">", x-tileSize, y);
-//			}
-//			
-//			text = "Sorcerer";
-//			x = getXforCentredText(text);
-//			y += tileSize;
-//			g2.drawString(text, x, y);
-//			if (commandNum == 2) { 
-//				g2.drawString(">", x-tileSize, y);
-//			}
-//			
-//			text = "Back";
-//			x = getXforCentredText(text);
-//			y += tileSize*2;
-//			g2.drawString(text, x, y);
-//			if (commandNum == 3) { 
-//				g2.drawString(">", x-tileSize, y);
-//			}
+		
+		text = "LOAD GAME";
+		x = getXforCentredText(text); 
+		y += tileSize; //add a further four tiles down from the image 
+		g2.drawString(text, x, y);
+		if (commandNum == 1) { 
+			g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
 		}
+		
+		text = "QUIT";
+		x = getXforCentredText(text); 
+		y += tileSize; //add a further four tiles down from the image 
+		g2.drawString(text, x, y);
+		if (commandNum == 2) { 
+			g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
+		}
+	}
 	
 	private void drawDialogueScreen() {
 	    // WINDOW 

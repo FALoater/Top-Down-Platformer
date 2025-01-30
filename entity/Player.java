@@ -116,9 +116,6 @@ public class Player extends Entity {
             //CHECK ENEMY COLLISION
             gp.getCollisionChecker().checkEntity(this, gp.getEnemy()); // probably decrease health after this coliision
             
-            // CHECK EVENT 
-            gp.getEventHandler().checkEvent();
-            
             gp.getKeyHandler().setEnterPressed(false);
 
             //IF COLLISION IS FALSE, PLAYER CAN MOVE

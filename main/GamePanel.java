@@ -47,7 +47,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	protected AssetSetter aSetter = new AssetSetter(this);
 	protected CollisionChecker cChecker = new CollisionChecker(this);
-	protected EventHandler eHandler = new EventHandler(this); //instantiate in gamePanel class
 	protected LevelManager levelManager = new LevelManager(this);
 	protected UI ui = new UI(this);
 
@@ -72,7 +71,6 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	//setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
-		aSetter.setObject();
 		levelManager.init();
 		//playMusic(0); // this is the first song that will run continuously in the background
 		// we do not want music running on the title screen so we turn it off in this function 
@@ -246,10 +244,6 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public AssetSetter getAssetSetter() {
 		return aSetter;
-	}
-
-	public EventHandler getEventHandler() {
-		return eHandler;
 	}
 
 	public KeyHandler getKeyHandler() {
