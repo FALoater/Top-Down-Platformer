@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private AssetSetter aSetter = new AssetSetter(this);
 	private CollisionChecker cChecker = new CollisionChecker(this);
-	// private EventHandler eHandler = new EventHandler(this); //instantiate in gamePanel class
+	private EventHandler eHandler = new EventHandler(this); //instantiate in gamePanel class
 	private LevelManager levelManager = new LevelManager(this);
 	private UI ui = new UI(this);
 
@@ -315,9 +315,9 @@ public class GamePanel extends JPanel implements Runnable {
 		return aSetter;
 	}
 
-	// public EventHandler getEventHandler() {
-	// 	return eHandler;
-	// }
+	public EventHandler getEventHandler() {
+		return eHandler;
+	}
 
 	public KeyHandler getKeyHandler() {
 		return keyH;

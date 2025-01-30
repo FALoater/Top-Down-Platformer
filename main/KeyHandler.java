@@ -95,11 +95,11 @@ public class KeyHandler implements KeyListener {
 		}
 		
 		// DIALOGUE STATE
-		// if (gp.getGameState() == gp.getDialogueState()) {
-		// 	if (code == KeyEvent.VK_ENTER) {
-		// 		gp.setGameState(gp.getPlayState());
-		// 	}
-		// }
+		if (gp.getGameState() == gp.getDialogueState()) {
+			if (code == KeyEvent.VK_ENTER) {
+				gp.setGameState(gp.getPlayState());
+			}
+		}
 	}
 
 	@Override
