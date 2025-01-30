@@ -29,7 +29,6 @@ public class UI {
 	
 	public UI (GamePanel gp) {
 		this.gp = gp;
-		
 		arial_40 = new Font("Arial", Font.PLAIN, 40); //instantiate in the constructor once 
 		
 		// CREATE HUD OBJECT 
@@ -45,27 +44,26 @@ public class UI {
 		
 		g2.setFont(arial_40);
 		g2.setColor(Color.white);
-		
-		//TITLE STATE 
-		if(gp.getGameState() == GameStates.TITLE) {
-			drawTitleScreen();
-		}
-		
-		//PLAY STATE
-		if (gp.getGameState() == GameStates.PLAY) { 
-			drawPlayerLife();
-		}
-		
-		//PAUSE STATE
-		if (gp.getGameState() == GameStates.PAUSE) { 
-			//Do pauseState stuff later
-			drawPlayerLife();
-			drawPauseScreen();
-		}
-		//DIALOGUE STATE
-		if(gp.getGameState() == GameStates.DIALOGUE) {
-			drawPlayerLife();
-			drawDialogueScreen();
+
+		GameStates gameState = gp.getGameState();
+
+		switch(gameState) {
+			case TITLE:
+				drawTitleScreen();
+				break;
+			case PLAY:
+				drawPlayerLife();
+				break;
+			case PAUSE:
+				drawPlayerLife();
+				drawPauseScreen();
+				break;
+			case DIALOGUE:
+				drawPlayerLife();
+				drawDialogueScreen();
+				break;
+			case GAMEOVER:
+				break;
 		}
 	}
 	
@@ -103,8 +101,8 @@ public class UI {
 		g2.fillRect(0, 0, screenWidth, screenHeight);
 		
 		// TITLE NAME
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD,75F));
-		String text = "Blue Boy Adventure";
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
+		String text = "Top Down Platformer"; // change this to the name of your game
 		int x = getXforCentredText(text); 
 		int y = tileSize * 3; 
 		
