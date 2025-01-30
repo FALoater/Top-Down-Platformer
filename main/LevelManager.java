@@ -2,15 +2,15 @@ package main;
 
 import tile.TileManager;
 
-import java.awt.Graphics2D;
-
 import static main.GamePanel.tileSize;
+
+import java.awt.Graphics2D;
 
 public class LevelManager {
     private GamePanel gp;
     private TileManager tileManager;
     private int currentLevel = 1;
-    // private int numberOfEnemies;
+    private int numberOfEnemies;
 
     public LevelManager(GamePanel gp) {
         this.gp = gp;
@@ -23,26 +23,26 @@ public class LevelManager {
         loadEnemies();
     }
 
-    // public void loadNextLevel() {
-    //     currentLevel++;
-    //     loadTiles(currentLevel);
-    //     resetAll();
-    //     loadEnemies();
-    // }
+    public void loadNextLevel() {
+        currentLevel++;
+        loadTiles(currentLevel);
+        resetAll();
+        loadEnemies();
+    }
 
-    // private void resetAll() {
-    //     resetPlayer();
-    //     resetProjectiles();
-    //     resetEnemies();
-    // }
+    private void resetAll() {
+        resetPlayer();
+        resetProjectiles();
+        resetEnemies();
+    }
 
-    // private void resetProjectiles() {
-    //     gp.resetProjectiles();
-    // }
+    private void resetProjectiles() {
+        gp.resetProjectiles();
+    }
 
-    // private void resetEnemies() {
-    //     gp.resetEnemies();
-    // }
+    private void resetEnemies() {
+        gp.resetEnemies();
+    }
 
     public void draw(Graphics2D g2) {
         tileManager.draw(g2);
@@ -58,10 +58,10 @@ public class LevelManager {
                 gp.getPlayer().setWorldX(tileSize * 5);
                 gp.getPlayer().setWorldY(tileSize * 3);
                 break;
-            // case 2:
-            //     gp.getPlayer().setWorldX(tileSize * 20);
-            //     gp.getPlayer().setWorldY(tileSize * 10);
-            //     break;
+            case 2:
+                gp.getPlayer().setWorldX(tileSize * 20);
+                gp.getPlayer().setWorldY(tileSize * 10);
+                break;
             // case 3:
             //     gp.getPlayer().setWorldX(100);
             //     gp.getPlayer().setWorldY(100);
@@ -79,12 +79,12 @@ public class LevelManager {
                 // copy and paste the above line to add more enemies
                 // enemyTypes: fireThrower, waterThrower, slimeThrower
                 // worldX and worldY are tile coordinates
-            //     numberOfEnemies = 3;
-            // case 2:
-            //     numberOfEnemies = 3;
-            //     return;
-            // case 3:
-            //     return;
+                numberOfEnemies = 3;
+            case 2:
+                numberOfEnemies = 3;
+                return;
+            case 3:
+                return;
         }
     }
 
@@ -92,11 +92,11 @@ public class LevelManager {
         return tileManager;
     }
 
-    // public int getNumberOfEnemies() {
-    //     return numberOfEnemies;
-    // }  
+    public int getNumberOfEnemies() {
+        return numberOfEnemies;
+    }  
 
-    // public void decreaseNumberOfEnemies() {
-    //     numberOfEnemies--;
-    // }   
+    public void decreaseNumberOfEnemies() {
+        numberOfEnemies--;
+    }   
 }
