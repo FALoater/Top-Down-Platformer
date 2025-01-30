@@ -5,6 +5,7 @@ import entity.enemy.Enemy;
 import entity.Player;
 import main.GamePanel;
 import main.LevelManager;
+import main.Sound;
 import main.UI;
 import object.SuperObject;
 
@@ -59,6 +60,7 @@ public class Playing implements GameState{
         for(int i = 0; i <enemies.length;i++) {
             if(enemies[i] != null) {
                 if(enemies[i].isMarkedForDeletion()) {
+                    gp.playSoundEffect(Sound.ENEMY_DEATH);
                     enemies[i] = null;
                     levelManager.decreaseNumberOfEnemies();
                 } else {

@@ -175,7 +175,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void playSoundEffect(int i) { 
 		se.setFile(i);
-		se.play(); // we dont call loop for sound effects because these are generally really stop 
+		se.play(); // we dont call loop for sound effects because these are generally really short 
 	}
 
 	// Getters and setters

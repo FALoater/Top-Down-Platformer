@@ -5,8 +5,10 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import gamestates.GameStateType;
 import main.GamePanel;
 import main.KeyHandler;
+import main.Sound;
 
 import static main.GamePanel.screenWidth;
 import static main.GamePanel.screenHeight;
@@ -72,6 +74,11 @@ public class Player extends Entity {
     }
     
     public void update() { 
+        if(life <= 0) {
+            gp.playSoundEffect(Sound.PLAYER_DEATH);
+            gp.setGameState(GameStateType.GAMEOVER);
+        }
+
         attackTimer++;
 
         if(attacking) {
@@ -109,10 +116,6 @@ public class Player extends Entity {
             collisionOn = false; 
             gp.getCollisionChecker().checkTile(this);
             
-            //CHECK OBJECT COLLISION
-            int objIndex = gp.getCollisionChecker().checkObject(this, true);
-            pickUpObject(objIndex);
-            
             //CHECK ENEMY COLLISION
             gp.getCollisionChecker().checkEntity(this, gp.getEnemy()); // probably decrease health after this coliision
             
@@ -149,51 +152,7 @@ public class Player extends Entity {
         }	
     }
 
-	public void pickUpObject(int i) { 
-    	if (i!= 999) {
-    	}
-//         
-//        	String objectName = gp.obj[i].name;
-//        	
-//        	//Handle object's reactions 
-//        	switch (objectName) { 
-//        	case "Key":
-//        		gp.playSoundEffect(1); //coin
-//        		hasKey++;
-//        		gp.obj[i] = null;
-//        		gp.ui.showMessage("You got a key!");
-//        		//System.out.println("Key: " + hasKey); < -- Testing 
-//        		break; 
-//        	case "Door": 
-//        		if (hasKey > 0) { 
-//        			gp.playSoundEffect(3); //unlock
-//        			gp.obj[i] = null;
-//        			hasKey--;
-//        			gp.ui.showMessage("You opened the door!");
-//        		}
-//        		else { 
-//        			gp.ui.showMessage("You need a key!");
-//        		}
-//        		//System.out.println("Key: " + hasKey); < Testing
-//        		break;
-//        	case "Boots": 
-//        		gp.playSoundEffect(2); //power-up sound
-//        		speed += 1;
-//        		gp.obj[i] = null; 
-//        		gp.ui.showMessage("SPEED UP!");
-//        		break;
-//        	case "Chest": 
-//        		gp.ui.gameFinished = true; 
-//        		gp.stopMusic();
-//        		gp.playSoundEffect(4);
-//        		break;
-//        		
-//        	
-//        	// add penalty item as well 
-//        }
-//        }
-    }
-
+    @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         switch(direction) { 
@@ -228,8 +187,11 @@ public class Player extends Entity {
                 }
         }
         
-        if(isHurt) {
+        if(isHurt && life > 0) {
             image = hurt;
+            // pick random hurt sfx
+            int random = (int) (Math.random() * 2);
+            gp.playSoundEffect(2 + random); // player hurt is either 2 or 3
             isHurt = false;
         }
 

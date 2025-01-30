@@ -136,7 +136,8 @@ public class Entity {
 				break;
 			}
 
-			if(isHurt) {
+			if(isHurt && life > 0) {
+				playHurtEffect();
 				image = hurt;
 				isHurt = false;
 			}
@@ -147,6 +148,8 @@ public class Entity {
 	}
 
 	public void drawHitbox(Graphics2D g2) {}
+
+	protected void playHurtEffect() {};
 
 	protected BufferedImage setup(String imagePath) {
 		return setup(imagePath, tileSize, tileSize);
