@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
+import entity.Player;
+
 public class GamePanel extends JPanel implements Runnable {
 	
 	// SCREEN SETTINGS
@@ -30,8 +32,10 @@ public class GamePanel extends JPanel implements Runnable {
 	//FPS
 	private int FPS = 60;
 	private Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
+	private KeyHandler keyH = new KeyHandler(this);
 
 	// GAME OBJECTS
+	private Player player = new Player(this, keyH);
 
 	// GAME MANAGERS
 	private LevelManager levelManager = new LevelManager(this); // this will be used to manage the levels in the game
@@ -50,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true); // similar to BufferStrategy (improves game rendering process)
+		this.addKeyListener(keyH); //add the keyHandler to the gamePanel
 		this.setFocusable(true); //needed for GamePanel to be 'focused' to receive key input 
 	}
 	
@@ -99,6 +104,8 @@ public class GamePanel extends JPanel implements Runnable {
 	// the two methods (update and paintComponent) will be called in the gameLoop 
 	public void update() {
 		if (gameState == playState) { 
+			player.update();
+
 
 		}
 		if (gameState == pauseState) {
@@ -124,6 +131,9 @@ public class GamePanel extends JPanel implements Runnable {
 			
 		} else {
 			levelManager.draw(g2);
+
+			player.draw(g2);
+			if(debug) player.drawHitbox(g2);
 
 			// DEBUG
 			if (debug) {
@@ -156,4 +166,15 @@ public class GamePanel extends JPanel implements Runnable {
 		return pauseState;
 	}
 
+	public KeyHandler getKeyHandler() {
+		return keyH;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void toggleDebug() {
+		debug = !debug;
+	}
 }

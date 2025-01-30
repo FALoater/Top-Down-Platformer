@@ -105,31 +105,22 @@ public class TileManager {
 			int tileNum = mapTileNum[worldCol][worldRow];
 			int worldX = worldCol * tileSize; 
 			int worldY = worldRow * tileSize; 
-
-
-			// int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX(); 
-			// int screenY = worldY - gp.getPlayer().getWorldY()  + gp.getPlayer().getScreenY();
+			int screenX = worldX - gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX(); 
+			int screenY = worldY - gp.getPlayer().getWorldY()  + gp.getPlayer().getScreenY();
 			
-			// if (worldX + tileSize> gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() &&
-			// 	worldX -tileSize < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() && 
-			// 	worldY + tileSize> gp.getPlayer().getWorldY()  - gp.getPlayer().getScreenY() && 
-			// 	worldY - tileSize < gp.getPlayer().getWorldY()  + gp.getPlayer().getScreenY()) { 
+			if (worldX + tileSize> gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() &&
+				worldX -tileSize < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenX() && 
+				worldY + tileSize> gp.getPlayer().getWorldY()  - gp.getPlayer().getScreenY() && 
+				worldY - tileSize < gp.getPlayer().getWorldY()  + gp.getPlayer().getScreenY()) { 
 				
-			// 	//previosuly, image had to be scaled during the game loop (not anymore, we have already pre-scaled it)
-			// 	g2.drawImage(tile[tileNum].getImage(), screenX, screenY, null);
-			// }
-			g2.drawImage(tile[tileNum].getImage(), worldX, worldY, tileSize, tileSize, null);
+				//previosuly, image had to be scaled during the game loop (not anymore, we have already pre-scaled it)
+				g2.drawImage(tile[tileNum].getImage(), screenX, screenY, null);
+			}
 			worldCol++; 
-			worldX += tileSize;
 		
 			if (worldCol == maxWorldCol) {
-				// worldCol = 0; 
-				// worldRow++;
-				worldCol = 0;
-				worldX = 0;
+				worldCol = 0; 
 				worldRow++;
-				worldY += tileSize;
-
 			}
 		}
 	}
