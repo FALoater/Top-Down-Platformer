@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import entity.enemy.Enemy;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -35,9 +36,11 @@ public class GamePanel extends JPanel implements Runnable {
 	private KeyHandler keyH = new KeyHandler(this);
 
 	// GAME OBJECTS
+	private Enemy enemies[] = new Enemy[10];
 	private Player player = new Player(this, keyH);
 
 	// GAME MANAGERS
+	private AssetSetter aSetter = new AssetSetter(this); // this will be used to set up the assets in the game
 	private LevelManager levelManager = new LevelManager(this); // this will be used to manage the levels in the game
 	private UI ui = new UI(this); // this will be used to manage the UI in the game
 
@@ -107,6 +110,16 @@ public class GamePanel extends JPanel implements Runnable {
 		if (gameState == playState) { 
 			player.update();
 
+			for(int i = 0; i <enemies.length;i++) {
+				if(enemies[i] != null) {
+					if(enemies[i].isMarkedForDeletion()) {
+						enemies[i] = null;
+						//levelManager.decreaseNumberOfEnemies();
+					} else {
+						enemies[i].update();
+					}
+				}
+			}
 
 		}
 		if (gameState == pauseState) {
@@ -132,6 +145,12 @@ public class GamePanel extends JPanel implements Runnable {
 			ui.draw(g2);
 		} else {
 			levelManager.draw(g2);
+
+			for (int i = 0; i < enemies.length; i++) {
+				if (enemies[i] != null) {
+					enemies[i].draw(g2);
+				}
+			}
 
 			player.draw(g2);
 			if(debug) player.drawHitbox(g2);
@@ -183,6 +202,22 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public UI getUi() {
 		return ui;
+	}
+
+	public AssetSetter getAssetSetter() {
+		return aSetter;
+	}
+
+	public Enemy[] getEnemy() {
+		return enemies;
+	}
+
+	public Enemy getEnemy(int index) {
+		return enemies[index];
+	}
+
+	public void setEnemy(int index, Enemy enemy) {
+		enemies[index] = enemy;
 	}
 
 	public void toggleDebug() {
