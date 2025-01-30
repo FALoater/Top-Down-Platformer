@@ -25,19 +25,25 @@ public class GamePanel extends JPanel implements Runnable {
 	public static final int worldWidth = tileSize * maxWorldCol; 
 	public static final int worldHeight = tileSize * maxWorldRow; 
 	
+	private boolean debug; //debug mode to print out useful information
+
 	//FPS
 	private int FPS = 60;
 	private Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
 
+	// GAME OBJECTS
 
-	// GAME STATEt
+	// GAME MANAGERS
+	private LevelManager levelManager = new LevelManager(this); // this will be used to manage the levels in the game
+
+	// GAME STATE
 	//game state - various game situations (title screen, main game play screen, menu screen, pause screen etc.) 
 	//depending on the situation, the program draws something different on the screen 
 	private int gameState; 
 	private final int titleState = 0; //for title screen 
 	private final int playState = 1; 
 	private final int pauseState = 2;
-	private final int dialogueState = 3; // not sure if will be used
+	//private final int dialogueState = 3; not sure if will be used
 
 	// Create gamePanel constructor 
 	public GamePanel() { 
@@ -49,7 +55,8 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	//setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
-		gameState = titleState;
+		gameState = playState;
+		levelManager.init();
 	}
 	
 	public void startGameThread() { 
@@ -92,6 +99,7 @@ public class GamePanel extends JPanel implements Runnable {
 	// the two methods (update and paintComponent) will be called in the gameLoop 
 	public void update() {
 		if (gameState == playState) { 
+
 		}
 		if (gameState == pauseState) {
 			// pause menu
@@ -107,10 +115,25 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		// DEBUG
 		long drawStart = 0; 
+		if (debug) { 
+			drawStart = System.nanoTime();
+		}
 		
 		//TITLE SCREEN
-		g2.dispose(); // once drawn, dispose of this graphics context and release any system resources it is using (good practice) 
-		
+		if (gameState == titleState) {
+			
+		} else {
+			levelManager.draw(g2);
+
+			// DEBUG
+			if (debug) {
+				long drawEnd = System.nanoTime();
+				long passed = drawEnd - drawStart;
+				g2.drawString("Draw time: "  + passed, 10, 400);
+				System.out.println("Draw time: " + passed);
+			}
+			g2.dispose(); 
+		}
 	}
 	// Getters and setters
 	public void setGameState(int gameState) {
