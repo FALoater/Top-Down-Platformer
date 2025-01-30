@@ -19,7 +19,7 @@ import main.UtilityTool;
 
 public class Entity {
 	
-	// protected boolean collisionOn = false; 
+	protected boolean collisionOn = false; 
 
 	protected int worldX , worldY;
 	protected int speed;
@@ -76,12 +76,12 @@ public class Entity {
 	public void update() { 
 		setAction(); // subclass method takes priority 
 		
-		// collisionOn = false; 
-		// gp.getCollisionChecker().checkTile(this);
-		// gp.getCollisionChecker().checkObject(this, false);
-		// gp.getCollisionChecker().checkPlayer(this);
+		collisionOn = false; 
+		gp.getCollisionChecker().checkTile(this);
+		gp.getCollisionChecker().checkObject(this, false);
+		gp.getCollisionChecker().checkPlayer(this);
 		
-		// if (collisionOn == false) { 
+		if (collisionOn == false) { 
             switch(direction) { 
                 case "up": 
                     worldY -= speed; 
@@ -96,7 +96,7 @@ public class Entity {
                     worldX += speed;
                     break;
             }
-        // }
+        }
 
         spriteCounter++; // everytime update is called, spriteCounter is incremented
 		if (spriteCounter > 12) {
@@ -257,13 +257,13 @@ public class Entity {
         return speed;
     }
 
-	// public boolean getCollisionOn() {
-	// 	return collisionOn;
-	// }
+	public boolean getCollisionOn() {
+		return collisionOn;
+	}
 
-	// public void setCollisionOn(boolean collisionOn) {
-	// 	this.collisionOn = collisionOn;
-	// }
+	public void setCollisionOn(boolean collisionOn) {
+		this.collisionOn = collisionOn;
+	}
 
 	public boolean isMarkedForDeletion() {
 		return markedForDeletion;

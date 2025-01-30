@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
 import javax.swing.JPanel;
 
 import entity.Player;
 import entity.enemy.Enemy;
+import object.SuperObject;
 
 public class GamePanel extends JPanel implements Runnable {
 	
@@ -32,15 +34,19 @@ public class GamePanel extends JPanel implements Runnable {
 
 	//FPS
 	private int FPS = 60;
+
+	private Sound music = new Sound(), se = new Sound(); //sound object to play music and sound effects
 	private Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
 	private KeyHandler keyH = new KeyHandler(this);
 
 	// GAME OBJECTS
+	private SuperObject obj[] = new SuperObject[10];
 	private Enemy enemies[] = new Enemy[10];
 	private Player player = new Player(this, keyH);
 
 	// GAME MANAGERS
 	private AssetSetter aSetter = new AssetSetter(this); // this will be used to set up the assets in the game
+	private CollisionChecker cChecker = new CollisionChecker(this); // this will be used to check for collisions in the game
 	private LevelManager levelManager = new LevelManager(this); // this will be used to manage the levels in the game
 	private UI ui = new UI(this); // this will be used to manage the UI in the game
 
@@ -167,6 +173,22 @@ public class GamePanel extends JPanel implements Runnable {
 			g2.dispose(); 
 		}
 	}
+
+	public void playMusic(int i) { 
+		music.setFile(i);
+		music.play();
+		music.loop();
+	}
+	
+	public void stopMusic() { 
+		music.stop();
+	}
+
+	public void playSoundEffect(int i) { 
+		se.setFile(i);
+		se.play(); // we dont call loop for sound effects because these are generally really stop 
+	}
+
 	// Getters and setters
 	public void setGameState(int gameState) {
 		this.gameState = gameState;
@@ -208,6 +230,10 @@ public class GamePanel extends JPanel implements Runnable {
 		return aSetter;
 	}
 
+	public CollisionChecker getCollisionChecker() {
+		return cChecker;
+	}
+
 	public Enemy[] getEnemy() {
 		return enemies;
 	}
@@ -218,6 +244,19 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void setEnemy(int index, Enemy enemy) {
 		enemies[index] = enemy;
+	}
+
+	
+	public LevelManager getLevelManager() {
+		return levelManager;
+	}
+
+	public SuperObject[] getObjects() {
+		return obj;
+	}
+
+	public SuperObject getObjects(int index) {
+		return obj[index];
 	}
 
 	public void toggleDebug() {

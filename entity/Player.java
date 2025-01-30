@@ -68,43 +68,39 @@ public class Player extends Entity {
                 direction = "right";
             }
 
-            // projectile collisions are managed in the projectile class
+            //projectile collisions are managed in the projectile class
 
             //CHECK TILE COLLISION
-            // collisionOn = false; 
-            // gp.getCollisionChecker().checkTile(this);
+            collisionOn = false; 
+            gp.getCollisionChecker().checkTile(this);
             
-            // //CHECK OBJECT COLLISION
+            //CHECK OBJECT COLLISION
             // int objIndex = gp.getCollisionChecker().checkObject(this, true);
             // pickUpObject(objIndex);
-            
-            // //CHECK NPC COLLISION
-            // int npcIndex = gp.getCollisionChecker().checkEntity(this, gp.npc); //pass npc array as 'target' parameter
-            // interactNPC(npcIndex);
 
-            // //CHECK ENEMY COLLISION
-            // gp.getCollisionChecker().checkEntity(this, gp.enemies); // probably decrease health after this coliision
+            //CHECK ENEMY COLLISION
+            gp.getCollisionChecker().checkEntity(this, gp.getEnemy()); // probably decrease health after this coliision
             
-            // // CHECK EVENT 
-            // gp.getEventHandler().checkEvent();
+            // CHECK EVENT 
+            //gp.getEventHandler().checkEvent();
 
             //IF COLLISION IS FALSE, PLAYER CAN MOVE
-            // if (collisionOn == false) { 
-            switch(direction) { 
-                case "up": 
-                    worldY -= speed; 
-                    break; 
-                case "down": 
-                    worldY += speed;
-                    break; 
-                case "left":
-                    worldX -= speed;
-                    break; 
-                case "right":
-                    worldX += speed;
-                    break;
+            if (collisionOn == false) { 
+                switch(direction) { 
+                    case "up": 
+                        worldY -= speed; 
+                        break; 
+                    case "down": 
+                        worldY += speed;
+                        break; 
+                    case "left":
+                        worldX -= speed;
+                        break; 
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
             }
-            //}
 
             spriteCounter++; // everytime update is called, spriteCounter is incremented
 			if (spriteCounter > 12) {
