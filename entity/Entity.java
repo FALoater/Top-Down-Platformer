@@ -12,7 +12,6 @@ import static main.GamePanel.tileSize;
 
 import main.GamePanel;
 import main.UtilityTool;
-// import projectile.Projectile;
 import projectile.Projectile;
 
 // this will be the super/parent class for all our entities

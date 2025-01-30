@@ -4,15 +4,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import main.GamePanel;
-
 import static main.GamePanel.tileSize;
 
 public class OBJ_Heart extends SuperObject {
-	private GamePanel gp;
-	
-	public OBJ_Heart(GamePanel gp) { 
-		this.gp = gp;
+	public OBJ_Heart() { 
 		name = "Heart"; 
 		try { 
 			image = ImageIO.read(getClass().getResourceAsStream("/assets/objects/heart_full.png"));

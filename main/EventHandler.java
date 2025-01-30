@@ -51,20 +51,20 @@ public class EventHandler {
     	if (canTouchEvent == true) { 
     		if (hit(27, 17, "down") == true) { // Check for eventRect position
                 // Event happens
-                damagePit(27, 17, gp.getDialogueState());
+                damagePit(27, 17, GameStates.DIALOGUE);
     		}
     		//TESTING PURPOSES ONLY 
     		if (hit(23, 19, "any") == true) { // Check for eventRect position
                 // Event happens
-                damagePit(23, 19, gp.getDialogueState());
+                damagePit(23, 19, GameStates.DIALOGUE);
     		}
             if(hit(23,7, "up") == true) {
-            	healingPool(23, 7, gp.getDialogueState());
+            	healingPool(23, 7, GameStates.DIALOGUE);
             }
     	}
     }
 
-	private void damagePit(int col, int row, int gameState) {
+	private void damagePit(int col, int row, GameStates gameState) {
         gp.setGameState(gameState);
         gp.getUi().setCurrentDialogue("You fell into a pit!");
         gp.getPlayer().takeDamage(1);
@@ -102,7 +102,7 @@ public class EventHandler {
         return hit;
     }
     
-    public void healingPool(int col, int row, int gameState) {
+    public void healingPool(int col, int row, GameStates gameState) {
     	if(gp.getKeyHandler().isEnterPressed()) {
     		gp.setGameState(gameState);
     		gp.getUi().setCurrentDialogue("You drink the water.\nYour life has been recovered!");

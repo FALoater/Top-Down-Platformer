@@ -35,7 +35,7 @@ public abstract class Enemy extends Entity {
     
 	public void attack() {
         // return early if the player is already attacking
-        if(attacking || attackTimer < 90) return;
+        if(attacking || attackTimer < 300) return;
 
         // else spawn projectile and update player sprite
         attacking = true;
@@ -49,7 +49,7 @@ public abstract class Enemy extends Entity {
 		attackTimer++;
 		directionLock++;
 
-		if(attackTimer > 90 && attacking) {
+		if(attackTimer > 300 && attacking) {
 			attacking = false;
 		}
 		

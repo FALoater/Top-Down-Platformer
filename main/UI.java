@@ -39,7 +39,7 @@ public class UI {
 		arial_80B = new Font("Arial", Font.BOLD, 80);
 		
 		// CREATE HUD OBJECT 
-		SuperObject heart = new OBJ_Heart(gp);
+		SuperObject heart = new OBJ_Heart();
 		BufferedImage[] images = heart.getImages();
 		heart_full = images[0];
 		heart_half = images[1];
@@ -58,23 +58,23 @@ public class UI {
 		g2.setColor(Color.white);
 		
 		//TITLE STATE 
-		if(gp.getGameState() == gp.getTitleState()) {
+		if(gp.getGameState() == GameStates.TITLE) {
 			drawTitleScreen();
 		}
 		
 		//PLAY STATE
-		if (gp.getGameState() == gp.getPlayState()) { 
+		if (gp.getGameState() == GameStates.PLAY) { 
 			drawPlayerLife();
 		}
 		
 		//PAUSE STATE
-		if (gp.getGameState() == gp.getPauseState()) { 
+		if (gp.getGameState() == GameStates.PAUSE) { 
 			//Do pauseState stuff later
 			drawPlayerLife();
 			drawPauseScreen();
 		}
 		//DIALOGUE STATE
-		if(gp.getGameState() == gp.getDialogueState()) {
+		if(gp.getGameState() == GameStates.DIALOGUE) {
 			drawPlayerLife();
 			drawDialogueScreen();
 		}

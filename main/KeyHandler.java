@@ -23,8 +23,8 @@ public class KeyHandler implements KeyListener {
 	public void keyPressed(KeyEvent e) {	
 		int code = e.getKeyCode(); // basically returns the number of the key that was pressed 
 		
-		// //TITLE STATE
-		if (gp.getGameState() == gp.getTitleState()) {
+		//TITLE STATE
+		if (gp.getGameState() == GameStates.TITLE) {
 			if (gp.getUi().getTitleScreenState() == 0) {
 				if (code == KeyEvent.VK_W) {
 					gp.getUi().decrementCommandNum();
@@ -41,7 +41,7 @@ public class KeyHandler implements KeyListener {
 				
 				if (code == KeyEvent.VK_ENTER) {
 					if (gp.getUi().getCommandNum() == 0) {
-						gp.setGameState(gp.getPlayState());
+						gp.setGameState(GameStates.PLAY);
 						gp.playMusic(0);
 					}
 					if (gp.getUi().getCommandNum() == 1) {
@@ -55,7 +55,7 @@ public class KeyHandler implements KeyListener {
 		}
 		
 		//PLAY STATE 
-		if(gp.getGameState() == gp.getPlayState()) {
+		if(gp.getGameState() == GameStates.PLAY) {
 			if (code == KeyEvent.VK_W) {
 				upPressed = true; //update boolean value 
 			}
@@ -69,7 +69,7 @@ public class KeyHandler implements KeyListener {
 				rightPressed = true;
 			}
 			if (code == KeyEvent.VK_P) {
-				gp.setGameState(gp.getPauseState());
+				gp.setGameState(GameStates.PAUSE);
 			}
 			if (code == KeyEvent.VK_ENTER) {
 				enterPressed = true;
@@ -88,16 +88,16 @@ public class KeyHandler implements KeyListener {
 		}
 		
 		// PAUSE STATE 
-		else if (gp.getGameState() == gp.getPauseState()) {
+		else if (gp.getGameState() == GameStates.PAUSE) {
 			if (code == KeyEvent.VK_P) {
-				gp.setGameState(gp.getPlayState());
+				gp.setGameState(GameStates.PLAY);
 			}
 		}
 		
 		// DIALOGUE STATE
-		if (gp.getGameState() == gp.getDialogueState()) {
+		if (gp.getGameState() == GameStates.DIALOGUE) {
 			if (code == KeyEvent.VK_ENTER) {
-				gp.setGameState(gp.getPlayState());
+				gp.setGameState(GameStates.PLAY);
 			}
 		}
 	}
@@ -118,9 +118,9 @@ public class KeyHandler implements KeyListener {
 		if (code == KeyEvent.VK_D) {
 			rightPressed = false;
 		}
-		// if (code == KeyEvent.VK_E) {
-		// 	attackPressed = false;
-		// }
+		if (code == KeyEvent.VK_E) {
+			attackPressed = false;
+		}
 	}
 
 	// getters and setters

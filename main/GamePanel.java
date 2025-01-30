@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import entity.Player;
 import entity.enemy.Enemy;
+import gamestates.Playing;
 import object.SuperObject;
 import projectile.Projectile;
 
@@ -31,37 +32,34 @@ public class GamePanel extends JPanel implements Runnable {
 	public static final int worldHeight = tileSize * maxWorldRow; 
 	
 	//FPS
-	private int FPS = 60;
+	protected int FPS = 60;
 	
 	//INSTANTIATE SYSTEM CLASSES
-	private Sound music = new Sound(), se = new Sound();
-	private Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
-	private KeyHandler keyH = new KeyHandler(this);
+	protected Sound music = new Sound(), se = new Sound();
+	protected Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
+	protected KeyHandler keyH = new KeyHandler(this);
 
 	//INSTANTIATE ENTITY AND OBJECT 
-	private SuperObject obj[] = new SuperObject[10]; // we have 10 slots to add objects (at the same time) (can update later on during the game development)
-	private Enemy enemies[] = new Enemy[10];
-	private Projectile proj[] = new Projectile[10];
-	private Player player = new Player(this, keyH); //instantiate in gamePanel class
+	protected SuperObject obj[] = new SuperObject[10]; // we have 10 slots to add objects (at the same time) (can update later on during the game development)
+	protected Enemy enemies[] = new Enemy[10];
+	protected Projectile proj[] = new Projectile[10];
+	protected Player player = new Player(this, keyH); //instantiate in gamePanel class
 
-	private AssetSetter aSetter = new AssetSetter(this);
-	private CollisionChecker cChecker = new CollisionChecker(this);
-	private EventHandler eHandler = new EventHandler(this); //instantiate in gamePanel class
-	private LevelManager levelManager = new LevelManager(this);
-	private UI ui = new UI(this);
+	protected AssetSetter aSetter = new AssetSetter(this);
+	protected CollisionChecker cChecker = new CollisionChecker(this);
+	protected EventHandler eHandler = new EventHandler(this); //instantiate in gamePanel class
+	protected LevelManager levelManager = new LevelManager(this);
+	protected UI ui = new UI(this);
 
 
 	// GAME STATE
 	//game state - various game situations (title screen, main game play screen, menu screen, pause screen etc.) 
 	//depending on the situation, the program draws something different on the screen 
-	private int gameState; 
-	private final int titleState = 0; //for title screen 
-	private final int playState = 1; 
-	private final int pauseState = 2;
-	private final int dialogueState = 3; // not sure if will be used
+	private GameStates gameState = GameStates.TITLE;
+	private Playing playing = new Playing(this); //instantiate in gamePanel class
 
 	// debug
-	private boolean debug = false;
+	protected boolean debug = false;
 
 	// Create gamePanel constructor 
 	public GamePanel() { 
@@ -78,7 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
 		levelManager.init();
 		//playMusic(0); // this is the first song that will run continuously in the background
 		// we do not want music running on the title screen so we turn it off in this function 
-		gameState = titleState;
+		gameState = GameStates.TITLE;
 	}
 	
 	public void startGameThread() { 
@@ -120,41 +118,18 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// the two methods (update and paintComponent) will be called in the gameLoop 
 	public void update() {
-		if (gameState == playState) { 
-			// PLAYER
-			player.update();
-			if(levelManager.getNumberOfEnemies() == 0) {
-				levelManager.loadNextLevel();
-			}
-
-			// Projectiles
-			for(int i = 0;i<proj.length;i++) {
-				Projectile projectile = proj[i];
-
-				if(projectile != null) {
-					// check first if the projectile is meant to be deleted first
-					if(projectile.isMarkedForDeletion() || Math.abs(projectile.getWorldX()) > worldWidth || Math.abs(projectile.getWorldY()) > worldHeight) {
-						proj[i] = null;
-					} else {
-						projectile.update();
-					}
-				}
-			}
-
-			for(int i = 0; i <enemies.length;i++) {
-				if(enemies[i] != null) {
-					if(enemies[i].isMarkedForDeletion()) {
-						enemies[i] = null;
-						levelManager.decreaseNumberOfEnemies();
-					} else {
-						enemies[i].update();
-					}
-				}
-			}
-		}
-		
-		if (gameState == pauseState) {
-			// pause menu
+		switch(gameState) {
+			case DIALOGUE:
+				break;
+			case GAMEOVER:
+				break;
+			case PAUSE:
+				break;
+			case PLAY:
+				playing.update();
+				break;
+			case TITLE:
+				break;
 		}
 	}
 	
@@ -172,55 +147,29 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 		
 		//TITLE SCREEN
-		if (gameState == titleState) {
-			ui.draw(g2);
+		switch(gameState) {
+			case DIALOGUE:
+				break;
+			case GAMEOVER:
+				break;
+			case PAUSE:
+				break;
+			case PLAY:
+				playing.draw(g2);
+				break;
+			case TITLE:
+				ui.draw(g2);
+				break;
 		}
-		
-		//OTHERS (add a condition for the title xfeen) 
-		else {
-			//TILE
-			levelManager.draw(g2); // this has to come before the player line (draw tiles first, then player) 
-			
-			//OBJECT
-			for (int i = 0; i < obj.length; i++) { // have to go through the entire objects array and check to see if any object is null 
-				if (obj[i] != null) { // avoids NullPointer error 
-					obj[i].draw(g2, this);
-				}
-			}
 
-			//Enemy
-			for (int i = 0; i < enemies.length; i++) {
-				if (enemies[i] != null) {
-					enemies[i].draw(g2);
-				}
-			}
-
-			//PLAYER
-			player.draw(g2);
-			if(debug) player.drawHitbox(g2);
-
-			//Projectile
-			//Using for x in list structure similar to python
-			for(Projectile projectile : proj) {
-				if(projectile != null) {
-					projectile.draw(g2);
-					if(debug) projectile.drawHitbox(g2);
-				}
-			}
-			
-			//UI called at the end because it should not be covered by tile or player 
-			ui.draw(g2);
-			
-			//DEBUG
-			if (debug) { 
-				long drawEnd = System.nanoTime();
-				long passed = drawEnd - drawStart; 
-				g2.setColor(Color.white);
-				g2.drawString("Draw time: "  + passed, 10, 400);
-				System.out.println("Draw time: " + passed);
-			}			
-			g2.dispose(); // once drawn, dispose of this graphics context and release any system resources it is using (good practice) 
-		}
+		if (debug) { 
+			long drawEnd = System.nanoTime();
+			long passed = drawEnd - drawStart; 
+			g2.setColor(Color.white);
+			g2.drawString("Draw time: "  + passed, 10, 400);
+			System.out.println("Draw time: " + passed);
+		}			
+		g2.dispose(); // once drawn, dispose of this graphics context and release any system resources it is using (good practice) 
 	}
 	
 	public void playMusic(int i) { 
@@ -239,24 +188,12 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	// Getters and setters
-	public void setGameState(int gameState) {
+	public void setGameState(GameStates gameState) {
 		this.gameState = gameState;
 	}
 
-	public int getGameState() {
+	public GameStates getGameState() {
 		return gameState;
-	}
-
-	public int getTitleState() {
-		return titleState;
-	}
-
-	public int getPlayState() {
-		return playState;
-	}
-	
-	public int getPauseState() {
-		return pauseState;
 	}
 
 	public Projectile[] getProjectiles() {
@@ -293,10 +230,6 @@ public class GamePanel extends JPanel implements Runnable {
 		for(int i = 0; i < enemies.length; i++) {
 			enemies[i] = null;
 		}
-	}
-
-	public int getDialogueState() {
-		return dialogueState;
 	}
 
 	public UI getUi() {
@@ -338,4 +271,14 @@ public class GamePanel extends JPanel implements Runnable {
 	public void toggleDebug() {
 		debug = !debug;
 	}
+
+	public boolean getDebug() {
+		return debug;
+	}
 }
+/*
+ * General notes - without an FPS counter, touching a key will update the position around a million times a second and move the rectangle off the screen 
+ * Therefore FPS counter is necessary 
+ * Generally delta FPS measure is better than the sleep FPS measure (can mention in NEA) 
+ * 
+*/
