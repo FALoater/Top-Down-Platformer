@@ -72,8 +72,6 @@ public class GamePanel extends JPanel implements Runnable {
 	//setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
 		levelManager.init();
-		//playMusic(0); // this is the first song that will run continuously in the background
-		// we do not want music running on the title screen so we turn it off in this function 
 		gameState = GameStates.TITLE;
 	}
 	
@@ -128,6 +126,8 @@ public class GamePanel extends JPanel implements Runnable {
 				break;
 			case TITLE:
 				break;
+			case NULL:
+				break;
 		}
 	}
 	
@@ -144,20 +144,11 @@ public class GamePanel extends JPanel implements Runnable {
 			drawStart = System.nanoTime();
 		}
 		
-		//TITLE SCREEN
-		switch(gameState) {
-			case DIALOGUE:
-				break;
-			case GAMEOVER:
-				break;
-			case PAUSE:
-				break;
-			case PLAY:
-				playing.draw(g2);
-				break;
-			case TITLE:
-				ui.draw(g2);
-				break;
+		// DRAW GAME OBJECTS
+		if(gameState == GameStates.PLAY) {
+			playing.draw(g2);
+		} else {
+			ui.draw(g2);
 		}
 
 		if (debug) { 

@@ -16,12 +16,10 @@ import static main.GamePanel.screenWidth;
 public class UI {
 	// store for game over
 	private int commandNum = 0;
-	private int titleScreenState = 0; // 0: the first screen, 1: the second screen...
-
-	private String currentDialogue = "";
+	private int sentenceNo = 0;
 
 	//handles all the on-screen UI 
-	//BufferedImage keyImage;
+	private String[] storyStartLines = {"HELLO AND WELCOME TO THE GAME", "YOU ARE QUITE BAD"};// the current dialogue to be displayed on the screen
 	private BufferedImage heart_full, heart_half, heart_blank;
 	private Font arial_40;
 	private GamePanel gp; 
@@ -30,7 +28,7 @@ public class UI {
 	public UI (GamePanel gp) {
 		this.gp = gp;
 		arial_40 = new Font("Arial", Font.PLAIN, 40); //instantiate in the constructor once 
-		
+	
 		// CREATE HUD OBJECT 
 		SuperObject heart = new OBJ_Heart();
 		BufferedImage[] images = heart.getImages();
@@ -59,10 +57,11 @@ public class UI {
 				drawPauseScreen();
 				break;
 			case DIALOGUE:
-				drawPlayerLife();
-				drawDialogueScreen();
+				drawDialogueScreen(sentenceNo);
 				break;
 			case GAMEOVER:
+				break;
+			case NULL:
 				break;
 		}
 	}
@@ -146,8 +145,8 @@ public class UI {
 			g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
 		}
 	}
-	
-	private void drawDialogueScreen() {
+
+	private void drawDialogueScreen(int dialogueNum) {
 	    // WINDOW 
 	    int x = tileSize * 2; 
 	    int y = tileSize / 2; 
@@ -160,14 +159,30 @@ public class UI {
 	    x += tileSize;
 	    y += tileSize;
 	    
-	    // Split the text inside the dialogue at the backslash n keyword 
-	    for (String line : currentDialogue.split("\n")) {
-	        g2.drawString(line, x, y);
-	        // Makes sure the next line is displayed below the first line 
-	        y += 40;
-	    }
-	}
+	    // Split the text inside the dialogue at the backslash n keyword every 26 characters
+		String[] currentDialogue = new String[(storyStartLines[dialogueNum].length() / 26) + 1];
 
+		for(int i=0;i<currentDialogue.length;i++) {
+			if(i == currentDialogue.length-1) {
+				currentDialogue[i] = storyStartLines[dialogueNum].substring(i*26);
+			} else {
+				currentDialogue[i] = storyStartLines[dialogueNum].substring(i*26, (i+1)*26);
+			}
+		}
+
+		for(String dialogue : currentDialogue) {
+			g2.drawString(dialogue, x, y);
+			y += 40;
+		}
+	}
+	
+	private void drawPauseScreen() {
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+		String text = "PAUSED"; 
+		int x = getXforCentredText(text), y = screenHeight/2; 
+		g2.drawString(text, x, y);
+	}
+	
 	public void drawSubWindow(int x, int y, int width, int height) {
 		Color c = new Color(0,0,0, 210); // RGB number for black, fourth number = alpha value (transparency level)
 		g2.setColor(c);
@@ -181,23 +196,11 @@ public class UI {
 		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
 	}
 
-	private void drawPauseScreen() {
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
-		String text = "PAUSED"; 
-		int x = getXforCentredText(text), y = screenHeight/2; 
-		g2.drawString(text, x, y);
-	}
-	
 	public int getXforCentredText(String text) { 
 		//position x to the centre of the screen
 		int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = screenWidth/2 - length/2;
 		return x;
-	}
-
-	// getters and setters
-	public void setCurrentDialogue(String currentDialogue) {
-		this.currentDialogue = currentDialogue;
 	}
 
 	public void decrementCommandNum() {
@@ -208,15 +211,19 @@ public class UI {
 		this.commandNum++;
 	}
 
+	public void incrementDialogue() {
+		this.sentenceNo++;
+		if(sentenceNo >= storyStartLines.length) {
+			gp.setGameState(GameStates.PLAY);
+			gp.playMusic(0);
+		}
+	}
+
 	public void setCommandNum(int commandNum) {
 		this.commandNum = commandNum;
 	}
 
 	public int getCommandNum() {
 		return commandNum;
-	}
-
-	public int getTitleScreenState() {
-		return titleScreenState;
 	}
 }
