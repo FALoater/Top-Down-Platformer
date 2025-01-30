@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
 	// implements KeyListener is necessary 
 	// KeyListener - the listener interface for receiving keyboard events (keystrokes) 
-	private boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed; //attackPressed;
+	private boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, attackPressed;
 
 	private GamePanel gp;
 	
@@ -74,10 +74,10 @@ public class KeyHandler implements KeyListener {
 			if (code == KeyEvent.VK_ENTER) {
 				enterPressed = true;
 			}
-			// if (code == KeyEvent.VK_E) {
-			// 	attackPressed = true;
-			// 	gp.getPlayer().attack();
-			// }
+			if (code == KeyEvent.VK_E) {
+				attackPressed = true;
+				gp.getPlayer().attack();
+			}
 			// if (code == KeyEvent.VK_Z) {
 			// 	gp.getLevelManager().loadNextLevel();
 			// }
@@ -145,9 +145,9 @@ public class KeyHandler implements KeyListener {
 		return enterPressed;
 	}
 
-	// public boolean isAttackPressed() {
-	// 	return attackPressed;
-	// }
+	public boolean isAttackPressed() {
+		return attackPressed;
+	}
 
 	public void setEnterPressed(boolean enterPressed) {
 		this.enterPressed = enterPressed;
