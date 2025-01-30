@@ -3,6 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import gamestates.GameStateType;
+
 public class KeyHandler implements KeyListener {
 	// implements KeyListener is necessary 
 	// KeyListener - the listener interface for receiving keyboard events (keystrokes) 
@@ -27,71 +29,78 @@ public class KeyHandler implements KeyListener {
 			case TITLE:
 				if (code == KeyEvent.VK_W) {
 					gp.getUi().decrementCommandNum();
-					if(gp.getUi().getCommandNum() < 0) {
+					if (gp.getUi().getCommandNum() < 0) {
 						gp.getUi().setCommandNum(2); //prevents the arrow from moving into oblivion 
 					}
 				}
 				if (code == KeyEvent.VK_S) {
 					gp.getUi().incrementCommandNum();
-					if(gp.getUi().getCommandNum() > 2) {
+					if (gp.getUi().getCommandNum() > 2) {
 						gp.getUi().setCommandNum(0);
 					}
 				}
 				
 				if (code == KeyEvent.VK_ENTER) {
 					if (gp.getUi().getCommandNum() == 0) {
-						gp.setGameState(GameStates.DIALOGUE);
+						gp.setGameState(GameStateType.STORY);
 					}
 					if (gp.getUi().getCommandNum() == 1) {
 						//add later
 					}
-					if(gp.getUi().getCommandNum() == 2) { 
+					if (gp.getUi().getCommandNum() == 2) { 
 						System.exit(0);
 					}
 				}
 				break;
-			case DIALOGUE:
-				if (code == KeyEvent.VK_ENTER) gp.getUi().incrementDialogue();
+			case PLAY:
+				if (code == KeyEvent.VK_W) {
+					upPressed = true; //update boolean value 
+				}
+				if (code == KeyEvent.VK_S) {
+					downPressed = true; 		
+				}
+				if (code == KeyEvent.VK_A) {
+					leftPressed = true;
+				}
+				if (code == KeyEvent.VK_D) {
+					rightPressed = true;
+				}
+				if (code == KeyEvent.VK_P) {
+					gp.setGameState(GameStateType.PAUSE);
+				}
+				if (code == KeyEvent.VK_ENTER) {
+					enterPressed = true;
+				}
+				if (code == KeyEvent.VK_E) {
+					attackPressed = true;
+					gp.getPlayer().attack();
+				}
+				if (code == KeyEvent.VK_Z) {
+					//gp.getLevelManager().loadNextLevel();
+				}
+				// DEBUG
+				if (code == KeyEvent.VK_Q) { 
+					gp.toggleDebug();
+				}
+				break;
+			case STORY:
+				if (code == KeyEvent.VK_ENTER) {
+					gp.getUi().incrementDialogue(); 
+				}
+				if (code == KeyEvent.VK_Q) {
+					// skip story
+					gp.setGameState(GameStateType.LOADING);
+				}
 				break;
 			case GAMEOVER:
 				break;
-			case NULL:
-				break;
 			case PAUSE:
-				if (code == KeyEvent.VK_P) gp.setGameState(GameStates.PLAY);
+				if (code == KeyEvent.VK_P) gp.setGameState(GameStateType.PLAY);
 				break;
-			case PLAY:
-				if(gp.getGameState() == GameStates.PLAY) {
-					if (code == KeyEvent.VK_W) {
-						upPressed = true; //update boolean value 
-					}
-					if (code == KeyEvent.VK_S) {
-						downPressed = true; 		
-					}
-					if (code == KeyEvent.VK_A) {
-						leftPressed = true;
-					}
-					if (code == KeyEvent.VK_D) {
-						rightPressed = true;
-					}
-					if (code == KeyEvent.VK_P) {
-						gp.setGameState(GameStates.PAUSE);
-					}
-					if (code == KeyEvent.VK_ENTER) {
-						enterPressed = true;
-					}
-					if (code == KeyEvent.VK_E) {
-						attackPressed = true;
-						gp.getPlayer().attack();
-					}
-					if (code == KeyEvent.VK_Z) {
-						gp.getLevelManager().loadNextLevel();
-					}
-					// DEBUG
-					if (code == KeyEvent.VK_Q) { 
-						gp.toggleDebug();
-					}
-				}
+			case SETTINGS:
+				break;
+			case LOADING:
+			case NULL:
 				break;
 		}
 	}

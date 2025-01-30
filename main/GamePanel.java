@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import entity.Player;
 import entity.enemy.Enemy;
+import gamestates.GameStateType;
 import gamestates.Playing;
 import object.SuperObject;
 import projectile.Projectile;
@@ -50,11 +51,13 @@ public class GamePanel extends JPanel implements Runnable {
 	protected LevelManager levelManager = new LevelManager(this);
 	protected UI ui = new UI(this);
 
+	// loading screen
+	private int loadTimer = 0;
 
 	// GAME STATE
 	//game state - various game situations (title screen, main game play screen, menu screen, pause screen etc.) 
 	//depending on the situation, the program draws something different on the screen 
-	private GameStates gameState = GameStates.TITLE;
+	private GameStateType gameState = GameStateType.TITLE;
 	private Playing playing = new Playing(this); //instantiate in gamePanel class
 
 	// debug
@@ -72,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
 		levelManager.init();
-		gameState = GameStates.TITLE;
+		gameState = GameStateType.TITLE;
 	}
 	
 	public void startGameThread() { 
@@ -114,20 +117,19 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// the two methods (update and paintComponent) will be called in the gameLoop 
 	public void update() {
-		switch(gameState) {
-			case DIALOGUE:
-				break;
-			case GAMEOVER:
-				break;
-			case PAUSE:
-				break;
-			case PLAY:
-				playing.update();
-				break;
-			case TITLE:
-				break;
-			case NULL:
-				break;
+		if(gameState == GameStateType.LOADING) {
+			loadTimer++;
+			if(loadTimer >= 120) { // wait for 2 seconds
+				gameState = GameStateType.PLAY;
+				playMusic(levelManager.getCurrentLevel() - 1);
+				loadTimer = 0;
+			}
+		}
+
+		if(gameState == GameStateType.PLAY) {
+			playing.update();
+		} else {
+			return;
 		}
 	}
 	
@@ -145,7 +147,7 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 		
 		// DRAW GAME OBJECTS
-		if(gameState == GameStates.PLAY) {
+		if(gameState == GameStateType.PLAY) {
 			playing.draw(g2);
 		} else {
 			ui.draw(g2);
@@ -177,11 +179,11 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	// Getters and setters
-	public void setGameState(GameStates gameState) {
+	public void setGameState(GameStateType gameState) {
 		this.gameState = gameState;
 	}
 
-	public GameStates getGameState() {
+	public GameStateType getGameState() {
 		return gameState;
 	}
 
@@ -259,6 +261,10 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public boolean getDebug() {
 		return debug;
+	}
+
+	public int getLoadTimer() {
+		return loadTimer;
 	}
 }
 /*

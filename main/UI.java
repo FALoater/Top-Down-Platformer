@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import gamestates.GameStateType;
 import object.OBJ_Heart;
 import object.SuperObject;
 
@@ -43,7 +44,7 @@ public class UI {
 		g2.setFont(arial_40);
 		g2.setColor(Color.white);
 
-		GameStates gameState = gp.getGameState();
+		GameStateType gameState = gp.getGameState();
 
 		switch(gameState) {
 			case TITLE:
@@ -56,12 +57,19 @@ public class UI {
 				drawPlayerLife();
 				drawPauseScreen();
 				break;
-			case DIALOGUE:
+			case STORY:
 				drawDialogueScreen(sentenceNo);
 				break;
 			case GAMEOVER:
 				break;
 			case NULL:
+				break;
+			case LOADING:
+				drawLoadingScreen();	
+				break;
+			case SETTINGS:
+				break;
+			default:
 				break;
 		}
 	}
@@ -183,7 +191,14 @@ public class UI {
 		g2.drawString(text, x, y);
 	}
 	
-	public void drawSubWindow(int x, int y, int width, int height) {
+	private void drawLoadingScreen() {
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+		String text = "LOADING LEVEL " + gp.getLevelManager().getCurrentLevel(); 
+		int x = getXforCentredText(text), y = screenHeight/2; 
+		g2.drawString(text, x, y);
+	}
+
+	private void drawSubWindow(int x, int y, int width, int height) {
 		Color c = new Color(0,0,0, 210); // RGB number for black, fourth number = alpha value (transparency level)
 		g2.setColor(c);
 		g2.fillRoundRect(x, y, width, height, 35, 35);
@@ -196,12 +211,13 @@ public class UI {
 		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
 	}
 
-	public int getXforCentredText(String text) { 
+	private int getXforCentredText(String text) { 
 		//position x to the centre of the screen
 		int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = screenWidth/2 - length/2;
 		return x;
 	}
+	// getters and setters
 
 	public void decrementCommandNum() {
 		this.commandNum--;
@@ -213,10 +229,7 @@ public class UI {
 
 	public void incrementDialogue() {
 		this.sentenceNo++;
-		if(sentenceNo >= storyStartLines.length) {
-			gp.setGameState(GameStates.PLAY);
-			gp.playMusic(0);
-		}
+		if(sentenceNo >= storyStartLines.length) gp.setGameState(GameStateType.LOADING);
 	}
 
 	public void setCommandNum(int commandNum) {

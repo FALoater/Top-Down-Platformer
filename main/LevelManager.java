@@ -6,6 +6,8 @@ import static main.GamePanel.tileSize;
 
 import java.awt.Graphics2D;
 
+import gamestates.GameStateType;
+
 public class LevelManager {
     private GamePanel gp;
     private TileManager tileManager;
@@ -28,6 +30,8 @@ public class LevelManager {
         loadTiles(currentLevel);
         resetAll();
         loadEnemies();
+        gp.setGameState(GameStateType.LOADING);
+        gp.stopMusic();
     }
 
     private void resetAll() {
@@ -88,6 +92,8 @@ public class LevelManager {
         }
     }
 
+    // getters and settesr
+
     public TileManager getTileManager() {
         return tileManager;
     }
@@ -99,4 +105,8 @@ public class LevelManager {
     public void decreaseNumberOfEnemies() {
         numberOfEnemies--;
     }   
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
 }
