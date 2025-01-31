@@ -77,6 +77,7 @@ public class Player extends Entity {
         if(life <= 0) {
             gp.playSoundEffect(Sound.PLAYER_DEATH);
             gp.setGameState(GameStateType.GAMEOVER);
+            gp.stopMusic();
             gp.playMusic(Sound.END_GAME);
         }
 
