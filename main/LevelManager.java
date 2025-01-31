@@ -13,6 +13,7 @@ public class LevelManager {
     private TileManager tileManager;
     private int currentLevel;
     private int numberOfEnemies;
+    private final int MAX_LEVEL = 2;
 
     public LevelManager(GamePanel gp) {
         this.gp = gp;
@@ -27,12 +28,19 @@ public class LevelManager {
     }
 
     public void loadNextLevel() {
+        if(currentLevel == MAX_LEVEL) {
+            gp.stopMusic();
+            gp.playMusic(Sound.END_GAME);
+            gp.setGameState(GameStateType.GAMEOVER);
+            return;
+        }
+
         currentLevel++;
         loadTiles(currentLevel);
         resetAll();
         loadEnemies();
-        gp.setGameState(GameStateType.LOADING);
         gp.stopMusic();
+        gp.setGameState(GameStateType.LOADING);
     }
 
     private void resetAll() {
@@ -58,6 +66,8 @@ public class LevelManager {
     }
 
     private void resetPlayer() {
+        gp.getPlayer().resetAttack();
+
         switch(currentLevel) {
             case 1:
                 gp.getPlayer().setWorldX(tileSize * 5);

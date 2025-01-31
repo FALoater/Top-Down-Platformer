@@ -75,6 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
 	//setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
 		levelManager.init();
+		playMusic(Sound.MAIN_MENU);
 		gameState = GameStateType.TITLE;
 	}
 
@@ -125,8 +126,9 @@ public class GamePanel extends JPanel implements Runnable {
 		if(gameState == GameStateType.LOADING) {
 			loadTimer++;
 			if(loadTimer >= 120) { // wait for 2 seconds
+				stopMusic();
+				playMusic(levelManager.getCurrentLevel());
 				gameState = GameStateType.PLAY;
-				playMusic(levelManager.getCurrentLevel() - 1);
 				loadTimer = 0;
 			}
 		}

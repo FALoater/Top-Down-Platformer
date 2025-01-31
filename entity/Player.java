@@ -77,6 +77,7 @@ public class Player extends Entity {
         if(life <= 0) {
             gp.playSoundEffect(Sound.PLAYER_DEATH);
             gp.setGameState(GameStateType.GAMEOVER);
+            gp.playMusic(Sound.END_GAME);
         }
 
         attackTimer++;
@@ -191,7 +192,7 @@ public class Player extends Entity {
             image = hurt;
             // pick random hurt sfx
             int random = (int) (Math.random() * 2);
-            gp.playSoundEffect(2 + random); // player hurt is either 2 or 3
+            gp.playSoundEffect(5 + random); // player hurt is either 5 or 6
             isHurt = false;
         }
 
@@ -232,6 +233,11 @@ public class Player extends Entity {
     // getters and setters
     public int getAmmo() {
         return ammo;
+    }
+
+    public void resetAttack() {
+        ammo = 3;
+        attackTimer = 120;
     }
 
     public int getAttackTimer() {

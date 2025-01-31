@@ -42,6 +42,7 @@ public class KeyHandler implements KeyListener {
 				
 				if (code == KeyEvent.VK_ENTER) {
 					if (gp.getUi().getCommandNum() == 0) {
+						gp.stopMusic();
 						gp.setGameState(GameStateType.STORY);
 					}
 					if (gp.getUi().getCommandNum() == 1) {
@@ -53,6 +54,8 @@ public class KeyHandler implements KeyListener {
 				}
 				// debug
 				if (code == KeyEvent.VK_F) {
+					gp.stopMusic();
+					gp.playMusic(Sound.END_GAME);
 					gp.setGameState(GameStateType.GAMEOVER);
 				}
 				break;
@@ -94,6 +97,7 @@ public class KeyHandler implements KeyListener {
 				if (code == KeyEvent.VK_Q) {
 					// skip story
 					gp.setGameState(GameStateType.LOADING);
+					gp.playMusic(Sound.LEVEL1);
 				}
 				break;
 			case GAMEOVER:
@@ -113,9 +117,12 @@ public class KeyHandler implements KeyListener {
 				
 				if (code == KeyEvent.VK_ENTER) {
 					if (gp.getUi().getCommandNum() == 0) {
+						gp.stopMusic();
 						gp.setGameState(GameStateType.TITLE);
+						gp.playMusic(Sound.MAIN_MENU);
 					}
 					if (gp.getUi().getCommandNum() == 1) {
+						gp.stopMusic();
 						gp.restartGame();
 					}
 					if (gp.getUi().getCommandNum() == 2) { 
@@ -124,7 +131,9 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case PAUSE:
-				if (code == KeyEvent.VK_P) gp.setGameState(GameStateType.PLAY);
+				if (code == KeyEvent.VK_P) {
+					gp.setGameState(GameStateType.PLAY);
+				}
 				break;
 			case SETTINGS:
 				break;
