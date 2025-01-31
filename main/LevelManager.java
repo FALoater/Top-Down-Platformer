@@ -11,7 +11,7 @@ import gamestates.GameStateType;
 public class LevelManager {
     private GamePanel gp;
     private TileManager tileManager;
-    private int currentLevel = 1;
+    private int currentLevel;
     private int numberOfEnemies;
 
     public LevelManager(GamePanel gp) {
@@ -20,6 +20,7 @@ public class LevelManager {
     }
 
     public void init() {
+        currentLevel = 1;
         loadTiles(1);
         resetPlayer();
         loadEnemies();

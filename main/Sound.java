@@ -17,8 +17,9 @@ public class Sound {
 	public static final int PLAYER_HURT_1 = 2;
 	public static final int PLAYER_HURT_2 = 3;
 	public static final int PLAYER_DEATH = 4;
-	public static final int ENEMY_HURT = 5;
-	public static final int ENEMY_DEATH = 6;
+	public static final int PLAYER_ATTACK = 5;
+	public static final int ENEMY_HURT = 6;
+	public static final int ENEMY_DEATH = 7;
 
 	public Sound() { 
 		music[0] = getClass().getResource("/assets/sound/level1.wav");
@@ -26,9 +27,11 @@ public class Sound {
 		
 		music[2] = getClass().getResource("/assets/sound/player_hurt_1.wav");
 		music[3] = getClass().getResource("/assets/sound/player_hurt_2.wav");
+
 		music[4] = getClass().getResource("/assets/sound/player_death.wav");
-		music[5] = getClass().getResource("/assets/sound/enemy_hurt.wav");
-		music[6] = getClass().getResource("/assets/sound/enemy_death.wav");
+		music[5] = getClass().getResource("/assets/sound/player_attack.wav");
+		music[6] = getClass().getResource("/assets/sound/enemy_hurt.wav");
+		music[7] = getClass().getResource("/assets/sound/enemy_death.wav");
 	}
 	
 	public void setFile(int i) { 

@@ -51,6 +51,10 @@ public class KeyHandler implements KeyListener {
 						System.exit(0);
 					}
 				}
+				// debug
+				if (code == KeyEvent.VK_F) {
+					gp.setGameState(GameStateType.GAMEOVER);
+				}
 				break;
 			case PLAY:
 				if (code == KeyEvent.VK_W) {
@@ -93,6 +97,31 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case GAMEOVER:
+				// MAIN MENU, RESTART, QUIT
+				if (code == KeyEvent.VK_W) {
+					gp.getUi().decrementCommandNum();
+					if (gp.getUi().getCommandNum() < 0) {
+						gp.getUi().setCommandNum(2); //prevents the arrow from moving into oblivion 
+					}
+				}
+				if (code == KeyEvent.VK_S) {
+					gp.getUi().incrementCommandNum();
+					if (gp.getUi().getCommandNum() > 2) {
+						gp.getUi().setCommandNum(0);
+					}
+				}
+				
+				if (code == KeyEvent.VK_ENTER) {
+					if (gp.getUi().getCommandNum() == 0) {
+						gp.setGameState(GameStateType.TITLE);
+					}
+					if (gp.getUi().getCommandNum() == 1) {
+						gp.restartGame();
+					}
+					if (gp.getUi().getCommandNum() == 2) { 
+						System.exit(0);
+					}
+				}
 				break;
 			case PAUSE:
 				if (code == KeyEvent.VK_P) gp.setGameState(GameStateType.PLAY);

@@ -34,7 +34,7 @@ public class Player extends Entity {
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
-        attackTimer = 90;
+        attackTimer = 120;
         
         setDefaultValues();
         getPlayerImage();
@@ -92,7 +92,7 @@ public class Player extends Entity {
         }
 
         if(ammo <= 0) {
-            if(attackTimer > 90) {
+            if(attackTimer > 120) {
                 ammo = 3;
             }
             attacking = false;
@@ -208,6 +208,7 @@ public class Player extends Entity {
     public void attack() {
         if(ammo <= 0 || !keyH.isAttackPressed()) return;
 
+        gp.playSoundEffect(Sound.PLAYER_ATTACK);
         attacking = true;
         attackTimer = 0;
         ammo--;
@@ -225,6 +226,19 @@ public class Player extends Entity {
             case "right":
                 gp.getAssetSetter().spawnProjectile(worldX + tileSize, worldY, 7, direction, "fire");
                 break;
+        }
+    }
+
+    // getters and setters
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public int getAttackTimer() {
+        if(attackTimer > 120) {
+            return 120;
+        } else {
+            return attackTimer;
         }
     }
 }

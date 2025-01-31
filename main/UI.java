@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import gamestates.GameStateType;
 import object.OBJ_Heart;
@@ -21,7 +24,7 @@ public class UI {
 
 	//handles all the on-screen UI 
 	private String[] storyStartLines = {"HELLO AND WELCOME TO THE GAME", "YOU ARE QUITE BAD"};// the current dialogue to be displayed on the screen
-	private BufferedImage heart_full, heart_half, heart_blank;
+	private BufferedImage heart_full, heart_half, heart_blank, bullet;
 	private Font arial_40;
 	private GamePanel gp; 
 	private Graphics2D g2;
@@ -36,7 +39,22 @@ public class UI {
 		heart_full = images[0];
 		heart_half = images[1];
 		heart_blank = images[2];
+		bullet = setup("/assets/objects/bullet");
 	}
+
+	private BufferedImage setup(String imagePath) { 
+		UtilityTool uTool = new UtilityTool();
+		BufferedImage image = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB);
+		
+		try { 
+			image = ImageIO.read(getClass().getResourceAsStream(imagePath +".png"));
+			image = uTool.scaleImage(image, tileSize, tileSize);
+			
+		}catch(IOException e) { 
+			e.printStackTrace();
+		}
+		return image;
+    }
 	
 	public void draw(Graphics2D g2) { 
 		this.g2 = g2;
@@ -52,6 +70,7 @@ public class UI {
 				break;
 			case PLAY:
 				drawPlayerLife();
+				drawPlayerBullets();
 				break;
 			case PAUSE:
 				drawPlayerLife();
@@ -61,7 +80,7 @@ public class UI {
 				drawDialogueScreen(sentenceNo);
 				break;
 			case GAMEOVER:
-				break;
+				drawGameOverScreen();
 			case NULL:
 				break;
 			case LOADING:
@@ -83,7 +102,7 @@ public class UI {
 		while (i < gp.getPlayer().getMaxLife()/2 ) {
 			g2.drawImage(heart_blank, x, y, null); 
 			i++; 
-			x+= tileSize;
+			x += tileSize;
 		}
 		
 		//RESET VALUES
@@ -95,14 +114,38 @@ public class UI {
 		while (i < gp.getPlayer().getCurrentLife()) {
 			g2.drawImage(heart_half, x, y, null);
 			i++;
+
 			if(i < gp.getPlayer().getCurrentLife()) {
 				g2.drawImage(heart_full, x, y, null);
 			}
+
 			i++;
-			x+= tileSize;
+			x += tileSize;
 		}
 	}
 
+	private void drawPlayerBullets() {
+		int x = (int)(screenWidth - tileSize * 1.5); 
+		int y = tileSize/2; 
+
+		int ammo = gp.getPlayer().getAmmo();
+
+		//DRAW BULLETS
+		if(ammo > 0) {
+			for(int i = 0;i<ammo;i++) {
+				g2.drawImage(bullet, x, y, null);
+				x -= tileSize;
+			}
+		} else {
+			g2.setColor(Color.white);
+			g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 30F));
+			g2.drawString("RELOADING", (int)(screenWidth - tileSize * (1.5 + 2) - 10), y + 30);
+			g2.setColor(Color.red);
+			g2.drawRect((int)(screenWidth - tileSize * (1.5 + 2)), y + 50, tileSize * 3, 10);
+			g2.fillRect((int)(screenWidth - tileSize * (1.5 + 2)), y + 50, (int) ((float) (tileSize * 3 * gp.getPlayer().getAttackTimer() / 120)), 10);
+		}
+	}
+	
 	private void drawTitleScreen() {
 		g2.setColor(new Color(0,0,0));
 		g2.fillRect(0, 0, screenWidth, screenHeight);
@@ -121,36 +164,20 @@ public class UI {
 		g2.setColor(Color.white);
 		g2.drawString(text, x, y);
 		
-		// BLUE BOY IMAGE
+		// MAIN CHARACTER IMAGE
 		x = screenWidth/2 - (tileSize*2)/2; 
 		y += tileSize*2;
 		g2.drawImage(gp.getPlayer().getPlayerMenuImg(), x, y, tileSize*2, tileSize*2, null);
 		
 		//MENU 
+		String[] options = {"NEW GAME", "LOAD GAME", "QUIT"};
+
+		// draw the menu options, new game, load game and quit
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-		
-		text = "NEW GAME";
-		x = getXforCentredText(text); 
-		y += tileSize*3.5; //add a further four tiles down from the image 
-		g2.drawString(text, x, y);
-		if (commandNum == 0) { 
-			g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
-		}
-		
-		text = "LOAD GAME";
-		x = getXforCentredText(text); 
-		y += tileSize; //add a further four tiles down from the image 
-		g2.drawString(text, x, y);
-		if (commandNum == 1) { 
-			g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
-		}
-		
-		text = "QUIT";
-		x = getXforCentredText(text); 
-		y += tileSize; //add a further four tiles down from the image 
-		g2.drawString(text, x, y);
-		if (commandNum == 2) { 
-			g2.drawString(">", x-tileSize, y); // points a little arrow to the left of each string
+		y += tileSize*3.5;
+
+		for(int i=0;i<options.length;i++) {
+			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
 		}
 	}
 
@@ -198,6 +225,43 @@ public class UI {
 		g2.drawString(text, x, y);
 	}
 
+	private void drawGameOverScreen() {
+		g2.setColor(new Color(0,0,0));
+		g2.fillRect(0, 0, screenWidth, screenHeight);
+		
+		// TITLE NAME
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
+		String text = "GAME OVER"; // change this to the name of your game
+		int x = getXforCentredText(text);
+		int y = tileSize * 3; 
+		
+		//SHADOW
+		g2.setColor(Color.gray);
+		g2.drawString(text, x + 5, y + 5);
+		
+		//MAIN COLOUR
+		g2.setColor(Color.red);
+		g2.drawString(text, x, y);
+
+		// extra text underneath
+		String subText = "You made it to level " + gp.getLevelManager().getCurrentLevel() + ".";
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+		g2.setColor(Color.white);
+		g2.drawString(subText, getXforCentredText(subText), y + 50);
+
+		// draw the menu options, main menu, play again and quit
+		String[] options = {"MAIN MENU", "PLAY AGAIN", "QUIT"};
+
+		// draw the menu options, new game, load game and quit
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+		y += tileSize*3.5;
+
+		for(int i=0;i<options.length;i++) {
+			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
+		}
+
+	}
+
 	private void drawSubWindow(int x, int y, int width, int height) {
 		Color c = new Color(0,0,0, 210); // RGB number for black, fourth number = alpha value (transparency level)
 		g2.setColor(c);
@@ -209,6 +273,17 @@ public class UI {
 		//setStroke defines the width of outline graphics which are rendered with a Graphics2D
 		
 		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
+	}
+
+	private void drawMenuOption(String text, int x, int y, boolean selected) {
+		g2.setColor(Color.white);
+
+		if(selected) {
+			g2.setColor(Color.blue);
+			g2.drawString(">", x-tileSize, y); 	// points a little arrow to the left of each string
+		}
+	
+		g2.drawString(text, x, y);
 	}
 
 	private int getXforCentredText(String text) { 

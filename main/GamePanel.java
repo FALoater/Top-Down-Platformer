@@ -77,7 +77,12 @@ public class GamePanel extends JPanel implements Runnable {
 		levelManager.init();
 		gameState = GameStateType.TITLE;
 	}
-	
+
+	public void restartGame() {
+		levelManager.init();
+		gameState = GameStateType.STORY;
+	}
+
 	public void startGameThread() { 
 		gameThread = new Thread(this); // 'this' means we are passing this gamePanel class in as a parameter into our thread
 		gameThread.start(); //automatically calls the 'run' method 
