@@ -1,7 +1,6 @@
-package gamemanagers;
+package main;
 
 import entity.Entity;
-import main.GamePanel;
 import projectile.Projectile;
 
 import static main.GamePanel.tileSize;
@@ -19,7 +18,12 @@ public class CollisionChecker {
         // a method for checkTile(entity) already exists
         // therefore convert projectile into entity
         Entity p = new Entity(projectile);
-        checkTile(p);
+        try {
+            checkTile(p);
+        } catch (Exception e) {
+            projectile.setMarkedForDeletion(true);
+            return true;
+        }
         return p.getCollisionOn();
     }
     
@@ -35,6 +39,10 @@ public class CollisionChecker {
         int entityRightCol = entityRightWorldX / tileSize;
         int entityTopRow = entityTopWorldY / tileSize; 
         int entityBottomRow = entityBottomWorldY / tileSize;
+
+        if(entityLeftCol > 50 || entityRightCol > 50 || entityTopRow > 50 || entityBottomRow > 50) {
+            return;
+        }
         
         int tileNum1, tileNum2;
 

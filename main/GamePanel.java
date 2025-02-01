@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import entity.Player;
 import entity.enemy.Enemy;
-import gamemanagers.CollisionChecker;
 import gamemanagers.LevelManager;
 import gamestates.GameStateType;
 import gamestates.Playing;
@@ -38,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
 	protected int FPS = 60;
 	
 	//INSTANTIATE SYSTEM CLASSES
-	protected Sound music = new Sound(), se = new Sound();
+	protected Sound music = new Sound(0.8f), se = new Sound(0.9f); // play music at lower volume so sound effects can be heard
 	protected Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
 	protected KeyHandler keyH = new KeyHandler(this);
 
