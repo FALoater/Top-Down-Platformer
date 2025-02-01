@@ -1,12 +1,12 @@
-package main;
-
-import tile.TileManager;
+package gamemanagers;
 
 import static main.GamePanel.tileSize;
 
 import java.awt.Graphics2D;
 
 import gamestates.GameStateType;
+import main.GamePanel;
+import main.Sound;
 
 public class LevelManager {
     private GamePanel gp;

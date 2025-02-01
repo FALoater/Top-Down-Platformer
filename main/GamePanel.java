@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 
 import entity.Player;
 import entity.enemy.Enemy;
+import gamemanagers.CollisionChecker;
+import gamemanagers.LevelManager;
 import gamestates.GameStateType;
 import gamestates.Playing;
 import object.SuperObject;

@@ -1,4 +1,4 @@
-package tile;
+package gamemanagers;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import main.UtilityTool;
+import tile.Tile;
 
 import static main.GamePanel.tileSize;
 import static main.GamePanel.maxWorldCol;

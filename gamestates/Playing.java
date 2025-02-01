@@ -2,9 +2,9 @@ package gamestates;
 
 import projectile.Projectile;
 import entity.enemy.Enemy;
+import gamemanagers.LevelManager;
 import entity.Player;
 import main.GamePanel;
-import main.LevelManager;
 import main.Sound;
 import main.UI;
 import object.SuperObject;
