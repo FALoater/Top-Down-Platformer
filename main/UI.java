@@ -21,6 +21,7 @@ public class UI {
 	// store for game over
 	private int commandNum = 0;
 	private int sentenceNo = 0;
+	private int optionSelection = 0;
 
 	//handles all the on-screen UI 
 	private String[] storyStartLines = {"HELLO AND WELCOME TO THE GAME", "YOU ARE QUITE BAD"};// the current dialogue to be displayed on the screen
@@ -103,12 +104,7 @@ public class UI {
 		int y = tileSize * 3; 
 		
 		//SHADOW
-		g2.setColor(Color.gray);
-		g2.drawString(text, x+5, y+5);
-		
-		//MAIN COLOUR
-		g2.setColor(Color.white);
-		g2.drawString(text, x, y);
+		drawTextWithShadow(text, x, y);
 		
 		// MAIN CHARACTER IMAGE
 		x = screenWidth/2 - (tileSize*2)/2; 
@@ -186,12 +182,7 @@ public class UI {
 		int y = tileSize * 3; 
 		
 		//SHADOW
-		g2.setColor(Color.gray);
-		g2.drawString(text, x + 5, y + 5);
-		
-		//MAIN COLOUR
-		g2.setColor(Color.red);
-		g2.drawString(text, x, y);
+		drawTextWithShadow(text, x, y);
 
 		// extra text underneath
 		String subText = "You made it to level " + gp.getLevelManager().getCurrentLevel() + ".";
@@ -220,11 +211,57 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
 		String text = "SETTINGS"; // change this to the name of your game
 		int x = getXforCentredText(text);
-		int y = tileSize * 3; 
+		int y = tileSize * 2; 
 		
 		//SHADOW
+		drawTextWithShadow(text, x, y);
+		drawVolumeSlider();
+	}
+
+	private void drawVolumeSlider() {
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,50F));
+		String text = "Volume:";
+		int y = tileSize * 5;
+		int x = getXforCentredText(text);
+		
+		if(optionSelection == 0) {
+			g2.setColor(Color.red);
+			g2.drawString(text, x, y);
+			g2.setColor(Color.white);
+
+			text = "Back to Menu";
+			drawTextWithShadow(text, getXforCentredText(text), y + (int)(4 * tileSize));
+		} else {
+			drawTextWithShadow(text, x, y);
+			text = "Back to Menu";
+			g2.setColor(Color.red);
+			g2.drawString(text, getXforCentredText(text), y + (int)(4 * tileSize));
+		}
+		
+		g2.setColor(Color.white);
+
+		text = String.valueOf(gp.getMusic().getSoundLevel());
+		x = getXforCentredText(text);
+		y += tileSize * 1.5;
+
+		if(commandNum == 2) g2.setColor(Color.red);
+		g2.drawString("<", x - tileSize * 2, y);
+
+		g2.setColor(Color.white);
+		drawTextWithShadow(text, x, y);
+		// calculate position of right side
+		x += 10;
+		if(gp.getMusic().getSoundLevel() == 10) x += 30;
+
+		if(commandNum == 3) g2.setColor(Color.red);
+		g2.drawString(">", x + tileSize * 2, y);
+	}
+
+	private void drawTextWithShadow(String text, int x, int y) {
 		g2.setColor(Color.gray);
 		g2.drawString(text, x + 5, y + 5);
+		g2.setColor(Color.white);
+		g2.drawString(text, x, y);
 	}
 
 	private void drawPlayerLife() {
@@ -307,7 +344,7 @@ public class UI {
 	private int getXforCentredText(String text) { 
 		//position x to the centre of the screen
 		int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-		int x = screenWidth/2 - length/2;
+		int x = screenWidth / 2 - length / 2;
 		return x;
 	}
 	// getters and setters
@@ -334,5 +371,13 @@ public class UI {
 
 	public int getCommandNum() {
 		return commandNum;
+	}
+
+	public void setOptionSelection(int optionSelection) {
+		this.optionSelection = optionSelection;
+	}
+
+	public int getOptionSelection() {
+		return optionSelection;
 	}
 }

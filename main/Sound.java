@@ -10,6 +10,7 @@ import javax.sound.sampled.FloatControl;
 public class Sound {
 
 	private float volume;
+	private int soundLevel;
 	private Clip clip; // used to open sound files
 	private URL music[] = new URL[30]; //URL used to store file path of sound files
 
@@ -26,7 +27,7 @@ public class Sound {
 	public static final int ENEMY_HURT = 9;
 	public static final int ENEMY_DEATH = 10;
 
-	public Sound(float volume) { 
+	public Sound(int soundLevel) { 
 		music[0] = getClass().getResource("/assets/sound/main_menu.wav");
 		music[1] = getClass().getResource("/assets/sound/level_1.wav");
 		music[2] = getClass().getResource("/assets/sound/level_2.wav");
@@ -40,7 +41,7 @@ public class Sound {
 		music[9] = getClass().getResource("/assets/sound/enemy_hurt.wav");
 		music[10] = getClass().getResource("/assets/sound/enemy_death.wav");
 
-		this.volume = volume;
+		this.soundLevel = soundLevel;
 	}
 	
 	public void setFile(int i) { 
@@ -55,12 +56,12 @@ public class Sound {
 	}
 	
 	public void play() { 
-		updateSongVolume();
+		setSoundLevel(soundLevel);
 		clip.start();
 	}
 	
 	public void loop() { 
-		updateSongVolume();
+		setSoundLevel(soundLevel);
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 	
@@ -79,6 +80,61 @@ public class Sound {
 
 	public void setVolume(float volume) {
 		this.volume = volume;
+		updateSongVolume();
+	}
+
+	public int getSoundLevel() {
+		return soundLevel;
+	}
+
+	public void decreaseSound() {
+		soundLevel--;
+		if(soundLevel < 0) soundLevel = 0;
+		setSoundLevel(soundLevel);
+	}
+
+	public void increaseSound() {
+		soundLevel++;
+		if(soundLevel > 10) soundLevel = 10;
+		setSoundLevel(soundLevel);
+	}
+
+	public void setSoundLevel(int level) {
+		switch(level) {
+		case 0:
+			volume = 0;
+			break;
+		case 1:
+			volume = 0.44f;
+			break;
+		case 2:	
+			volume = 0.53f;
+			break;
+		case 3:
+			volume = 0.58f;
+			break;
+		case 4:
+			volume = 0.65f;
+			break;
+		case 5:
+			volume = 0.68f;
+			break;
+		case 6:
+			volume = 0.73f;	
+			break;
+		case 7:
+			volume = 0.77f;
+			break;
+		case 8:
+			volume = 0.80f;
+			break;
+		case 9:
+			volume = 0.83f;
+			break;
+		case 10:
+			volume = 0.86f;
+			break;
+		}
 		updateSongVolume();
 	}
 }

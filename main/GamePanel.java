@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
 	protected int FPS = 60;
 	
 	//INSTANTIATE SYSTEM CLASSES
-	protected Sound music = new Sound(0.8f), se = new Sound(0.9f); // play music at lower volume so sound effects can be heard
+	protected Sound music = new Sound(6), se = new Sound(9); // play music at lower volume so sound effects can be heard
 	protected Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
 	protected KeyHandler keyH = new KeyHandler(this);
 
@@ -273,6 +273,10 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public SuperObject getObjects(int index) {
 		return obj[index];
+	}
+
+	public Sound getMusic() {
+		return music;
 	}
 
 	public void toggleDebug() {
