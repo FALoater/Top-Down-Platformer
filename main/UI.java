@@ -171,7 +171,7 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
 
 		String text = "PAUSED"; 
-		g2.drawString(text, getXforCentredText(text), tileSize * 2);
+		drawTextWithShadow(text, getXforCentredText(text), tileSize * 2);
 	}
 	
 	private void drawLoadingScreen() {
