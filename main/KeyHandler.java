@@ -76,6 +76,11 @@ public class KeyHandler implements KeyListener {
 					attackPressed = true;
 					gp.getPlayer().attack();
 				}
+				if (code == KeyEvent.VK_R) {
+					if(gp.getPlayer().getAmmo() != 0) {
+						gp.getPlayer().reloadAmmo();
+					}
+				}
 				// DEBUG
 				if (code == KeyEvent.VK_Q) { 
 					gp.toggleDebug();

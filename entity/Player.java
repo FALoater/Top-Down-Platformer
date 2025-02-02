@@ -236,6 +236,11 @@ public class Player extends Entity {
         return ammo;
     }
 
+    public void reloadAmmo() {
+        ammo = 0;
+        attackTimer = 0;
+    }
+
     public void resetAttack() {
         ammo = 3;
         attackTimer = 120;
