@@ -125,20 +125,27 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// the two methods (update and paintComponent) will be called in the gameLoop 
 	public void update() {
-		if(gameState == GameStateType.LOADING) {
-			loadTimer++;
-			if(loadTimer >= 120) { // wait for 2 seconds
-				stopMusic();
-				playMusic(levelManager.getCurrentLevel());
-				gameState = GameStateType.PLAY;
-				loadTimer = 0;
-			}
-		}
+		switch(gameState) {
+			case LOADING:
+				loadTimer++;
+				if(loadTimer >= 120) { // wait for 2 seconds
+					stopMusic();
+					playMusic(levelManager.getCurrentLevel());
+					gameState = GameStateType.PLAY;
+					loadTimer = 0;
+				}
+			case PLAY:
+				playing.update();
+				break;
+			case SETTINGS:
+				break;
+			case TITLE:
+			case NULL:
+			case STORY:
 
-		if(gameState == GameStateType.PLAY) {
-			playing.update();
-		} else {
-			return;
+			case PAUSE:
+			case GAMEOVER:
+				break;
 		}
 	}
 	
@@ -156,7 +163,7 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 		
 		// DRAW GAME OBJECTS
-		if(gameState == GameStateType.PLAY) {
+		if(gameState == GameStateType.PLAY || gameState == GameStateType.PAUSE) {
 			playing.draw(g2);
 		} else {
 			ui.draw(g2);

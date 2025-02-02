@@ -87,12 +87,146 @@ public class UI {
 				drawLoadingScreen();	
 				break;
 			case SETTINGS:
-				break;
-			default:
+				drawSettingsScreen();
 				break;
 		}
 	}
+
+	private void drawTitleScreen() {
+		g2.setColor(new Color(0,0,0));
+		g2.fillRect(0, 0, screenWidth, screenHeight);
+		
+		// TITLE NAME
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
+		String text = "Top Down Platformer"; // change this to the name of your game
+		int x = getXforCentredText(text); 
+		int y = tileSize * 3; 
+		
+		//SHADOW
+		g2.setColor(Color.gray);
+		g2.drawString(text, x+5, y+5);
+		
+		//MAIN COLOUR
+		g2.setColor(Color.white);
+		g2.drawString(text, x, y);
+		
+		// MAIN CHARACTER IMAGE
+		x = screenWidth/2 - (tileSize*2)/2; 
+		y += tileSize*2;
+		g2.drawImage(gp.getPlayer().getPlayerMenuImg(), x, y, tileSize*2, tileSize*2, null);
+		
+		//MENU 
+		String[] options = {"NEW GAME", "SETTINGS", "QUIT"};
+
+		// draw the menu options, new game, load game and quit
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+		y += tileSize*3.5;
+
+		for(int i=0;i<options.length;i++) {
+			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
+		}
+	}
+
+	private void drawDialogueScreen(int dialogueNum) {
+	    // WINDOW 
+	    int x = tileSize * 2; 
+	    int y = tileSize / 2; 
+	    int width = screenWidth - (tileSize * 4); 
+	    int height = tileSize * 4;
+	    
+	    drawSubWindow(x, y, width, height); // Pass everything to the method below
+	    
+	    g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+	    x += tileSize;
+	    y += tileSize;
+	    
+	    // Split the text inside the dialogue at the backslash n keyword every 26 characters
+		String[] currentDialogue = new String[(storyStartLines[dialogueNum].length() / 26) + 1];
+
+		for(int i=0;i<currentDialogue.length;i++) {
+			if(i == currentDialogue.length-1) {
+				currentDialogue[i] = storyStartLines[dialogueNum].substring(i*26);
+			} else {
+				currentDialogue[i] = storyStartLines[dialogueNum].substring(i*26, (i+1)*26);
+			}
+		}
+
+		for(String dialogue : currentDialogue) {
+			g2.drawString(dialogue, x, y);
+			y += 40;
+		}
+	}
 	
+	private void drawPauseScreen() {
+		g2.setColor(new Color(0, 0, 0, 100));
+		g2.fillRect(0, 0, screenWidth, screenHeight);
+
+		g2.setColor(Color.white);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+		String text = "PAUSED"; 
+		int x = getXforCentredText(text), y = screenHeight/2; 
+		g2.drawString(text, x, y);
+	}
+	
+	private void drawLoadingScreen() {
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+		String text = "LOADING LEVEL " + gp.getLevelManager().getCurrentLevel(); 
+		int x = getXforCentredText(text), y = screenHeight/2; 
+		g2.drawString(text, x, y);
+	}
+
+	private void drawGameOverScreen() {
+		g2.setColor(new Color(0,0,0));
+		g2.fillRect(0, 0, screenWidth, screenHeight);
+		
+		// TITLE NAME
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
+		String text = "GAME OVER"; // change this to the name of your game
+		int x = getXforCentredText(text);
+		int y = tileSize * 3; 
+		
+		//SHADOW
+		g2.setColor(Color.gray);
+		g2.drawString(text, x + 5, y + 5);
+		
+		//MAIN COLOUR
+		g2.setColor(Color.red);
+		g2.drawString(text, x, y);
+
+		// extra text underneath
+		String subText = "You made it to level " + gp.getLevelManager().getCurrentLevel() + ".";
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+		g2.setColor(Color.white);
+		g2.drawString(subText, getXforCentredText(subText), y + 50);
+
+		// draw the menu options, main menu, play again and quit
+		String[] options = {"MAIN MENU", "PLAY AGAIN", "QUIT"};
+
+		// draw the menu options, new game, load game and quit
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+		y += tileSize*3.5;
+
+		for(int i=0;i<options.length;i++) {
+			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
+		}
+
+	}
+
+	private void drawSettingsScreen() {
+		g2.setColor(new Color(0,0,0));
+		g2.fillRect(0, 0, screenWidth, screenHeight);
+		
+		// TITLE NAME
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
+		String text = "SETTINGS"; // change this to the name of your game
+		int x = getXforCentredText(text);
+		int y = tileSize * 3; 
+		
+		//SHADOW
+		g2.setColor(Color.gray);
+		g2.drawString(text, x + 5, y + 5);
+	}
+
 	private void drawPlayerLife() {
 		int x = tileSize/2; 
 		int y = tileSize/2; 
@@ -146,122 +280,6 @@ public class UI {
 		}
 	}
 	
-	private void drawTitleScreen() {
-		g2.setColor(new Color(0,0,0));
-		g2.fillRect(0, 0, screenWidth, screenHeight);
-		
-		// TITLE NAME
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
-		String text = "Top Down Platformer"; // change this to the name of your game
-		int x = getXforCentredText(text); 
-		int y = tileSize * 3; 
-		
-		//SHADOW
-		g2.setColor(Color.gray);
-		g2.drawString(text, x+5, y+5);
-		
-		//MAIN COLOUR
-		g2.setColor(Color.white);
-		g2.drawString(text, x, y);
-		
-		// MAIN CHARACTER IMAGE
-		x = screenWidth/2 - (tileSize*2)/2; 
-		y += tileSize*2;
-		g2.drawImage(gp.getPlayer().getPlayerMenuImg(), x, y, tileSize*2, tileSize*2, null);
-		
-		//MENU 
-		String[] options = {"NEW GAME", "LOAD GAME", "QUIT"};
-
-		// draw the menu options, new game, load game and quit
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-		y += tileSize*3.5;
-
-		for(int i=0;i<options.length;i++) {
-			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
-		}
-	}
-
-	private void drawDialogueScreen(int dialogueNum) {
-	    // WINDOW 
-	    int x = tileSize * 2; 
-	    int y = tileSize / 2; 
-	    int width = screenWidth - (tileSize * 4); 
-	    int height = tileSize * 4;
-	    
-	    drawSubWindow(x, y, width, height); // Pass everything to the method below
-	    
-	    g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
-	    x += tileSize;
-	    y += tileSize;
-	    
-	    // Split the text inside the dialogue at the backslash n keyword every 26 characters
-		String[] currentDialogue = new String[(storyStartLines[dialogueNum].length() / 26) + 1];
-
-		for(int i=0;i<currentDialogue.length;i++) {
-			if(i == currentDialogue.length-1) {
-				currentDialogue[i] = storyStartLines[dialogueNum].substring(i*26);
-			} else {
-				currentDialogue[i] = storyStartLines[dialogueNum].substring(i*26, (i+1)*26);
-			}
-		}
-
-		for(String dialogue : currentDialogue) {
-			g2.drawString(dialogue, x, y);
-			y += 40;
-		}
-	}
-	
-	private void drawPauseScreen() {
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
-		String text = "PAUSED"; 
-		int x = getXforCentredText(text), y = screenHeight/2; 
-		g2.drawString(text, x, y);
-	}
-	
-	private void drawLoadingScreen() {
-		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
-		String text = "LOADING LEVEL " + gp.getLevelManager().getCurrentLevel(); 
-		int x = getXforCentredText(text), y = screenHeight/2; 
-		g2.drawString(text, x, y);
-	}
-
-	private void drawGameOverScreen() {
-		g2.setColor(new Color(0,0,0));
-		g2.fillRect(0, 0, screenWidth, screenHeight);
-		
-		// TITLE NAME
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
-		String text = "GAME OVER"; // change this to the name of your game
-		int x = getXforCentredText(text);
-		int y = tileSize * 3; 
-		
-		//SHADOW
-		g2.setColor(Color.gray);
-		g2.drawString(text, x + 5, y + 5);
-		
-		//MAIN COLOUR
-		g2.setColor(Color.red);
-		g2.drawString(text, x, y);
-
-		// extra text underneath
-		String subText = "You made it to level " + gp.getLevelManager().getCurrentLevel() + ".";
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-		g2.setColor(Color.white);
-		g2.drawString(subText, getXforCentredText(subText), y + 50);
-
-		// draw the menu options, main menu, play again and quit
-		String[] options = {"MAIN MENU", "PLAY AGAIN", "QUIT"};
-
-		// draw the menu options, new game, load game and quit
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-		y += tileSize*3.5;
-
-		for(int i=0;i<options.length;i++) {
-			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
-		}
-
-	}
-
 	private void drawSubWindow(int x, int y, int width, int height) {
 		Color c = new Color(0,0,0, 210); // RGB number for black, fourth number = alpha value (transparency level)
 		g2.setColor(c);

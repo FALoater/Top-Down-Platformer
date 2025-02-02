@@ -46,7 +46,7 @@ public class KeyHandler implements KeyListener {
 						gp.setGameState(GameStateType.STORY);
 					}
 					if (gp.getUi().getCommandNum() == 1) {
-						//add later
+						gp.setGameState(GameStateType.SETTINGS);
 					}
 					if (gp.getUi().getCommandNum() == 2) { 
 						System.exit(0);
@@ -66,7 +66,7 @@ public class KeyHandler implements KeyListener {
 				if (code == KeyEvent.VK_D) {
 					rightPressed = true;
 				}
-				if (code == KeyEvent.VK_P) {
+				if (code == KeyEvent.VK_ESCAPE) {
 					gp.setGameState(GameStateType.PAUSE);
 				}
 				if (code == KeyEvent.VK_ENTER) {
@@ -93,7 +93,6 @@ public class KeyHandler implements KeyListener {
 				if (code == KeyEvent.VK_Q) {
 					// skip story
 					gp.setGameState(GameStateType.LOADING);
-					gp.playMusic(Sound.LEVEL1);
 				}
 				break;
 			case GAMEOVER:
@@ -127,7 +126,7 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case PAUSE:
-				if (code == KeyEvent.VK_P) {
+				if (code == KeyEvent.VK_ESCAPE) {
 					gp.setGameState(GameStateType.PLAY);
 				}
 				break;
