@@ -8,7 +8,7 @@ import gamestates.GameStateType;
 public class KeyHandler implements KeyListener {
 	// implements KeyListener is necessary 
 	// KeyListener - the listener interface for receiving keyboard events (keystrokes) 
-	private boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, attackPressed;
+	private boolean upPressed, downPressed, leftPressed, rightPressed, attackPressed;
 
 	private GamePanel gp;
 	
@@ -27,20 +27,20 @@ public class KeyHandler implements KeyListener {
 	
 		switch(gp.getGameState()) {
 			case TITLE:
-				if(code == KeyEvent.VK_W) {
+				if(code == KeyEvent.VK_W) { // move arrow up
 					gp.getUi().decrementCommandNum();
 					if(gp.getUi().getCommandNum() < 0) {
 						gp.getUi().setCommandNum(2); //prevents the arrow from moving into oblivion 
 					}
 				}
-				if(code == KeyEvent.VK_S) {
+				if(code == KeyEvent.VK_S) { // move arrow down
 					gp.getUi().incrementCommandNum();
 					if(gp.getUi().getCommandNum() > 2) {
 						gp.getUi().setCommandNum(0);
 					}
 				}
 				
-				if(code == KeyEvent.VK_ENTER) {
+				if(code == KeyEvent.VK_ENTER) { // respond to relevant option selected
 					if(gp.getUi().getCommandNum() == 0) {
 						gp.stopMusic();
 						gp.setGameState(GameStateType.STORY);
@@ -54,8 +54,9 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case PLAY:
+				// update player movement 
 				if(code == KeyEvent.VK_W) {
-					upPressed = true; //update boolean value 
+					upPressed = true;
 				}
 				if(code == KeyEvent.VK_S) {
 					downPressed = true; 		
@@ -66,20 +67,17 @@ public class KeyHandler implements KeyListener {
 				if(code == KeyEvent.VK_D) {
 					rightPressed = true;
 				}
+				// pause menu
 				if(code == KeyEvent.VK_ESCAPE) {
 					gp.setGameState(GameStateType.PAUSE);
-				}
-				if(code == KeyEvent.VK_ENTER) {
-					enterPressed = true;
+				// attacks
 				}
 				if(code == KeyEvent.VK_E) {
 					attackPressed = true;
 					gp.getPlayer().attack();
 				}
 				if(code == KeyEvent.VK_R) {
-					if(gp.getPlayer().getAmmo() != 0) {
-						gp.getPlayer().reloadAmmo();
-					}
+					gp.getPlayer().reloadAmmo();
 				}
 				// DEBUG
 				if(code == KeyEvent.VK_Q) { 
@@ -87,11 +85,13 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case STORY:
+				// go to next bit
 				if(code == KeyEvent.VK_ENTER) {
 					gp.getUi().incrementDialogue(); 
 				}
+				// skip story
 				if(code == KeyEvent.VK_Q) {
-					// skip story
+
 					gp.setGameState(GameStateType.LOADING);
 				}
 				break;
@@ -127,27 +127,31 @@ public class KeyHandler implements KeyListener {
 				break;
 			case PAUSE:
 				if(code == KeyEvent.VK_ESCAPE) {
-					gp.setGameState(GameStateType.PLAY);
+					gp.setGameState(GameStateType.PLAY); // resume play
 				}
 				break;
 			case SETTINGS:
-				if(gp.getUi().getOptionSelection() == 0) {
+				if(gp.getUi().getOptionSelection() == 0) { // selected on sound option
+					// left arrow key
 					if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
 						gp.getUi().setCommandNum(2);
 						gp.getMusic().decreaseSound();
 					}
-
+					// right arrow key
 					if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
 						gp.getUi().setCommandNum(3);
 						gp.getMusic().increaseSound();
 					}
 				}
+				// select bottom option
 				if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
 					gp.getUi().setOptionSelection(1);
 				}
+				// select top option
 				if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
 					gp.getUi().setOptionSelection(0);
 				}
+				// go back to main menu
 				if(code == KeyEvent.VK_ENTER && gp.getUi().getOptionSelection() == 1) {
 					gp.setGameState(GameStateType.TITLE);
 				}
@@ -164,8 +168,9 @@ public class KeyHandler implements KeyListener {
 
 		switch(gp.getGameState()) {
 			case PLAY:
+				// update valuses
 				if(code == KeyEvent.VK_W) {
-					upPressed = false; //update boolean value 
+					upPressed = false;
 				}
 				if(code == KeyEvent.VK_S) {
 					downPressed = false; 		
@@ -181,6 +186,7 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case SETTINGS:
+				// remove arrow highlight
 				gp.getUi().setCommandNum(1);
 				break;
 			case GAMEOVER:
@@ -211,15 +217,7 @@ public class KeyHandler implements KeyListener {
 		return rightPressed;
 	}
 
-	public boolean isEnterPressed() {
-		return enterPressed;
-	}
-
 	public boolean isAttackPressed() {
 		return attackPressed;
-	}
-
-	public void setEnterPressed(boolean enterPressed) {
-		this.enterPressed = enterPressed;
 	}
 }

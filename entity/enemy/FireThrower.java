@@ -5,11 +5,10 @@ import main.GamePanel;
 public class FireThrower extends Enemy{
 
     public FireThrower(GamePanel gp, int worldX, int worldY) {
-        super(gp);
+        super(gp); // call superclass method
 		this.worldX = worldX;
 		this.worldY = worldY;
-        direction = "down";
-		speed = 1; 
+		// other attributes already defined in super class
         getImage();
     }
 

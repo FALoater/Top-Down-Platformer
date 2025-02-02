@@ -15,7 +15,7 @@ public abstract class Enemy extends Entity {
 
     public Enemy(GamePanel gp) {
         super(gp);
-        speed = 4;
+        speed = 1;
 
 		// choose random direction
 		int i = random.nextInt(100) + 1;
@@ -29,16 +29,20 @@ public abstract class Enemy extends Entity {
 			direction = "right";
 		}
 
+		// set max health
         maxLife = 4;
         life = maxLife;
 
+		// set hitboxes
         solidArea = new Rectangle(3, 12, 39, 30);
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
+		// load images
         getImage();
     }
 
+	// overriden in subclasses
     protected void getImage() {}
     protected void spawnProjectile() {}
 
@@ -107,6 +111,7 @@ public abstract class Enemy extends Entity {
 			}
 
 		}
+		// after movement, attempts to shoot once
 		attack();
 	}	
 
@@ -116,10 +121,17 @@ public abstract class Enemy extends Entity {
 		g2.drawRect(screenX, screenY - 10, 48, 10);
 		g2.setColor(Color.red);
 		g2.fillRect(screenX + 1, screenY - 9, (int)(47 * ((float)life / (float)maxLife)), 9);
+		//                                      calculates percentage of health bar shaded
 	}
 
 	@Override
 	protected void playHurtEffect() {
 		gp.playSoundEffect(Sound.ENEMY_HURT);
 	}
+
+	@Override
+	public void drawHitbox(Graphics2D g2) {
+        g2.setColor(Color.green);
+        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+    }
 }

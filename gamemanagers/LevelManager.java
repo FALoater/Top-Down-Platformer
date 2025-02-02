@@ -10,7 +10,11 @@ import main.Sound;
 
 public class LevelManager {
     private GamePanel gp;
+    
+    // access tilemanager to draw tiles
     private TileManager tileManager;
+
+    // level statistics
     private int currentLevel;
     private int numberOfEnemies;
     private final int MAX_LEVEL = 3;
@@ -21,6 +25,7 @@ public class LevelManager {
     }
 
     public void init() {
+        // start game triggers
         currentLevel = 1;
         loadTiles(1);
         resetPlayer();
@@ -30,14 +35,16 @@ public class LevelManager {
     public void loadNextLevel() {
         currentLevel++;
 
-        if(currentLevel > MAX_LEVEL) {
+        if(currentLevel > MAX_LEVEL) { // if final level then go to end screen
             currentLevel--;
+            gp.getUi().setVictory(true);
             gp.stopMusic();
             gp.playMusic(Sound.END_GAME);
             gp.setGameState(GameStateType.GAMEOVER);
             return;
         }
 
+        // else load the next available level
         loadTiles(currentLevel);
         resetAll();
         loadEnemies();
@@ -68,8 +75,11 @@ public class LevelManager {
     }
 
     private void resetPlayer() {
+        // reset player animations
         gp.getPlayer().resetAttack();
-
+        gp.getPlayer().setMovement(false);
+        
+        // spawn player in correct position on map
         switch(currentLevel) {
             case 1:
                 gp.getPlayer().setWorldX(tileSize * 5);
@@ -119,8 +129,7 @@ public class LevelManager {
         }
     }
 
-    // getters and settesr
-
+    // getters and setters
     public TileManager getTileManager() {
         return tileManager;
     }

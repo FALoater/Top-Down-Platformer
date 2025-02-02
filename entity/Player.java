@@ -26,7 +26,7 @@ public class Player extends Entity {
     	super(gp);
         this.keyH = keyH;
         
-        //Display character at the centre of the screen (have to subtract tileSize/2 because measurements are taken from top left corner of box) 
+        // display character at the centre of the screen (have to subtract tileSize/2 because measurements are taken from top left corner of box) 
         screenX = screenWidth / 2 - (tileSize / 2); 
         screenY = screenHeight / 2 - (tileSize / 2);
         
@@ -41,16 +41,17 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() { 
-    	//Default characteristics for the player entity 
+    	// default attributes
         speed = 4;
         direction = "down";
         
-        // PLAYER STATUS 
+        // health
         maxLife = 6; 
         life = maxLife; 
     }
 
     public void getPlayerImage() { 
+        // load walking sprites
         up1 = setup("/assets/entities/player/moving/boy_up_1"); 
         up2 = setup("/assets/entities/player/moving/boy_up_2"); 
         down1 = setup("/assets/entities/player/moving/boy_down_1"); 
@@ -70,10 +71,12 @@ public class Player extends Entity {
         attackRight1 = setup("/assets/entities/player/attacking/boy_attack_right_1", tileSize * 2, tileSize);
         attackRight2 = setup("/assets/entities/player/attacking/boy_attack_right_2", tileSize * 2, tileSize);
 
+        // hurt sprite
         hurt = setup("/assets/entities/player/moving/boy_hurt");
     }
     
     public void update() { 
+        // if player has no health, trigger death and end game screen
         if(life <= 0) {
             gp.playSoundEffect(Sound.PLAYER_DEATH);
             gp.setGameState(GameStateType.GAMEOVER);
@@ -81,6 +84,7 @@ public class Player extends Entity {
             gp.playMusic(Sound.END_GAME);
         }
 
+        // check attack timer attempts
         attackTimer++;
 
         if(attacking) {
@@ -114,16 +118,12 @@ public class Player extends Entity {
 
             // projectile collisions are managed in the projectile class
 
-            //CHECK TILE COLLISION
+            // tile and enemy collisions
             collisionOn = false; 
             gp.getCollisionChecker().checkTile(this);
-            
-            //CHECK ENEMY COLLISION
-            gp.getCollisionChecker().checkEntity(this, gp.getEnemy()); // probably decrease health after this coliision
-            
-            gp.getKeyHandler().setEnterPressed(false);
+            gp.getCollisionChecker().checkEntity(this, gp.getEnemy());
 
-            //IF COLLISION IS FALSE, PLAYER CAN MOVE
+            // if no collision, player can move
             if (collisionOn == false && canMove) { 
                 switch(direction) { 
                     case "up": 
@@ -172,7 +172,7 @@ public class Player extends Entity {
                 break;
         }
 
-        if(attacking) {
+        if(attacking) { // show shooting animation
             switch(direction) {
                 case "up":
                     image = (spriteNum == 1) ? attackUp1 : attackUp2;
@@ -201,13 +201,14 @@ public class Player extends Entity {
     }
 
     @Override
-    //Troubleshooting for collision detection
+    // debug mode
     public void drawHitbox(Graphics2D g2) {
         g2.setColor(Color.red);
         g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     } 
     
     public void attack() {
+        // attempts to register an attack 
         if(ammo <= 0 || !keyH.isAttackPressed()) return;
 
         gp.playSoundEffect(Sound.PLAYER_ATTACK);
@@ -215,7 +216,7 @@ public class Player extends Entity {
         attackTimer = 0;
         ammo--;
 
-        switch(direction) {
+        switch(direction) { // create new projectile if attack goes through
             case "up":
                 gp.getAssetSetter().spawnProjectile(worldX, worldY - tileSize, 7, direction, "fire");
                 break;
@@ -237,6 +238,7 @@ public class Player extends Entity {
     }
 
     public void reloadAmmo() {
+        if(ammo >= 3) return;
         ammo = 0;
         attackTimer = 0;
     }
@@ -244,6 +246,10 @@ public class Player extends Entity {
     public void resetAttack() {
         ammo = 3;
         attackTimer = 120;
+    }
+
+    public void setMovement(boolean canMove) {
+        this.canMove = canMove;
     }
 
     public int getAttackTimer() {

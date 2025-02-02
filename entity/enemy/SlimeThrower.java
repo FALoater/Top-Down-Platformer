@@ -5,14 +5,13 @@ import main.GamePanel;
 public class SlimeThrower extends Enemy{
 
     public SlimeThrower(GamePanel gp, int worldX, int worldY) {
-        super(gp);
+        super(gp); // call superclass method
 		this.worldX = worldX;
 		this.worldY = worldY;
 
-		maxLife = 6;
+		maxLife = 6; // this enemy has more health so override superclass attribute
 		life = maxLife;
-        direction = "down";
-		speed = 1; 
+
         getImage();
     }
 

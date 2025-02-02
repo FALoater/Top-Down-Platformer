@@ -5,11 +5,10 @@ import main.GamePanel;
 public class WaterThrower extends Enemy{
 
     public WaterThrower(GamePanel gp, int worldX, int worldY) {
-        super(gp);
+        super(gp); // call superclass method
 		this.worldX = worldX;
 		this.worldY = worldY;
-        direction = "down";
-		speed = 1; 
+
         getImage();
     }
 

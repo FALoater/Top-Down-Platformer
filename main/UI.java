@@ -22,6 +22,7 @@ public class UI {
 	private int commandNum = 0;
 	private int sentenceNo = 0;
 	private int optionSelection = 0;
+	private boolean victory = false;
 
 	//handles all the on-screen UI 
 	private String[] storyStartLines = {"HELLO AND WELCOME TO THE GAME", "YOU ARE QUITE BAD"};// the current dialogue to be displayed on the screen
@@ -32,9 +33,9 @@ public class UI {
 	
 	public UI (GamePanel gp) {
 		this.gp = gp;
-		arial_40 = new Font("Arial", Font.PLAIN, 40); //instantiate in the constructor once 
+		arial_40 = new Font("Arial", Font.PLAIN, 40); // instantiate in the constructor once 
 	
-		// CREATE HUD OBJECT 
+		// create hud during game state
 		SuperObject heart = new OBJ_Heart();
 		BufferedImage[] images = heart.getImages();
 		heart_full = images[0];
@@ -44,6 +45,7 @@ public class UI {
 	}
 
 	private BufferedImage setup(String imagePath) { 
+		// format heart image
 		UtilityTool uTool = new UtilityTool();
 		BufferedImage image = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB);
 		
@@ -66,6 +68,7 @@ public class UI {
 		GameStateType gameState = gp.getGameState();
 
 		switch(gameState) {
+			// draw the ui layout depending on the game state
 			case TITLE:
 				drawTitleScreen();
 				break;
@@ -75,6 +78,7 @@ public class UI {
 				break;
 			case PAUSE:
 				drawPlayerLife();
+				drawPlayerBullets();
 				drawPauseScreen();
 				break;
 			case STORY:
@@ -97,21 +101,21 @@ public class UI {
 		g2.setColor(new Color(0,0,0));
 		g2.fillRect(0, 0, screenWidth, screenHeight);
 		
-		// TITLE NAME
+		// game title
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
-		String text = "Top Down Platformer"; // change this to the name of your game
+		String text = "Top Down Platformer"; // name of the game
 		int x = getXforCentredText(text); 
 		int y = tileSize * 3; 
 		
-		//SHADOW
+		// shadow highlight
 		drawTextWithShadow(text, x, y);
 		
-		// MAIN CHARACTER IMAGE
+		// game logo which is main character
 		x = screenWidth/2 - (tileSize*2)/2; 
 		y += tileSize*2;
 		g2.drawImage(gp.getPlayer().getPlayerMenuImg(), x, y, tileSize*2, tileSize*2, null);
 		
-		//MENU 
+		// menu underneath
 		String[] options = {"NEW GAME", "SETTINGS", "QUIT"};
 
 		// draw the menu options, new game, load game and quit
@@ -124,19 +128,19 @@ public class UI {
 	}
 
 	private void drawDialogueScreen(int dialogueNum) {
-	    // WINDOW 
+	    // background window at top
 	    int x = tileSize * 2; 
 	    int y = tileSize / 2; 
 	    int width = screenWidth - (tileSize * 4); 
 	    int height = tileSize * 4;
 	    
-	    drawSubWindow(x, y, width, height); // Pass everything to the method below
+	    drawSubWindow(x, y, width, height); // pass everything to the method below
 	    
 	    g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
 	    x += tileSize;
 	    y += tileSize;
 	    
-	    // Split the text inside the dialogue at the backslash n keyword every 26 characters
+	    // split the text inside the dialogue at the backslash n keyword every 26 characters
 		String[] currentDialogue = new String[(storyStartLines[dialogueNum].length() / 26) + 1];
 
 		for(int i=0;i<currentDialogue.length;i++) {
@@ -148,20 +152,21 @@ public class UI {
 		}
 
 		for(String dialogue : currentDialogue) {
+			// draw the current dialogue string
 			g2.drawString(dialogue, x, y);
 			y += 40;
 		}
 	}
 	
 	private void drawPauseScreen() {
-		g2.setColor(new Color(0, 0, 0, 100));
+		g2.setColor(new Color(0, 0, 0, 100)); // alpha transparency value of 100 enables game to be seen
 		g2.fillRect(0, 0, screenWidth, screenHeight);
 
 		g2.setColor(Color.white);
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
+
 		String text = "PAUSED"; 
-		int x = getXforCentredText(text), y = screenHeight/2; 
-		g2.drawString(text, x, y);
+		g2.drawString(text, getXforCentredText(text), screenHeight / 2); // draw text in centre of screen
 	}
 	
 	private void drawLoadingScreen() {
@@ -177,7 +182,8 @@ public class UI {
 		
 		// TITLE NAME
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
-		String text = "GAME OVER"; // change this to the name of your game
+		String text = "GAME OVER";
+		if(victory) text = "YOU WON!";
 		int x = getXforCentredText(text);
 		int y = tileSize * 3; 
 		
@@ -204,17 +210,19 @@ public class UI {
 	}
 
 	private void drawSettingsScreen() {
+		// fill background colour as black
 		g2.setColor(new Color(0,0,0));
 		g2.fillRect(0, 0, screenWidth, screenHeight);
 		
-		// TITLE NAME
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
-		String text = "SETTINGS"; // change this to the name of your game
+		String text = "SETTINGS";
 		int x = getXforCentredText(text);
 		int y = tileSize * 2; 
 		
-		//SHADOW
+		// shadow
 		drawTextWithShadow(text, x, y);
+
+		// draw options underneath
 		drawVolumeSlider();
 	}
 
@@ -222,9 +230,10 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,50F));
 		String text = "Volume:";
 		int y = tileSize * 5;
-		int x = getXforCentredText(text);
+		int x = getXforCentredText(text); 
 		
 		if(optionSelection == 0) {
+			// if this option is selected highlight red
 			g2.setColor(Color.red);
 			g2.drawString(text, x, y);
 			g2.setColor(Color.white);
@@ -232,6 +241,7 @@ public class UI {
 			text = "Back to Menu";
 			drawTextWithShadow(text, getXforCentredText(text), y + (int)(4 * tileSize));
 		} else {
+			// else highlight other option
 			drawTextWithShadow(text, x, y);
 			text = "Back to Menu";
 			g2.setColor(Color.red);
@@ -240,12 +250,12 @@ public class UI {
 		
 		g2.setColor(Color.white);
 
-		text = String.valueOf(gp.getMusic().getSoundLevel());
+		text = String.valueOf(gp.getMusic().getSoundLevel()); // get current sound value
 		x = getXforCentredText(text);
 		y += tileSize * 1.5;
 
 		if(commandNum == 2) g2.setColor(Color.red);
-		g2.drawString("<", x - tileSize * 2, y);
+		g2.drawString("<", x - tileSize * 2, y); // draw left and right option buttons
 
 		g2.setColor(Color.white);
 		drawTextWithShadow(text, x, y);
@@ -269,19 +279,19 @@ public class UI {
 		int y = tileSize/2; 
 		int i = 0; 
 		
-		//DRAW MAX LIFE
+		// draw max hearts
 		while (i < gp.getPlayer().getMaxLife()/2 ) {
 			g2.drawImage(heart_blank, x, y, null); 
 			i++; 
 			x += tileSize;
 		}
 		
-		//RESET VALUES
+		// reset x and y values
 		x = tileSize/2; 
 		y = tileSize/2; 
 		i = 0;
 		
-		//DRAW CURRENT LIFE
+		// draw current player health
 		while (i < gp.getPlayer().getCurrentLife()) {
 			g2.drawImage(heart_half, x, y, null);
 			i++;
@@ -301,18 +311,19 @@ public class UI {
 
 		int ammo = gp.getPlayer().getAmmo();
 
-		//DRAW BULLETS
+		// draw current number of bullets
 		if(ammo > 0) {
 			for(int i = 0;i<ammo;i++) {
 				g2.drawImage(bullet, x, y, null);
 				x -= tileSize;
 			}
 		} else {
+			// if no bullets show reloading animation
 			g2.setColor(Color.white);
 			g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 30F));
 			g2.drawString("RELOADING", (int)(screenWidth - tileSize * (1.5 + 2) - 10), y + 30);
 			g2.setColor(Color.red);
-			g2.drawRect((int)(screenWidth - tileSize * (1.5 + 2)), y + 50, tileSize * 3, 10);
+			g2.drawRect((int)(screenWidth - tileSize * (1.5 + 2)), y + 50, tileSize * 3, 10); // calculate percentage of bar filled using player attack cooldown timer
 			g2.fillRect((int)(screenWidth - tileSize * (1.5 + 2)), y + 50, (int) ((float) (tileSize * 3 * gp.getPlayer().getAttackTimer() / 120)), 10);
 		}
 	}
@@ -322,10 +333,10 @@ public class UI {
 		g2.setColor(c);
 		g2.fillRoundRect(x, y, width, height, 35, 35);
 		
-		c = new Color(255,255,255);//RGB number for white
+		c = new Color(255,255,255);// RGB number for white
 		g2.setColor(c);
 		g2.setStroke(new BasicStroke(5));
-		//setStroke defines the width of outline graphics which are rendered with a Graphics2D
+		// setStroke defines the width of outline graphics which are rendered with a Graphics2D
 		
 		g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
 	}
@@ -347,6 +358,7 @@ public class UI {
 		int x = screenWidth / 2 - length / 2;
 		return x;
 	}
+	
 	// getters and setters
 
 	public void decrementCommandNum() {
@@ -379,5 +391,9 @@ public class UI {
 
 	public int getOptionSelection() {
 		return optionSelection;
+	}
+
+	public void setVictory(boolean victory) {
+		this.victory = victory;
 	}
 }

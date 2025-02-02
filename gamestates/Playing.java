@@ -28,6 +28,7 @@ public class Playing implements GameState{
     public Playing(GamePanel gp) {
         this.gp = gp;
 
+        // get all required objects from game class
         player = gp.getPlayer();
         levelManager = gp.getLevelManager();
         proj = gp.getProjectiles();
@@ -39,8 +40,9 @@ public class Playing implements GameState{
     @Override
     public void update() {
         player.update();
+
         if(levelManager.getNumberOfEnemies() == 0) {
-            levelManager.loadNextLevel();
+            levelManager.loadNextLevel(); // if all enemies are killed
         }
 
         // Projectiles
@@ -48,7 +50,7 @@ public class Playing implements GameState{
             Projectile projectile = proj[i];
 
             if(projectile != null) {
-                // check first if the projectile is meant to be deleted first
+                // check first if the projectile is meant to be deleted first or outside the world bounds
                 if(projectile.isMarkedForDeletion() || Math.abs(projectile.getWorldX()) > worldWidth || Math.abs(projectile.getWorldY()) > worldHeight) {
                     proj[i] = null;
                 } else {
@@ -58,8 +60,10 @@ public class Playing implements GameState{
         }
 
         for(int i = 0; i <enemies.length;i++) {
+            // same idea as projectiles
             if(enemies[i] != null) {
                 if(enemies[i].isMarkedForDeletion()) {
+                    // if enemy killed remove them from the array
                     gp.playSoundEffect(Sound.ENEMY_DEATH);
                     enemies[i] = null;
                     levelManager.decreaseNumberOfEnemies();
@@ -87,6 +91,7 @@ public class Playing implements GameState{
         for (int i = 0; i < enemies.length; i++) {
             if (enemies[i] != null) {
                 enemies[i].draw(g2);
+                if(debug) enemies[i].drawHitbox(g2);
             }
         }
 

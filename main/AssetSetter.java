@@ -17,13 +17,13 @@ public class AssetSetter {
 	
 	public Enemy spawnEnemy(int worldX, int worldY, String type) {
 		switch(type) {
+			// switch case is easier to use than if statements
 			case "fireThrower":
 				return new FireThrower(gp, tileSize * worldX, tileSize * worldY);
 			case "waterThrower":
 				return new WaterThrower(gp, tileSize * worldX, tileSize * worldY);
 			case "slimeThrower":
 				return new SlimeThrower(gp, tileSize * worldX, tileSize * worldY);
-			
 			default:
 				return null;
 		}

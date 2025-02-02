@@ -11,14 +11,14 @@ import static main.GamePanel.tileSize;
 
 public class SuperObject {
 	
-	//this is the parent class of all the object classes that we will be creating later 
+	// this is the parent class of all the object classes that we will be creating later 
 	protected boolean collision = false; 
 
 	protected int solidAreaDefaultX = 0; 
 	protected int solidAreaDefaultY = 0; 
 	protected int worldX, worldY;
 	//VARIABLES
-	protected BufferedImage image, image2, image3; //heart object has 3 images
+	protected BufferedImage image, image2, image3; // heart object has 3 images
 	protected Rectangle solidArea = new Rectangle(0,0,48,48); // we are goint o set the whole 48 by 48 square box as a hitbox 
 	protected String name; 
 	protected UtilityTool uTool = new UtilityTool();

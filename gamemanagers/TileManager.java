@@ -24,25 +24,12 @@ public class TileManager {
 	
 	public TileManager(GamePanel gp) { 
 		this.gp = gp;
-		this.tile = new Tile[10]; //create 10 kinds of tiles (if we need more we can simply change this number) 
+		this.tile = new Tile[6]; // only need 6 types of tiles
 		getTileImage();
-	}
-
-	public void getLevel(int level) {
-		loadLevel(level);
-	}
-	
-	public void getTileImage() { 
-		//load Tile images in this method 
-			initaliseTile(0, "grass", false);
-			initaliseTile(1, "wall", true);
-			initaliseTile(2, "water", true);
-			initaliseTile(3, "earth", false);
-			initaliseTile(4, "tree", true);
-			initaliseTile(5, "sand", false);
 	}
 	
 	public static BufferedImage readImage(String imageName){
+		// load image from asset files
 		String fileName = imageName + ".png";
 		InputStream is = TileManager.class.getResourceAsStream("/assets/tiles/" + fileName);
 		BufferedImage img = null;
@@ -58,14 +45,14 @@ public class TileManager {
 
     public void loadLevel(int level) { 
 	    try { 
-	        InputStream is = getClass().getResourceAsStream("/assets/maps/world0" + String.valueOf(level) + ".txt"); //importStream used to import text file 
+	        InputStream is = getClass().getResourceAsStream("/assets/maps/world0" + String.valueOf(level) + ".txt"); // importStream used to import text file 
 	        BufferedReader br = new BufferedReader(new InputStreamReader(is));  // bufferedReader reads the contents of the text file (just a format) 
 	        
 	        int col = 0;
 	        int row = 0; 
 	        
 	        while(row < maxWorldRow && col < maxWorldCol) {
-	            String line = br.readLine(); //reads a line of the text file (a single line at a time) 
+	            String line = br.readLine(); // reads a line of the text file (a single line at a time) 
 	            if (line == null) {
 	                break; // EOF reached
 	            }
@@ -114,7 +101,7 @@ public class TileManager {
 				worldY + tileSize> gp.getPlayer().getWorldY()  - gp.getPlayer().getScreenY() && 
 				worldY - tileSize < gp.getPlayer().getWorldY()  + gp.getPlayer().getScreenY()) { 
 				
-				//previosuly, image had to be scaled during the game loop (not anymore, we have already pre-scaled it)
+				// previously, image had to be scaled during the game loop (not anymore, we have already pre-scaled it)
 				g2.drawImage(tile[tileNum].getImage(), screenX, screenY, null);
 			}
 			worldCol++; 
@@ -124,6 +111,22 @@ public class TileManager {
 				worldRow++;
 			}
 		}
+	}
+
+	// getters and setters
+
+	public void getLevel(int level) {
+		loadLevel(level);
+	}
+	
+	public void getTileImage() { 
+		//load Tile images in this method 
+			initaliseTile(0, "grass", false);
+			initaliseTile(1, "wall", true);
+			initaliseTile(2, "water", true);
+			initaliseTile(3, "earth", false);
+			initaliseTile(4, "tree", true);
+			initaliseTile(5, "sand", false);
 	}
 
 	public int[][] getMapTileNum() {

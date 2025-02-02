@@ -14,6 +14,7 @@ public class Sound {
 	private Clip clip; // used to open sound files
 	private URL music[] = new URL[30]; //URL used to store file path of sound files
 
+	// constants to refer to specific sound files, similar to an enum
 	public static final int MAIN_MENU = 0;
 	public static final int LEVEL1 = 1;
 	public static final int LEVEL2 = 2;
@@ -28,6 +29,7 @@ public class Sound {
 	public static final int ENEMY_DEATH = 10;
 
 	public Sound(int soundLevel) { 
+		// load sound files from assets 
 		music[0] = getClass().getResource("/assets/sound/main_menu.wav");
 		music[1] = getClass().getResource("/assets/sound/level_1.wav");
 		music[2] = getClass().getResource("/assets/sound/level_2.wav");
@@ -46,7 +48,7 @@ public class Sound {
 	
 	public void setFile(int i) { 
 		try { 
-			//Format to open audio files in Java 
+			// format to open audio files in Java 
 			AudioInputStream ais = AudioSystem.getAudioInputStream(music[i]);
 			clip = AudioSystem.getClip();
 			clip.open(ais);
@@ -100,6 +102,7 @@ public class Sound {
 	}
 
 	public void setSoundLevel(int level) {
+		// preset values as sound increase is exponential
 		switch(level) {
 		case 0:
 			volume = 0;

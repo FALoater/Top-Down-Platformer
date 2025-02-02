@@ -18,33 +18,36 @@ import projectile.Projectile;
 // stores variables that will be used in all of player, monster classes
 
 public class Entity {
-	
+	// event triggers
+	protected boolean attacking = false; 
 	protected boolean collisionOn = false; 
-
-	protected int worldX , worldY;
-	protected int speed;
-	protected int screenX, screenY;
-	protected int solidAreaDefaultX, solidAreaDefaultY;
-
-	protected int spriteCounter = 0, spriteNum = 1;
-	protected int attackTimer;
-	
-	// CHARACTER STATUS 
-	protected int maxLife; 
-	protected int life;
-
-	protected boolean attacking = false, isHurt = false, markedForDeletion = false;
-
-	// BufferedImage = an image with an accessible buffer of image data (we use this to store our image files) 
-	protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, hurt;
-
-	protected GamePanel gp;
+	protected boolean isHurt = false;
+	protected boolean markedForDeletion = false;
 
 	// init hitbox for collision detection, can change later
 	protected Rectangle solidArea = new Rectangle(0,0,48,48); 
-	
+
+	// world position
+	protected int speed;
+	protected int screenX, screenY;
+	protected int solidAreaDefaultX, solidAreaDefaultY;
+	protected int worldX, worldY;
 	protected String direction;
+
+	// animations
+	protected int spriteCounter = 0, spriteNum = 1;
+	protected int attackTimer;
 	
+	// entity health
+	protected int maxLife; 
+	protected int life;
+
+	// sprites
+	protected BufferedImage up1, up2, down1, down2, left1, left2, right1, right2, hurt;
+
+	// main game class
+	protected GamePanel gp;
+
 	public Entity(GamePanel gp) {
 		this.gp = gp;
 	}
@@ -60,19 +63,19 @@ public class Entity {
 	}
 
 	public void setHitbox(int x, int y, int width, int height) {
+		// initialise hitbox boundaries
 		solidArea.x = x;
 		solidArea.y = y;
 		solidArea.width = width;
 		solidArea.height = height;
 	}
 
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-	
-	public void setAction() {}; // overriden in subclasses
-	protected void drawHealthBar(Graphics2D g2) {}; // overriden in subclasses
-	
+	// override in subclasses
+	public void drawHitbox(Graphics2D g2) {}
+	public void setAction() {};
+	protected void drawHealthBar(Graphics2D g2) {}; 
+	protected void playHurtEffect() {};
+
 	public void update() { 
 		setAction(); // subclass method takes priority 
 		
@@ -81,6 +84,7 @@ public class Entity {
 		gp.getCollisionChecker().checkObject(this, false);
 		gp.getCollisionChecker().checkPlayer(this);
 		
+		// if no collisions, can move
 		if (collisionOn == false) { 
             switch(direction) { 
                 case "up": 
@@ -136,7 +140,7 @@ public class Entity {
 				break;
 			}
 
-			if(isHurt && life > 0) {
+			if(isHurt && life > 0) { // if taken hit but not dead
 				playHurtEffect();
 				image = hurt;
 				isHurt = false;
@@ -147,11 +151,8 @@ public class Entity {
 		}
 	}
 
-	public void drawHitbox(Graphics2D g2) {}
-
-	protected void playHurtEffect() {};
-
 	protected BufferedImage setup(String imagePath) {
+		// more general version of setup
 		return setup(imagePath, tileSize, tileSize);
 	}
 		
@@ -168,12 +169,15 @@ public class Entity {
 		}
 		return image;
     }
-
+	
+	// getters and setters
 	public void restoreFullHealth() {
 		life = maxLife;
 	}
 
-	// Setter and getter methods
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
 
 	public BufferedImage getPlayerMenuImg() {
 		return down1;

@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private final static int ORIGINAL_TILE_SIZE = 16; //16x16 tile 
 	private final static int SCALE = 3;
 	
-	//have to make these variables public and static to import into other classes
+	// have to make these variables public and static to import into other classes
 	public static final int tileSize = ORIGINAL_TILE_SIZE * SCALE; // 48x48 tile (public to give access to other packages)
 	public static final int maxScreenCol = 16; 
 	public static final int maxScreenRow = 12;
@@ -38,14 +38,14 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	//INSTANTIATE SYSTEM CLASSES
 	protected Sound music = new Sound(6), se = new Sound(9); // play music at lower volume so sound effects can be heard
-	protected Thread gameThread; //very useful for game loops (need to implement runnable to use this thread) 
+	protected Thread gameThread; // very useful for game loops (need to implement runnable to use this thread) 
 	protected KeyHandler keyH = new KeyHandler(this);
 
 	//INSTANTIATE ENTITY AND OBJECT 
 	protected SuperObject obj[] = new SuperObject[10]; // we have 10 slots to add objects (at the same time) (can update later on during the game development)
 	protected Enemy enemies[] = new Enemy[10];
 	protected Projectile proj[] = new Projectile[10];
-	protected Player player = new Player(this, keyH); //instantiate in gamePanel class
+	protected Player player = new Player(this, keyH); // instantiate in gamePanel class
 
 	protected AssetSetter aSetter = new AssetSetter(this);
 	protected CollisionChecker cChecker = new CollisionChecker(this);
@@ -56,24 +56,24 @@ public class GamePanel extends JPanel implements Runnable {
 	private int loadTimer = 0;
 
 	// GAME STATE
-	//game state - various game situations (title screen, main game play screen, menu screen, pause screen etc.) 
-	//depending on the situation, the program draws something different on the screen 
+	// game state - various game situations (title screen, main game play screen, menu screen, pause screen etc.) 
+	// depending on the situation, the program draws something different on the screen 
 	private GameStateType gameState = GameStateType.TITLE;
-	private Playing playing = new Playing(this); //instantiate in gamePanel class
+	private Playing playing = new Playing(this); // instantiate in gamePanel class
 
 	// debug
 	protected boolean debug = false;
 
-	// Create gamePanel constructor 
+	// create gamePanel constructor 
 	public GamePanel() { 
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true); // similar to BufferStrategy (improves game rendering process)
-		this.addKeyListener(keyH); //gamePanel can recognise keyInput
-		this.setFocusable(true); //needed for GamePanel to be 'focused' to receive key input 
+		this.addKeyListener(keyH); // gamePanel can recognise keyInput
+		this.setFocusable(true); // needed for GamePanel to be 'focused' to receive key input 
 	}
 	
-	//setupGame() method should be called before the thread starts running so position it correctly in the main class
+	// setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
 		levelManager.init();
 		playMusic(Sound.MAIN_MENU);
@@ -81,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 
 	public void restartGame() {
+		ui.setVictory(false);
 		levelManager.init();
 		gameState = GameStateType.STORY;
 		player.restoreFullHealth();
@@ -88,7 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public void startGameThread() { 
 		gameThread = new Thread(this); // 'this' means we are passing this gamePanel class in as a parameter into our thread
-		gameThread.start(); //automatically calls the 'run' method 
+		gameThread.start(); // automatically calls the 'run' method 
 	}
 	
 	public void run() {
@@ -128,28 +129,27 @@ public class GamePanel extends JPanel implements Runnable {
 		switch(gameState) {
 			case LOADING:
 				loadTimer++;
-				if(loadTimer >= 120) { // wait for 2 seconds
+				if(loadTimer >= 120) { // wait on loading screen for 2 seconds
 					stopMusic();
 					playMusic(levelManager.getCurrentLevel());
 					gameState = GameStateType.PLAY;
+					player.setMovement(true);
 					loadTimer = 0;
 				}
 			case PLAY:
-				playing.update();
+				playing.update(); // update playing gamestate
 				break;
-			case SETTINGS:
-				break;
+			case SETTINGS: // pass on other gamestates as nothing requires updating
 			case TITLE:
 			case NULL:
 			case STORY:
-
 			case PAUSE:
 			case GAMEOVER:
 				break;
 		}
 	}
 	
-	public void paintComponent(Graphics g) { //standard built-in methods to draw things on JPanel in Java
+	public void paintComponent(Graphics g) { // standard built-in methods to draw things on JPanel in Java
 		super.paintComponent(g); // just have to do it whenever you use paintComponent method 
 		
 		Graphics2D g2 = (Graphics2D)g;
@@ -189,7 +189,7 @@ public class GamePanel extends JPanel implements Runnable {
 		try {
 			music.stop();
 		} catch (Exception e) {
-			// fixes random bug when game is loaded too fast
+			// fixes random bug when game is loaded too fast at the start
 		}
 	}
 

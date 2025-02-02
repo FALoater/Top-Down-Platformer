@@ -8,7 +8,7 @@ import main.GamePanel;
 public class FireProjectile extends Projectile{
     
     public FireProjectile(int worldX, int worldY, int speed, String direction, GamePanel gp) {
-        super(worldX, worldY, speed, direction, gp);
+        super(worldX, worldY, speed, direction, gp); // trigger superclass constructor
         loadImgs();
 
         damage = 2;
@@ -23,26 +23,23 @@ public class FireProjectile extends Projectile{
 
     @Override
     protected BufferedImage getImg() {
+        // get right sprite depending on direction
+        // only this projectile has different direction sprites
         switch(direction) {
             case "up":
                 return up1;
-            
             case "down":
                 return down1;
-            
             case "left":
                 return left1;
-            
             case "right":
                 return right1;
-            
             default:
                 return null;
         }
     }
 
     // needs to be for every enemy
-
     @Override
     protected boolean checkCollisions() {
         if(gp.getCollisionChecker().checkTile(this)) return true;

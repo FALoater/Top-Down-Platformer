@@ -11,7 +11,7 @@ import main.GamePanel;
 import static main.GamePanel.tileSize;
 
 public class Projectile extends Entity {
-    //Every projectile needs the position, direction, image and access to the main game class
+    // every projectile needs the position, direction, image and access to the main game class
     protected BufferedImage img;
     protected boolean init = true;
     protected int damage;
@@ -68,7 +68,7 @@ public class Projectile extends Entity {
 
     @Override
     public void draw(Graphics2D g2) {
-        // Calculate the area where the player is currently in
+        // calculate the area where the player is currently in
 		if (worldX + tileSize> gp.getPlayer().getWorldX() - gp.getPlayer().getScreenX() &&
             worldX -tileSize < gp.getPlayer().getWorldX() + gp.getPlayer().getScreenY() && 
             worldY + tileSize> gp.getPlayer().getWorldY() - gp.getPlayer().getScreenY() && 
@@ -76,7 +76,7 @@ public class Projectile extends Entity {
             
             img = getImg();
                 
-            // Draw the projectile if inside the four corners
+            // draw the projectile if inside the four corners
             if(!init) g2.drawImage(img, screenX, screenY, tileSize, tileSize, null);
         }
     }
@@ -88,7 +88,7 @@ public class Projectile extends Entity {
         g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     }
 
-    // Getters and setters
+    // getters and setters
     public boolean isMarkedForDeletion() {
         return markedForDeletion;
     }
