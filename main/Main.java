@@ -6,7 +6,7 @@ public class Main {
 		JFrame window = new JFrame(); //create an instance of a JFrame
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // able to close the window
 		window.setResizable(false); //cannot resize window
-		window.setTitle("2D Adventure"); //set title to window 
+		window.setTitle("Top Down Platformer"); //set title to window 
 		
 		GamePanel gamePanel = new GamePanel(); 
 		window.add(gamePanel);

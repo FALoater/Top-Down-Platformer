@@ -94,6 +94,9 @@ public class UI {
 			case SETTINGS:
 				drawSettingsScreen();
 				break;
+			case RULES:
+				drawRulesScreen();
+				break;
 		}
 	}
 
@@ -116,14 +119,15 @@ public class UI {
 		g2.drawImage(gp.getPlayer().getPlayerMenuImg(), x, y, tileSize*2, tileSize*2, null);
 		
 		// menu underneath
-		String[] options = {"NEW GAME", "SETTINGS", "QUIT"};
+		String[] options = {"NEW GAME", "SETTINGS", "RULES", "QUIT"};
 
 		// draw the menu options, new game, load game and quit
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-		y += tileSize*3.5;
+		y += tileSize*2.5;
 
 		for(int i=0;i<options.length;i++) {
-			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
+			y += tileSize;
+			drawMenuOption(options[i], getXforCentredText(options[i]), y, commandNum == i);
 		}
 	}
 
@@ -224,6 +228,33 @@ public class UI {
 
 		// draw options underneath
 		drawVolumeSlider();
+	}
+
+	private void drawRulesScreen() {
+		g2.setColor(Color.white);
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,70F));
+
+		int y = tileSize * 2;
+		String text = "Rules & Controls";
+		g2.drawString(text, getXforCentredText(text), y);
+
+		y += tileSize;
+		String[] rules = {"W / Up", "A / Left", "S / Down", "D / Right", "Q", "E", "R", "Escape"};
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,30F));
+
+		for(String line : rules) {
+			g2.drawString(line, getXforCentredText(line), y);
+			y += tileSize * 0.75;
+		}
+
+		g2.setColor(Color.red);
+		g2.setFont(g2.getFont().deriveFont(Font.BOLD,50F));
+
+		text = "Back to Menu";
+		int x = getXforCentredText(text);
+		y = (int) (tileSize * 10.5);
+
+		g2.drawString(text, x, y);
 	}
 
 	private void drawVolumeSlider() {
@@ -345,7 +376,7 @@ public class UI {
 		g2.setColor(Color.white);
 
 		if(selected) {
-			g2.setColor(Color.blue);
+			g2.setColor(Color.red);
 			g2.drawString(">", x-tileSize, y); 	// points a little arrow to the left of each string
 		}
 	

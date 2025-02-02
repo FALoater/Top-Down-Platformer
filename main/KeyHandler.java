@@ -30,12 +30,12 @@ public class KeyHandler implements KeyListener {
 				if(code == KeyEvent.VK_W) { // move arrow up
 					gp.getUi().decrementCommandNum();
 					if(gp.getUi().getCommandNum() < 0) {
-						gp.getUi().setCommandNum(2); //prevents the arrow from moving into oblivion 
+						gp.getUi().setCommandNum(3); //prevents the arrow from moving into oblivion 
 					}
 				}
 				if(code == KeyEvent.VK_S) { // move arrow down
 					gp.getUi().incrementCommandNum();
-					if(gp.getUi().getCommandNum() > 2) {
+					if(gp.getUi().getCommandNum() > 3) {
 						gp.getUi().setCommandNum(0);
 					}
 				}
@@ -48,7 +48,10 @@ public class KeyHandler implements KeyListener {
 					if(gp.getUi().getCommandNum() == 1) {
 						gp.setGameState(GameStateType.SETTINGS);
 					}
-					if(gp.getUi().getCommandNum() == 2) { 
+					if(gp.getUi().getCommandNum() == 2) {
+						gp.setGameState(GameStateType.RULES);
+					}
+					if(gp.getUi().getCommandNum() == 3) { 
 						System.exit(0);
 					}
 				}
@@ -156,6 +159,9 @@ public class KeyHandler implements KeyListener {
 					gp.setGameState(GameStateType.TITLE);
 				}
 				break;
+			case RULES:
+				if(code == KeyEvent.VK_ENTER) gp.setGameState(GameStateType.TITLE);
+				break;
 			case LOADING:
 			case NULL:
 				break;
@@ -195,6 +201,7 @@ public class KeyHandler implements KeyListener {
 			case PAUSE:
 			case STORY:
 			case TITLE:
+			case RULES:
 				break;
 		}
 	}

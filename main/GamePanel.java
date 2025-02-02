@@ -145,6 +145,7 @@ public class GamePanel extends JPanel implements Runnable {
 			case STORY:
 			case PAUSE:
 			case GAMEOVER:
+			case RULES:
 				break;
 		}
 	}
