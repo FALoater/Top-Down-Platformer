@@ -75,8 +75,8 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	// setupGame() method should be called before the thread starts running so position it correctly in the main class
 	public void setupGame() { 
-		levelManager.init();
 		playMusic(Sound.MAIN_MENU);
+		levelManager.init();
 		gameState = GameStateType.TITLE;
 	}
 
@@ -133,7 +133,6 @@ public class GamePanel extends JPanel implements Runnable {
 					stopMusic();
 					playMusic(levelManager.getCurrentLevel());
 					gameState = GameStateType.PLAY;
-					player.setMovement(true);
 					loadTimer = 0;
 				}
 			case PLAY:
@@ -190,7 +189,7 @@ public class GamePanel extends JPanel implements Runnable {
 		try {
 			music.stop();
 		} catch (Exception e) {
-			// fixes random bug when game is loaded too fast at the start
+			// prevents crash when game is run too fast for music to be loaded
 		}
 	}
 
@@ -278,6 +277,10 @@ public class GamePanel extends JPanel implements Runnable {
 
 	public Sound getMusic() {
 		return music;
+	}
+
+	public Sound getSfx() {
+		return se;
 	}
 
 	public void toggleDebug() {

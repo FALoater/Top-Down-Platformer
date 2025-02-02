@@ -27,13 +27,13 @@ public class KeyHandler implements KeyListener {
 	
 		switch(gp.getGameState()) {
 			case TITLE:
-				if(code == KeyEvent.VK_W) { // move arrow up
+				if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP) { // move arrow up
 					gp.getUi().decrementCommandNum();
 					if(gp.getUi().getCommandNum() < 0) {
 						gp.getUi().setCommandNum(3); //prevents the arrow from moving into oblivion 
 					}
 				}
-				if(code == KeyEvent.VK_S) { // move arrow down
+				if(code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) { // move arrow down
 					gp.getUi().incrementCommandNum();
 					if(gp.getUi().getCommandNum() > 3) {
 						gp.getUi().setCommandNum(0);
@@ -43,10 +43,12 @@ public class KeyHandler implements KeyListener {
 				if(code == KeyEvent.VK_ENTER) { // respond to relevant option selected
 					if(gp.getUi().getCommandNum() == 0) {
 						gp.stopMusic();
+						gp.getLevelManager().resetAll();
 						gp.setGameState(GameStateType.STORY);
 					}
 					if(gp.getUi().getCommandNum() == 1) {
 						gp.setGameState(GameStateType.SETTINGS);
+						gp.getUi().setOptionSelection(1);
 					}
 					if(gp.getUi().getCommandNum() == 2) {
 						gp.setGameState(GameStateType.RULES);
@@ -73,6 +75,7 @@ public class KeyHandler implements KeyListener {
 				// pause menu
 				if(code == KeyEvent.VK_ESCAPE) {
 					gp.setGameState(GameStateType.PAUSE);
+					gp.getUi().setOptionSelection(1);
 				// attacks
 				}
 				if(code == KeyEvent.VK_E) {
@@ -129,12 +132,14 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case PAUSE:
-				if(code == KeyEvent.VK_ESCAPE) {
-					gp.setGameState(GameStateType.PLAY); // resume play
+				resetMovement();
+				if(code == KeyEvent.VK_ESCAPE) gp.setGameState(GameStateType.PLAY);
+				if(gp.getUi().getOptionSelection() == 0) { // select sfx option
+					if(code == KeyEvent.VK_ENTER) {
+						gp.getSfx().toggleSfx();
+					}
 				}
-				break;
-			case SETTINGS:
-				if(gp.getUi().getOptionSelection() == 0) { // selected on sound option
+				if(gp.getUi().getOptionSelection() == 1) { // selected on sound option
 					// left arrow key
 					if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
 						gp.getUi().setCommandNum(2);
@@ -146,17 +151,54 @@ public class KeyHandler implements KeyListener {
 						gp.getMusic().increaseSound();
 					}
 				}
-				// select bottom option
+				if(gp.getUi().getOptionSelection() == 2) { // select main menu optoin
+					if(code == KeyEvent.VK_ENTER) {
+						gp.stopMusic();
+						gp.playMusic(Sound.MAIN_MENU);
+						gp.setGameState(GameStateType.TITLE);
+					}
+				}
+			
+				// scroll down
 				if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
-					gp.getUi().setOptionSelection(1);
+					gp.getUi().incrementOptionSelection();
 				}
-				// select top option
+				// scroll up
 				if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
-					gp.getUi().setOptionSelection(0);
+					gp.getUi().decrementOptionSelection();
 				}
-				// go back to main menu
-				if(code == KeyEvent.VK_ENTER && gp.getUi().getOptionSelection() == 1) {
-					gp.setGameState(GameStateType.TITLE);
+				break;
+			case SETTINGS:
+				if(gp.getUi().getOptionSelection() == 0) { // select sfx option
+					if(code == KeyEvent.VK_ENTER) {
+						gp.getSfx().toggleSfx();
+					}
+				}
+				if(gp.getUi().getOptionSelection() == 1) { // selected on sound option
+					// left arrow key
+					if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
+						gp.getUi().setCommandNum(2);
+						gp.getMusic().decreaseSound();
+					}
+					// right arrow key
+					if(code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D) {
+						gp.getUi().setCommandNum(3);
+						gp.getMusic().increaseSound();
+					}
+				}
+				if(gp.getUi().getOptionSelection() == 2) { // select main menu optoin
+					if(code == KeyEvent.VK_ENTER) {
+						gp.setGameState(GameStateType.TITLE);
+					}
+				}
+					
+				// scroll down
+				if(code == KeyEvent.VK_DOWN || code == KeyEvent.VK_S) {
+					gp.getUi().incrementOptionSelection();
+				}
+				// scroll up
+				if(code == KeyEvent.VK_UP || code == KeyEvent.VK_W) {
+					gp.getUi().decrementOptionSelection();
 				}
 				break;
 			case RULES:
@@ -192,13 +234,13 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case SETTINGS:
+			case PAUSE:
 				// remove arrow highlight
 				gp.getUi().setCommandNum(1);
 				break;
 			case GAMEOVER:
 			case LOADING:
 			case NULL:
-			case PAUSE:
 			case STORY:
 			case TITLE:
 			case RULES:
@@ -207,6 +249,12 @@ public class KeyHandler implements KeyListener {
 	}
 
 	// getters and setters
+	public void resetMovement() {
+		upPressed = false;
+		downPressed = false;
+		rightPressed = false;
+		leftPressed = false;
+	}
 
 	public boolean isUpPressed() {
 		return upPressed;

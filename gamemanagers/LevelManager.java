@@ -27,8 +27,8 @@ public class LevelManager {
     public void init() {
         // start game triggers
         currentLevel = 1;
+        resetAll();
         loadTiles(1);
-        resetPlayer();
         loadEnemies();
     }
 
@@ -45,6 +45,7 @@ public class LevelManager {
         }
 
         // else load the next available level
+        gp.getKeyHandler().resetMovement();
         loadTiles(currentLevel);
         resetAll();
         loadEnemies();
@@ -52,10 +53,11 @@ public class LevelManager {
         gp.setGameState(GameStateType.LOADING);
     }
 
-    private void resetAll() {
+    public void resetAll() {
         resetPlayer();
         resetProjectiles();
         resetEnemies();
+        loadEnemies();
     }
 
     private void resetProjectiles() {
@@ -77,7 +79,7 @@ public class LevelManager {
     private void resetPlayer() {
         // reset player animations
         gp.getPlayer().resetAttack();
-        gp.getPlayer().setMovement(false);
+        gp.getKeyHandler().resetMovement();
         
         // spawn player in correct position on map
         switch(currentLevel) {

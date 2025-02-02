@@ -27,6 +27,7 @@ public class Sound {
 	public static final int PLAYER_ATTACK = 8;
 	public static final int ENEMY_HURT = 9;
 	public static final int ENEMY_DEATH = 10;
+	public static final int RELOAD = 11;
 
 	public Sound(int soundLevel) { 
 		// load sound files from assets 
@@ -42,6 +43,7 @@ public class Sound {
 		music[8] = getClass().getResource("/assets/sound/player_attack.wav");
 		music[9] = getClass().getResource("/assets/sound/enemy_hurt.wav");
 		music[10] = getClass().getResource("/assets/sound/enemy_death.wav");
+		music[11] = getClass().getResource("/assets/sound/reload.wav");
 
 		this.soundLevel = soundLevel;
 	}
@@ -89,6 +91,17 @@ public class Sound {
 		return soundLevel;
 	}
 
+	public String getSfxToggle() {
+		switch(soundLevel) {
+			case 0:
+				return "Off";
+			case 9:
+				return "On";
+			default:
+				return null;
+		}
+	}
+
 	public void decreaseSound() {
 		soundLevel--;
 		if(soundLevel < 0) soundLevel = 0;
@@ -99,6 +112,14 @@ public class Sound {
 		soundLevel++;
 		if(soundLevel > 10) soundLevel = 10;
 		setSoundLevel(soundLevel);
+	}
+
+	public void toggleSfx() {
+		if(soundLevel == 9) {
+			soundLevel = 0;
+		} else {
+			soundLevel = 9;	
+		}
 	}
 
 	public void setSoundLevel(int level) {

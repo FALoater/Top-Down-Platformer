@@ -80,6 +80,7 @@ public class UI {
 				drawPlayerLife();
 				drawPlayerBullets();
 				drawPauseScreen();
+				drawVolumeSlider();
 				break;
 			case STORY:
 				drawDialogueScreen(sentenceNo);
@@ -170,7 +171,7 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80F));
 
 		String text = "PAUSED"; 
-		g2.drawString(text, getXforCentredText(text), screenHeight / 2); // draw text in centre of screen
+		g2.drawString(text, getXforCentredText(text), tileSize * 2);
 	}
 	
 	private void drawLoadingScreen() {
@@ -259,44 +260,68 @@ public class UI {
 	}
 
 	private void drawVolumeSlider() {
+		g2.setColor(Color.white);
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,50F));
-		String text = "Volume:";
-		int y = tileSize * 5;
-		int x = getXforCentredText(text); 
+		boolean shadow0 = true, shadow1 = true, shadow2 = true;
+
+		switch(optionSelection) {
+			case 0:
+				shadow0 = false;
+				break;
+			case 1:
+				shadow1 = false;
+				break;
+			case 2:
+				shadow2 = false;
+				break; 
+		}
+		// draw sound effect option
+		String text = "SFX:";
+		int y = tileSize * 4;
+		drawTextWithShadow(text, getXforCentredText(text), y);
+
+		y += tileSize;
+		text = String.valueOf(gp.getSfx().getSfxToggle());
+		drawText(text, getXforCentredText(text), y, shadow0); // draw toggle button
+
+		// draw volume option
+		text = "Volume:";
+		y = tileSize * 7;
+		int x = getXforCentredText(text);
+		drawText(text, x, y, shadow1);
+
+		// draw volume number
+		text = String.valueOf(gp.getMusic().getSoundLevel());
+		y += tileSize;
+		x = getXforCentredText(text);
+		drawTextWithShadow(text, x, y);
+
+		if(commandNum == 2) g2.setColor(Color.red);
+		g2.drawString("<", x - tileSize * 2, y); // draw left arrow 
+		g2.setColor(Color.white); // reset colour
+
+		// calculate position of right side
+		if(commandNum == 3) g2.setColor(Color.red);
+		x += 10;
+		if(text.equals("10")) x += 30;
 		
-		if(optionSelection == 0) {
-			// if this option is selected highlight red
+		// draw right arrow
+		g2.drawString(">", x + tileSize * 2, y);
+
+		// draw back to menu
+		text = "Back to Menu";
+		drawText(text, getXforCentredText(text), y + 3 * tileSize, shadow2);
+	}
+
+	private void drawText(String text, int x, int y, boolean shadow) {
+		if(shadow) {
+			drawTextWithShadow(text, x, y);
+		} else {
 			g2.setColor(Color.red);
 			g2.drawString(text, x, y);
 			g2.setColor(Color.white);
-
-			text = "Back to Menu";
-			drawTextWithShadow(text, getXforCentredText(text), y + (int)(4 * tileSize));
-		} else {
-			// else highlight other option
-			drawTextWithShadow(text, x, y);
-			text = "Back to Menu";
-			g2.setColor(Color.red);
-			g2.drawString(text, getXforCentredText(text), y + (int)(4 * tileSize));
 		}
 		
-		g2.setColor(Color.white);
-
-		text = String.valueOf(gp.getMusic().getSoundLevel()); // get current sound value
-		x = getXforCentredText(text);
-		y += tileSize * 1.5;
-
-		if(commandNum == 2) g2.setColor(Color.red);
-		g2.drawString("<", x - tileSize * 2, y); // draw left and right option buttons
-
-		g2.setColor(Color.white);
-		drawTextWithShadow(text, x, y);
-		// calculate position of right side
-		x += 10;
-		if(gp.getMusic().getSoundLevel() == 10) x += 30;
-
-		if(commandNum == 3) g2.setColor(Color.red);
-		g2.drawString(">", x + tileSize * 2, y);
 	}
 
 	private void drawTextWithShadow(String text, int x, int y) {
@@ -415,6 +440,16 @@ public class UI {
 
 	public int getCommandNum() {
 		return commandNum;
+	}
+
+	public void incrementOptionSelection() {
+		optionSelection++;
+		if(optionSelection >= 3) optionSelection = 0;	
+	}
+
+	public void decrementOptionSelection() {
+		optionSelection--;
+		if(optionSelection < 0) optionSelection = 2;
 	}
 
 	public void setOptionSelection(int optionSelection) {

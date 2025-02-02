@@ -18,6 +18,7 @@ import static main.GamePanel.tileSize;
 public class Player extends Entity {
     private KeyHandler keyH;
     private boolean canMove;
+    private boolean reloading;
     private int ammo = 3;
 
     private BufferedImage attackDown1, attackDown2, attackUp1, attackUp2, attackLeft1, attackLeft2, attackRight1, attackRight2;
@@ -100,6 +101,9 @@ public class Player extends Entity {
         if(ammo <= 0) {
             if(attackTimer > 120) {
                 ammo = 3;
+                reloading = false;
+            } else {
+                reloadAmmo();
             }
             attacking = false;
         }
@@ -238,7 +242,9 @@ public class Player extends Entity {
     }
 
     public void reloadAmmo() {
-        if(ammo >= 3) return;
+        if(ammo >= 3 || reloading) return;
+        gp.playSoundEffect(Sound.RELOAD);
+        reloading = true;
         ammo = 0;
         attackTimer = 0;
     }
@@ -248,10 +254,6 @@ public class Player extends Entity {
         attackTimer = 120;
     }
 
-    public void setMovement(boolean canMove) {
-        this.canMove = canMove;
-    }
-
     public int getAttackTimer() {
         if(attackTimer > 120) {
             return 120;
@@ -259,4 +261,8 @@ public class Player extends Entity {
             return attackTimer;
         }
     }
+
+    public void setReloading(boolean reloading) {
+        this.reloading = reloading;
+    } 
 }
