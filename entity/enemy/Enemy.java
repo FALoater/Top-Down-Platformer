@@ -11,11 +11,23 @@ import main.Sound;
 
 public abstract class Enemy extends Entity {
 	private int directionLock = 60;
+	private Random random = new Random();
 
     public Enemy(GamePanel gp) {
         super(gp);
         speed = 4;
-        direction = "right";
+
+		// choose random direction
+		int i = random.nextInt(100) + 1;
+		if (i <= 25) {
+			direction = "up";
+		} else if (i > 25 && i <= 50) {
+			direction = "down";
+		} else if (i > 50 && i <= 75) {
+			direction = "left";
+		} else {
+			direction = "right";
+		}
 
         maxLife = 4;
         life = maxLife;
@@ -77,7 +89,6 @@ public abstract class Enemy extends Entity {
 			}
 		} else {
 			if(directionLock >= 60) {
-				Random random = new Random();
 				int i = random.nextInt(100) + 1;
 				if (i <= 25) {
 					direction = "up";
