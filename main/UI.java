@@ -205,10 +205,11 @@ public class UI {
 
 		// draw the menu options, new game, load game and quit
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
-		y += tileSize*3.5;
+		y += tileSize * 5;
 
 		for(int i=0;i<options.length;i++) {
-			drawMenuOption(options[i], getXforCentredText(options[i]), y += tileSize*i, commandNum == i);
+			drawMenuOption(options[i], getXforCentredText(options[i]), y, commandNum == i);
+			y += tileSize;
 		}
 
 	}
