@@ -8,6 +8,9 @@ public class SlimeThrower extends Enemy{
         super(gp);
 		this.worldX = worldX;
 		this.worldY = worldY;
+
+		maxLife = 6;
+		life = maxLife;
         direction = "down";
 		speed = 1; 
         getImage();

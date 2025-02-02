@@ -83,6 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
 	public void restartGame() {
 		levelManager.init();
 		gameState = GameStateType.STORY;
+		player.restoreFullHealth();
 	}
 
 	public void startGameThread() { 
@@ -178,7 +179,11 @@ public class GamePanel extends JPanel implements Runnable {
 	}
 	
 	public void stopMusic() { 
-		music.stop();
+		try {
+			music.stop();
+		} catch (Exception e) {
+			// fixes random bug when game is loaded too fast
+		}
 	}
 
 	public void playSoundEffect(int i) { 

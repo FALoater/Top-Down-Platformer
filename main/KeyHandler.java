@@ -52,12 +52,6 @@ public class KeyHandler implements KeyListener {
 						System.exit(0);
 					}
 				}
-				// debug
-				if (code == KeyEvent.VK_F) {
-					gp.stopMusic();
-					gp.playMusic(Sound.END_GAME);
-					gp.setGameState(GameStateType.GAMEOVER);
-				}
 				break;
 			case PLAY:
 				if (code == KeyEvent.VK_W) {
@@ -81,9 +75,6 @@ public class KeyHandler implements KeyListener {
 				if (code == KeyEvent.VK_E) {
 					attackPressed = true;
 					gp.getPlayer().attack();
-				}
-				if (code == KeyEvent.VK_Z) {
-					//gp.getLevelManager().loadNextLevel();
 				}
 				// DEBUG
 				if (code == KeyEvent.VK_Q) { 

@@ -10,7 +10,7 @@ public class WaterProjectile extends Projectile {
         super(worldX, worldY, speed, direction, gp);
         img = setup("/assets/projectiles/enemy_projectiles/water_projectile");
 
-        damage = 1;
+        damage = 2;
     }
 
     @Override

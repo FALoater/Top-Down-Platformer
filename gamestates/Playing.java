@@ -57,8 +57,11 @@ public class Playing implements GameState{
             }
         }
 
+        int count = 0;
+
         for(int i = 0; i <enemies.length;i++) {
             if(enemies[i] != null) {
+                count++;
                 if(enemies[i].isMarkedForDeletion()) {
                     gp.playSoundEffect(Sound.ENEMY_DEATH);
                     enemies[i] = null;

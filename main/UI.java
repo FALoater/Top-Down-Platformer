@@ -304,7 +304,10 @@ public class UI {
 
 	public void incrementDialogue() {
 		this.sentenceNo++;
-		if(sentenceNo >= storyStartLines.length) gp.setGameState(GameStateType.LOADING);
+		if(sentenceNo >= storyStartLines.length) {
+			sentenceNo = 0;
+			gp.setGameState(GameStateType.LOADING);
+		}
 	}
 
 	public void setCommandNum(int commandNum) {
