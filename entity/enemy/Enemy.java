@@ -7,7 +7,6 @@ import java.util.Random;
 
 import entity.Entity;
 import main.GamePanel;
-import main.Sound;
 
 public abstract class Enemy extends Entity {
 	private int directionLock = 60;
@@ -122,11 +121,6 @@ public abstract class Enemy extends Entity {
 		g2.setColor(Color.red);
 		g2.fillRect(screenX + 1, screenY - 9, (int)(47 * ((float)life / (float)maxLife)), 9);
 		//                                      calculates percentage of health bar shaded
-	}
-
-	@Override
-	protected void playHurtEffect() {
-		gp.playSoundEffect(Sound.ENEMY_HURT);
 	}
 
 	@Override

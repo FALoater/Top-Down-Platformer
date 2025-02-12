@@ -134,11 +134,6 @@ public class KeyHandler implements KeyListener {
 			case PAUSE:
 				resetMovement();
 				if(code == KeyEvent.VK_ESCAPE) gp.setGameState(GameStateType.PLAY);
-				if(gp.getUi().getOptionSelection() == 0) { // select sfx option
-					if(code == KeyEvent.VK_ENTER) {
-						gp.getSfx().toggleSfx();
-					}
-				}
 				if(gp.getUi().getOptionSelection() == 1) { // selected on sound option
 					// left arrow key
 					if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {
@@ -169,11 +164,6 @@ public class KeyHandler implements KeyListener {
 				}
 				break;
 			case SETTINGS:
-				if(gp.getUi().getOptionSelection() == 0) { // select sfx option
-					if(code == KeyEvent.VK_ENTER) {
-						gp.getSfx().toggleSfx();
-					}
-				}
 				if(gp.getUi().getOptionSelection() == 1) { // selected on sound option
 					// left arrow key
 					if(code == KeyEvent.VK_LEFT || code == KeyEvent.VK_A) {

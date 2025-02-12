@@ -25,7 +25,9 @@ public class UI {
 	private boolean victory = false;
 
 	//handles all the on-screen UI 
-	private String[] storyStartLines = {"HELLO AND WELCOME TO THE GAME", "YOU ARE QUITE BAD"};// the current dialogue to be displayed on the screen
+	private String[] storyStartLines = {"HELLO AND WELCOME TO THE GAME", 
+										"YOU ARE QUITE BAD"};// the current dialogue to be displayed on the screen
+
 	private BufferedImage heart_full, heart_half, heart_blank, bullet;
 	private Font arial_40;
 	private GamePanel gp; 
@@ -241,7 +243,15 @@ public class UI {
 		g2.drawString(text, getXforCentredText(text), y);
 
 		y += tileSize;
-		String[] rules = {"W / Up", "A / Left", "S / Down", "D / Right", "Q", "E", "R", "Escape"};
+		String[] rules = {"W / Up", 
+						  "A / Left", 
+						  "S / Down", 
+						  "D / Right", 
+						  "Q", 
+						  "E", 
+						  "R", 
+						  "Escape"};
+		
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,30F));
 
 		for(String line : rules) {
@@ -262,12 +272,9 @@ public class UI {
 	private void drawVolumeSlider() {
 		g2.setColor(Color.white);
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD,50F));
-		boolean shadow0 = true, shadow1 = true, shadow2 = true;
+		boolean shadow1 = true, shadow2 = true;
 
 		switch(optionSelection) {
-			case 0:
-				shadow0 = false;
-				break;
 			case 1:
 				shadow1 = false;
 				break;
@@ -275,18 +282,10 @@ public class UI {
 				shadow2 = false;
 				break; 
 		}
-		// draw sound effect option
-		String text = "SFX:";
-		int y = tileSize * 4;
-		drawTextWithShadow(text, getXforCentredText(text), y);
-
-		y += tileSize;
-		text = String.valueOf(gp.getSfx().getSfxToggle());
-		drawText(text, getXforCentredText(text), y, shadow0); // draw toggle button
-
+		
 		// draw volume option
-		text = "Volume:";
-		y = tileSize * 7;
+		String text = "Volume:";
+		int y = tileSize * 7;
 		int x = getXforCentredText(text);
 		drawText(text, x, y, shadow1);
 

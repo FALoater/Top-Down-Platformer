@@ -79,7 +79,6 @@ public class Player extends Entity {
     public void update() { 
         // if player has no health, trigger death and end game screen
         if(life <= 0) {
-            gp.playSoundEffect(Sound.PLAYER_DEATH);
             gp.setGameState(GameStateType.GAMEOVER);
             gp.stopMusic();
             gp.playMusic(Sound.END_GAME);
@@ -196,8 +195,6 @@ public class Player extends Entity {
         if(isHurt && life > 0) {
             image = hurt;
             // pick random hurt sfx
-            int random = (int) (Math.random() * 2);
-            gp.playSoundEffect(5 + random); // player hurt is either 5 or 6
             isHurt = false;
         }
 
@@ -215,7 +212,6 @@ public class Player extends Entity {
         // attempts to register an attack 
         if(ammo <= 0 || !keyH.isAttackPressed()) return;
 
-        gp.playSoundEffect(Sound.PLAYER_ATTACK);
         attacking = true;
         attackTimer = 0;
         ammo--;
@@ -243,7 +239,6 @@ public class Player extends Entity {
 
     public void reloadAmmo() {
         if(ammo >= 3 || reloading) return;
-        gp.playSoundEffect(Sound.RELOAD);
         reloading = true;
         ammo = 0;
         attackTimer = 0;
